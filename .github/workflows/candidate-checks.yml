@@ -1,0 +1,67 @@
+name: Tabi candidate checks
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches:
+      - 'release/**'
+      - 'feature/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check HTML and embedded JavaScript parse
+        run: |
+          python3 - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+          src = Path("index.html").read_text(encoding="utf-8")
+          assert src.lstrip().lower().startswith("<!doctype html>"), "HTML doctype missing"
+          assert "<html" in src and "</html>" in src, "HTML root missing"
+          assert "<script" in src and "</script>" in src, "Script missing"
+          class Parser(HTMLParser):
+              pass
+          Parser().feed(src)
+          print("HTML parser: OK")
+          PY
+      - name: Extract and syntax-check JavaScript blocks
+        run: |
+          python3 - <<'PY'
+          from html.parser import HTMLParser
+          from pathlib import Path
+          class Scripts(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.current = None
+                  self.items = []
+              def handle_starttag(self, tag, attrs):
+                  if tag == "script":
+                      a = dict(attrs)
+                      self.current = [] if "src" not in a and a.get("type","text/javascript") in ("text/javascript","module") else None
+              def handle_data(self, data):
+                  if self.current is not None: self.current.append(data)
+              def handle_endtag(self, tag):
+                  if tag == "script":
+                      if self.current is not None: self.items.append("".join(self.current))
+                      self.current = None
+          p=Scripts()
+          p.feed(Path("index.html").read_text(encoding="utf-8"))
+          Path("/tmp/tabi-js").mkdir(exist_ok=True)
+          for i, script in enumerate(p.items):
+              Path(f"/tmp/tabi-js/{i}.js").write_text(script, encoding="utf-8")
+          print(f"Extracted {len(p.items)} JavaScript blocks")
+          PY
+          for f in /tmp/tabi-js/*.js; do [ -f "$f" ] || break; node --check "$f"; done
+      - name: Upload candidate HTML for manual offline inspection
+        uses: actions/upload-artifact@v4
+        with:
+          name: tabi-candidate-html
+          path: index.html
+          retention-days: 14
