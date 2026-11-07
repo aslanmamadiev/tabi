@@ -352,7 +352,7 @@ async function ui04FinishSwipe(gesture,deltaX,velocity){
   const el=ui04GestureArea;
   const eligible=(gesture.from==='objects'&&deltaX<0)||(gesture.from==='board'&&deltaX>0);
   const valid=eligible&&(Math.abs(deltaX)>=Math.min(96,gesture.width*.24)||(Math.abs(deltaX)>=42&&Math.abs(velocity)>.55));
-  const fromX=gesture.locked?ui04Clamp(deltaX,-gesture.width*.38,gesture.width*.38):0;
+  const fromX=gesture.locked?ui04Clamp(gesture.dragX??deltaX,-gesture.width*.38,gesture.width*.38):0;
   const fromOpacity=gesture.locked?.96:1;
   try{
     if(!valid){
@@ -395,7 +395,7 @@ ui04GestureArea.addEventListener('touchmove',e=>{
     g.locked=true;ui04GestureArea.style.willChange='transform,opacity';
   }
   if(e.cancelable)e.preventDefault();
-  g.lastX=t.clientX;g.lastTime=performance.now();
+  g.dragX=dx;g.lastX=t.clientX;g.lastTime=performance.now();
   if(!ui04ReducedMotion()){
     const x=ui04Clamp(dx,-g.width*.38,g.width*.38);
     ui04GestureArea.style.transform=`translate3d(${x}px,0,0)`;
