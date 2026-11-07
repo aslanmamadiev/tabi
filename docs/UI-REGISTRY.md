@@ -1,6 +1,6 @@
 # Tabi · UI Registry
 
-**Spec:** UI-AUDIT-1.0 · **Date:** 2026-10-31 · **Status:** UI-01, UI-02, UI-03 and UI-11 accepted; frozen pending an explicitly approved change request.
+**Spec:** UI-AUDIT-1.0 · **Date:** 2026-10-31 · **Status:** UI-01, UI-02, UI-03, UI-04 and UI-11 accepted; frozen pending an explicitly approved change request.
 
 ## Immutable development rules
 1. Every change specifies module ID, scope, acceptance criteria, and files touched before editing.
@@ -17,8 +17,8 @@
 | UI-01 | Header controls | Center kanji 旅 inside its tile; coherent sync/settings icons in equal tiles. **FROZEN: approved 2026-11-07.** | Accepted — no further changes |
 | UI-02 | Hero | Dynamic heading based on inventory states; no new persisted phase field. | Accepted 2026-11-07 — frozen |
 | UI-03 | Stats | Counts become interactive filters without changing values or visual card layout: Total resets, Rooms shows occupied room groups, Tagged filters colored objects. | Accepted 2026-11-07 — frozen |
-| UI-04 | Navigation & viewport | Touch swipe between Objects/Kanban, preserving drag and Kanban horizontal scrolling; responsive reflow when device orientation changes. | Implemented in candidate; device acceptance pending |
-| UI-05 | Search & filters | Compact filter chips. | Chips and composition TBD |
+| UI-04 | Navigation & viewport | Finger-following swipe with snap-back and reduced motion; responsive reflow on rotation; preserves native scrolling and dragging. | Accepted 2026-11-07 — frozen |
+| UI-05 | Search & filters | Review redundant quick-filter shortcuts and retain a single clear access point per action. | Accepted 2026-11-07: no additional chips; existing filters preserved |
 | UI-06 | Progress | **No change.** Existing computation and interaction frozen. | Frozen |
 | UI-07 | Rooms | Collapsible groups and reorder rooms. | Persistence design TBD |
 | UI-08 | Item cards | Edit item title inline. | Save/cancel rules TBD |
@@ -83,6 +83,11 @@
 - Preserve **system-native text selection** (iPadOS blue handles), input behavior, hit targets, and semantics. Do not disable focus outlines outright.
 - Test on **iPadOS Safari (landscape and portrait)**, iOS Safari, Android Chrome; both themes; keyboard and touch navigation; project title editing; active stats.
 - Approved as a **future DS-01 design requirement only**. No implementation in currently approved UI-01/UI-02/UI-03/UI-11 and no modification to production `main`.
+
+## UI-05 · Filter simplification (accepted 2026-11-07)
+- User approved removal of the entire newly added chip row: it duplicated existing interactive statistics, progress decision counter, search, room selection, and unfinished-only checkbox.
+- Existing UI-03 stats, decision counter, search, room selector, and unfinished-only checkbox remain unchanged and continue to provide filtering.
+- No new quick-filter UI, storage, persistence, or sync changes. UI-05 resolves by **removing redundant controls** rather than introducing new ones.
 
 ## Design invariants
 - Two visual identities: Komorebi (light) and Dusk (dark). Keep approved semantics: red = leave; yellow = undecided; green = send/take; gray = unclassified.
