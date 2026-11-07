@@ -1,5 +1,16 @@
 # Tabi · CHANGELOG
 
+## [Unreleased] — UI-03 statistic filter candidate
+
+### Added
+- Interactive statistic cards: **Всего объектов** resets filters and shows the full Objects list; **Комнат** toggles occupied-room groups; **С цветной меткой** toggles colored objects in both Objects and Kanban.
+- Selected card border and accessibility `aria-pressed`; the global counter values and their formulas are unchanged.
+
+### Scope
+- Client-side view filtering only; no local storage schema, Supabase, synchronization, auth, theme, progress, project-name or accepted UI-01/UI-02/UI-11 changes.
+- Review pending: empty inventory, nested filters, mobile themes and focus behavior.
+
+
 ## [Unreleased] — UI-02 dynamic hero (approved 2026-11-07)
 
 ### Changed
