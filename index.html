@@ -224,6 +224,22 @@ button.stat{font:inherit;color:var(--ink);text-align:left;display:block;width:10
 button.stat:hover{border-color:var(--accent)!important}
 button.stat[aria-pressed="true"]{border-color:var(--accent)!important;box-shadow:var(--shadow),inset 0 0 0 1px var(--accent)!important}
 button.stat:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+
+/* UI-04 · orientation-aware containment, no edits to accepted components */
+:root{--tabi-viewport-width:100vw}
+.wrap{width:min(100%,var(--tabi-viewport-width));min-width:0}
+.hero,.hero>div,.stats,.tools,#content{min-width:0}
+.stats>*{min-width:0}
+.board{max-width:100%}
+@media (orientation:landscape) and (max-height:540px){
+  .hero{margin-top:22px}
+  .hero h1{font-size:clamp(29px,3.5vw,41px)}
+  .stats{margin-top:18px;margin-bottom:18px}
+  .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (orientation:portrait) and (max-width:540px){
+  .hero h1{font-size:clamp(29px,8vw,35px)}
+}
 </style></head><body><main class="wrap"><header class="top"><div class="brand"><div class="mark" aria-hidden="true">旅</div><div><b>Tabi <span class="project-label">· <button type="button" id="projectNameBtn" class="project-name-btn" title="Изменить название проекта" aria-label="Изменить название проекта">Мой переезд</button><input id="projectNameInput" class="project-name-input hidden" type="text" maxlength="48" autocomplete="off" aria-label="Название проекта"></span></b><small>Всё на своих местах</small></div></div><div class="top-actions"><button class="iconbtn" id="syncBtn" title="Синхронизировать" aria-label="Синхронизировать"><svg class="action-svg" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8.1 8.1 0 0 0-15.5-2M4 4v5h5"/><path d="M4 13a8.1 8.1 0 0 0 15.5 2M20 20v-5h-5"/></svg></button><button class="iconbtn" id="settingsBtn" title="Настройки и данные" aria-label="Настройки и данные"><svg class="action-svg" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><circle cx="12" cy="12" r="7.3"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(0 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(45 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(90 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(135 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(180 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(225 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(270 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(315 12 12)"/><circle cx="12" cy="12" r="3.15" fill="var(--card)"/></svg></button></div></header><section class="hero"><div><div class="eyebrow">МОЙ ПЕРЕЕЗД · ИНВЕНТАРЬ</div><h1 id="heroTitle" aria-live="polite">Порядок в вещах.</h1><p>Одна система для всех комнат и этапов.</p></div><button class="primary" id="addBtn">＋ Добавить</button></section><section class="stats" aria-label="Интерактивная статистика"><button type="button" class="stat" data-stat-filter="all" aria-pressed="true" title="Показать все объекты и сбросить фильтры"><strong id="totalCount">0</strong><span>Всего объектов</span></button><button type="button" class="stat" data-stat-filter="rooms" aria-pressed="false" title="Показать только комнаты с объектами"><strong id="roomCount">0</strong><span>Комнат</span></button><button type="button" class="stat" data-stat-filter="tagged" aria-pressed="false" title="Показать только объекты с цветной меткой"><strong id="taggedCount">0</strong><span>С цветной меткой</span></button></section><nav class="tabs"><button class="tab active" data-tab="objects">☷ &nbsp; Объекты</button><button class="tab" data-tab="board">▥ &nbsp; Канбан</button></nav><div class="tools"><input class="search" id="search" placeholder="⌕  Поиск по объектам..." type="search"><select class="filter" id="roomFilter" aria-label="Фильтр по комнатам"></select></div><div class="progressbox"><div class="progresshead"><strong>Прогресс переезда</strong><span id="progressText">0 / 0</span></div><div class="progressrail"><div id="progressFill"></div></div><small id="progressHint"></small></div><div class="extra-tools"><label class="toggle"><input id="unfinishedOnly" type="checkbox"> Только незавершённые</label><button class="secondary" id="bulkToggle" type="button">Выбрать несколько</button></div><div id="bulkBar" class="bulkbar hidden"><span id="bulkCount">0 выбрано</span><select id="bulkAction"><option value="">Выберите действие</option><option value="red">Оставить</option><option value="yellow">Не знаю</option><option value="green">Отправить / взять</option><option value="none">Без метки</option><option value="done">✓ Отметить выполненными</option><option value="undone">Снять галочки</option></select><select id="bulkRoom"></select><button id="bulkApply" class="primary" type="button">Применить</button></div><div id="content"></div><footer class="footer"><span id="saveState">● Сохранено на устройстве</span><span>Локально · JSON · облачная синхронизация</span></footer></main>
 <div class="overlay hidden" id="itemOverlay"><section class="modal" role="dialog" aria-modal="true" aria-label="Объект"><h2 id="itemTitle">Новый объект</h2><p class="desc">Добавьте вещь, назначьте комнату и цветовую метку.</p><label class="field">Название<input id="itemName" placeholder="Например, книги" maxlength="160"></label><label class="field">Комната<select id="itemRoom"></select></label><label class="field">Цветовая метка</label><div class="colors" id="colorPicks"></div><label class="field" style="display:flex;align-items:center;gap:10px"><input type="checkbox" id="itemDone" style="width:20px;height:20px;margin:0"> Готово</label><div class="modal-actions"><button class="secondary danger hidden" id="deleteBtn">Удалить</button><button class="secondary" id="cancelItem">Отмена</button><button class="primary" id="saveItem">Сохранить</button></div></section></div>
 <div class="overlay hidden" id="settingsOverlay"><section class="modal wide" role="dialog" aria-modal="true" aria-label="Настройки"><button class="modal-close" id="closeSettingsTop" aria-label="Закрыть настройки" title="Закрыть"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button><h2>Настройки и данные</h2><p class="desc">Комнаты и названия статусов можно менять. Ваши данные остаются доступны без интернета на этом устройстве.</p><div class="settings-title">Внешний вид</div><div class="settings-row"><select class="filter" id="themeMode"><option value="system">Системная тема</option><option value="light">Komorebi · День</option><option value="dark">Dusk · Вечер</option></select></div><p class="small">Komorebi — дневной свет; Dusk — графит и янтарь. Изменение вступает в силу сразу и запоминается на устройстве.</p><div class="settings-title">Комнаты</div><div id="roomEditor"></div><div class="settings-row"><input id="newRoom" class="search" placeholder="Новая комната"><button id="addRoom" class="secondary">Добавить</button></div><div class="settings-title">Цветовые категории</div><div id="statusEditor"></div><div class="settings-title">Резервное копирование</div><div class="settings-row"><button class="secondary" id="exportBtn">↓ Экспорт JSON</button><button class="secondary" id="importBtn">↑ Импорт JSON</button><input type="file" id="importFile" accept="application/json,.json" hidden></div><div class="settings-title">Защищённая синхронизация · Supabase Auth</div><p class="small">Создайте аккаунт по email или войдите в существующий. Каждый аккаунт имеет доступ только к своим записям. Для шифрования базы задайте отдельный пароль и введите его на обоих устройствах. Пароль шифрования не восстанавливается через email.</p><label class="field">Email<input id="authEmail" type="email" autocomplete="username" placeholder="you@example.com"></label><label class="field">Пароль аккаунта<input id="authPassword" type="password" autocomplete="current-password" placeholder="Пароль для входа"></label><div class="settings-row"><button class="secondary" id="authSignUp">Регистрация</button><button class="primary" id="authSignIn">Войти</button><button class="secondary" id="authSignOut">Выйти</button></div><label class="field">Пароль шифрования данных<input id="cloudPassword" type="password" placeholder="Отдельный пароль от 10 символов" autocomplete="off"></label><div class="settings-row"><button class="primary" id="cloudConnect">Сохранить пароль и синхронизировать</button></div><div id="cloudMsg" class="hint">Войдите в аккаунт. Локальные данные сохранены на устройстве.</div><div class="modal-actions"><button class="secondary" id="closeSettings">Готово</button></div></section></div><div id="toast" class="toast hidden"></div>
@@ -311,7 +327,48 @@ document.addEventListener('pointermove',e=>{if(!dragging||e.pointerId!==dragging
 document.addEventListener('pointerup',e=>{if(dragging&&e.pointerId===dragging.pointerId)finishDrag()});document.addEventListener('pointercancel',()=>cleanDrag());
 document.addEventListener('touchmove',e=>{if(dragging?.active){e.preventDefault();let t=e.touches[0];if(t){dragging.x=t.clientX;dragging.y=t.clientY;moveAt(t.clientX,t.clientY)}}},{passive:false});
 document.addEventListener('touchend',()=>{if(dragging?.active)finishDrag()});
-document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{cleanDrag();tab=b.dataset.tab;render()});/* UI-03: stat filter affects the view only, never the persisted inventory. */
+document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{cleanDrag();tab=b.dataset.tab;render()});
+
+/* UI-04 · touch swipe navigation. Native Kanban horizontal scrolling takes precedence. */
+let ui04Swipe=null;
+const swipeAreas=[document.querySelector('.tabs'),$('content')];
+for(const area of swipeAreas){
+  area.addEventListener('touchstart',e=>{
+    ui04Swipe=null;
+    if(e.touches.length!==1||dragging?.active||e.target.closest('button,input,select,textarea,a,[contenteditable="true"],.board,.kanitem'))return;
+    const t=e.touches[0];ui04Swipe={id:t.identifier,x:t.clientX,y:t.clientY,at:performance.now(),area};
+  },{passive:true});
+  area.addEventListener('touchend',e=>{
+    const start=ui04Swipe;ui04Swipe=null;
+    if(!start||start.area!==area||dragging?.active||e.changedTouches.length!==1)return;
+    const t=e.changedTouches[0];if(t.identifier!==start.id)return;
+    const dx=t.clientX-start.x,dy=t.clientY-start.y;
+    if(performance.now()-start.at>700||Math.abs(dx)<75||Math.abs(dx)<Math.abs(dy)*1.7||Math.abs(dy)>65)return;
+    const target=dx<0?'board':'objects';
+    if(tab!==target){cleanDrag();tab=target;render()}
+  },{passive:true});
+  area.addEventListener('touchcancel',()=>{ui04Swipe=null},{passive:true});
+}
+/* Browser-driven responsive layout: recalculate after iPad/phone orientation changes.
+   Never write inventory, alter zoom, or request cloud sync here. */
+let ui04ViewportFrame=0,ui04ViewportTimer=0;
+function ui04RefreshViewport(){
+  cancelAnimationFrame(ui04ViewportFrame);
+  ui04ViewportFrame=requestAnimationFrame(()=>{
+    const width=document.documentElement.clientWidth||window.innerWidth;
+    if(width>0)document.documentElement.style.setProperty('--tabi-viewport-width',width+'px');
+  });
+}
+function ui04OrientationRefresh(){
+  ui04Swipe=null;ui04RefreshViewport();
+  clearTimeout(ui04ViewportTimer);ui04ViewportTimer=setTimeout(ui04RefreshViewport,180);
+}
+window.addEventListener('resize',ui04RefreshViewport,{passive:true});
+window.addEventListener('orientationchange',ui04OrientationRefresh,{passive:true});
+if(window.screen?.orientation?.addEventListener)window.screen.orientation.addEventListener('change',ui04OrientationRefresh);
+if(window.visualViewport)window.visualViewport.addEventListener('resize',ui04RefreshViewport,{passive:true});
+ui04RefreshViewport();
+/* UI-03: stat filter affects the view only, never the persisted inventory. */
 document.querySelector('.stats').addEventListener('click',event=>{
   const button=event.target.closest('[data-stat-filter]');
   if(!button)return;
