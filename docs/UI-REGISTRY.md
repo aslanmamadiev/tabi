@@ -1,6 +1,6 @@
 # Tabi · UI Registry
 
-**Spec:** UI-AUDIT-1.0 · **Date:** 2026-10-31 · **Status:** requirements agreed; UI-01 candidate implemented in feature branch; review pending.
+**Spec:** UI-AUDIT-1.0 · **Date:** 2026-10-31 · **Status:** UI-01, UI-02 and UI-11 accepted; all three frozen pending an explicitly approved change request.
 
 ## Immutable development rules
 1. Every change specifies module ID, scope, acceptance criteria, and files touched before editing.
@@ -15,7 +15,7 @@
 | ID | Component | Approved change / contract | Status |
 |---|---|---|---|
 | UI-01 | Header controls | Center kanji 旅 inside its tile; coherent sync/settings icons in equal tiles. **FROZEN: approved 2026-11-07.** | Accepted — no further changes |
-| UI-02 | Hero | Dynamic title based on relocation phase. | Phase rules TBD |
+| UI-02 | Hero | Dynamic heading based on inventory states; no new persisted phase field. | Accepted 2026-11-07 — frozen |
 | UI-03 | Stats | Counts become interactive filters. | Mappings and reset TBD |
 | UI-04 | Navigation & viewport | Swipe between Objects and Kanban; **responsive reflow when device orientation changes (portrait ↔ landscape)** without manual page zoom. | Pending: touch gesture conflicts and orientation QA |
 | UI-05 | Search & filters | Compact filter chips. | Chips and composition TBD |
@@ -24,7 +24,7 @@
 | UI-08 | Item cards | Edit item title inline. | Save/cancel rules TBD |
 | UI-09 | Kanban | Optional compact cards. | Density controls TBD |
 | UI-10 | Settings | Reduce visual density; simplify without removing functions. | Layout TBD |
-| UI-11 | Project name | Tap the text after “Tabi ·” to edit project title inline; default “Мой переезд”; Enter/blur saves, Escape cancels, empty title keeps previous; max 48 characters. Independent local-only browser storage, no cloud sync. | Candidate v1.5.6 — review pending |
+| UI-11 | Project name | Tap the text after “Tabi ·” to edit project title inline; default “Мой переезд”; Enter/blur saves, Escape cancels, empty title keeps previous; max 48 characters. Independent local-only browser storage, no cloud sync. | Accepted 2026-11-07 — frozen |
 | CORE-01 | Storage & sync | **No change.** Keep local data, account login, Supabase, encryption, sync and schemas intact. | Frozen |
 | DS-01 | Design system | Add subtle animations; honor reduced-motion preference. | Motion spec TBD |
 
@@ -41,6 +41,16 @@
 - Default project title: **Мой переезд**; edit by tapping; save on Enter or blur; cancel on Escape; avoid accidental empty names, HTML injection and overflow.
 - **Storage caveat:** name is device/browser-origin local; it is not synced across devices. Adding cloud sync would require separate CORE-01 approval.
 - Test narrow screens, Komorebi/Dusk, persistence after reload, and both action buttons unaffected.
+
+## UI-02 · Dynamic hero — acceptance rules (candidate)
+- Empty inventory: **«Порядок в вещах.»**
+- Has items, none completed, at least one undecided/unclassified: **«Время определиться.»**
+- Has items, none completed, all decided red/green: **«План обретает форму.»**
+- Some completed, not all: **«Шаг за шагом.»**
+- Every current item completed: **«Всё на своих местах.»**
+- Use existing `state.items` and existing `done` / `status` fields; no new stored phase, no changes to progress calculations, filters, or sync.
+- Only the hero `h1` content changes. The subtitle, action buttons, header, themes and frozen UI-01/UI-11 remain unchanged.
+- Five deterministic stage tests and JavaScript syntax check passed; user accepted 2026-11-07. Further changes require separate approval.
 
 ## Design invariants
 - Two visual identities: Komorebi (light) and Dusk (dark). Keep approved semantics: red = leave; yellow = undecided; green = send/take; gray = unclassified.
