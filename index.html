@@ -244,7 +244,7 @@ function showProjectName(){
 function endProjectNameEdit(save){
   if(projectNameInput.classList.contains('hidden'))return;
   if(save){
-    const next=projectNameInput.value.trim().replace(/\\s+/g,' ').slice(0,48);
+    const next=projectNameInput.value.trim().replace(/\s+/g,' ').slice(0,48);
     if(next){
       projectName=next;
       try{localStorage.setItem(PROJECT_NAME_KEY,projectName)}catch{toast('Название изменено, но сохранить его на устройстве не удалось')}
