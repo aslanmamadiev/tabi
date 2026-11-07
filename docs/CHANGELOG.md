@@ -1,9 +1,15 @@
 # Tabi · CHANGELOG
 
-## [Unreleased] — UI-04 interactive swipe refinement (2026-11-07)
+## [Unreleased] — UI-05 quick filter chips
+- Compact view-only chips: All, Unfinished, Decision pending, Tagged; responsive horizontal scroll on mobile.
+- Reuses existing filter state, without modifying inventory, progress, sync, or accepted UI-01/02/03/04/11.
+- Pending mobile and iPad visual acceptance.
+
+
+## [Accepted] — UI-04 interactive swipe refinement (2026-11-07)
 - Finger-tracked horizontal displacement in the active list/board area; easing on completion and elastic snap-back when the gesture is too short.
 - Supports `prefers-reduced-motion`. Does not modify accepted components or Supabase.
-- Release is a new candidate, not merged to `main`. Manual iPad/Android swipe and scrolling checks still required.
+- User confirmed swipe and navigation behavior; UI-04 frozen. Not yet merged to `main`.
 
 
 ## [Unreleased] — UI-04 navigation and orientation candidate
