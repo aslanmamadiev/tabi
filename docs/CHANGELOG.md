@@ -1,5 +1,11 @@
 # Tabi · CHANGELOG
 
+## [Unreleased] — DS-01 focus consistency
+- Harmonized keyboard focus rings to the existing theme accent (Komorebi terracotta / Dusk gold), with a consistent 2px outline and 3px offset.
+- Native checkbox/radio accent aligns with theme; iOS text selection controls are not overridden.
+- Preserved existing card/status logic and reduced-motion behavior. Awaiting touch and keyboard review.
+
+
 ## [Unreleased] — UI-10 settings density
 - Backup and encrypted cloud sync grouped into native collapsible settings sections.
 - Appearance, rooms and color categories remain immediately visible; backup and sync controls remain intact inside their sections.
