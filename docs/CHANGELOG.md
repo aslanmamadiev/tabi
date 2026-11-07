@@ -1,5 +1,11 @@
 # Tabi · CHANGELOG
 
+## [Planned] — DS-01 focus indicator alignment (approved requirement 2026-11-07)
+- iPadOS Dusk observation: an old light-green `#b0c7b7` generic focus outline conflicts with the warm-gold input border, while blue text-selection handles are native iPadOS behavior.
+- Approved future solution: unify app focus/active outlines with theme tokens (Komorebi `#A65B48`, Dusk `#D5A76E`), preserve keyboard visibility and native iPadOS selection, check both iPad orientations.
+- **Not implemented**. No edits to `index.html`, frozen components, cloud storage, or production.
+
+
 ## [Unreleased] — UI-03 statistic filters (approved 2026-11-07)
 
 ### Added
