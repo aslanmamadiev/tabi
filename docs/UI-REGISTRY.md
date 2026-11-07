@@ -1,6 +1,6 @@
 # Tabi · UI Registry
 
-**Spec:** UI-AUDIT-1.0 · **Date:** 2026-10-31 · **Status:** UI-01 and UI-11 accepted; UI-02 candidate under review.
+**Spec:** UI-AUDIT-1.0 · **Date:** 2026-10-31 · **Status:** UI-01, UI-02 and UI-11 accepted; all three frozen pending an explicitly approved change request.
 
 ## Immutable development rules
 1. Every change specifies module ID, scope, acceptance criteria, and files touched before editing.
@@ -15,7 +15,7 @@
 | ID | Component | Approved change / contract | Status |
 |---|---|---|---|
 | UI-01 | Header controls | Center kanji 旅 inside its tile; coherent sync/settings icons in equal tiles. **FROZEN: approved 2026-11-07.** | Accepted — no further changes |
-| UI-02 | Hero | Dynamic heading based on inventory states; no new persisted phase field. | Candidate implemented; review pending |
+| UI-02 | Hero | Dynamic heading based on inventory states; no new persisted phase field. | Accepted 2026-11-07 — frozen |
 | UI-03 | Stats | Counts become interactive filters. | Mappings and reset TBD |
 | UI-04 | Navigation & viewport | Swipe between Objects and Kanban; **responsive reflow when device orientation changes (portrait ↔ landscape)** without manual page zoom. | Pending: touch gesture conflicts and orientation QA |
 | UI-05 | Search & filters | Compact filter chips. | Chips and composition TBD |
@@ -50,7 +50,7 @@
 - Every current item completed: **«Всё на своих местах.»**
 - Use existing `state.items` and existing `done` / `status` fields; no new stored phase, no changes to progress calculations, filters, or sync.
 - Only the hero `h1` content changes. The subtitle, action buttons, header, themes and frozen UI-01/UI-11 remain unchanged.
-- Check on mobile with each synthetic stage, including deleted items not counting. Candidate pending acceptance.
+- Five deterministic stage tests and JavaScript syntax check passed; user accepted 2026-11-07. Further changes require separate approval.
 
 ## Design invariants
 - Two visual identities: Komorebi (light) and Dusk (dark). Keep approved semantics: red = leave; yellow = undecided; green = send/take; gray = unclassified.
