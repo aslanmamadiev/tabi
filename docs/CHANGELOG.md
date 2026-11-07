@@ -1,5 +1,12 @@
 # Tabi · CHANGELOG
 
+## [Unreleased] — UI-08 inline item titles
+- Tap/click a title in the Objects view to edit directly; Enter/blur saves, Escape cancels.
+- Blank names rejected, 160-character limit retained, existing updatedAt/persist/sync path used.
+- Drag long-press remains on cards outside the active text editor; Kanban and status logic untouched.
+- Candidate awaiting mobile/touch acceptance; no merge to main.
+
+
 ## [Unreleased] — UI-07 room reorder feedback
 - Accent insertion line tracks the target position during room-handle dragging; cancel clears the marker without reordering.
 - Only UI-07 room drag interaction changed. Awaiting device acceptance.
