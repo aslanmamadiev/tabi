@@ -640,24 +640,53 @@ $('importFile').onchange=async e=>{
   }
   if(!navigator.onLine)throw Error('Для восстановления на всех устройствах требуется интернет');
   restoreInProgress=true;clearTimeout(delay);busy=true;
+  let restoreStage='подготовка',writeStarted=false,expectedRevision=null,restoreId=null;
   try{
+   restoreStage='авторизация';
    await validSession();
    const id=session.user.id;
+   restoreStage='чтение облака';
    const rows=await request('GET','move_spaces?id=eq.'+encodeURIComponent(id)+'&select=payload,revision');
-   const expectedRevision=Number(rows[0]?.revision)||0;
+   expectedRevision=Number(rows[0]?.revision)||0;
    const cloud=rows.length?await decrypt(rows[0].payload,cfg.pass):copy(state);
-   // Download current cloud state before any destructive write.
+   restoreStage='резервная копия';
    downloadJson({...cloud,exportedAt:new Date().toISOString()},'tabi-cloud-before-restore-'+Date.now()+'.json');
+   restoreStage='шифрование';
    const epoch=Math.max(Number(cloud.restoreEpoch)||0,Number(state.restoreEpoch)||0)+1;
    imported.restoreEpoch=epoch;
+   restoreId=crypto.randomUUID?crypto.randomUUID():String(Date.now())+'-'+Math.random();
+   imported.restoreId=restoreId;
    const payload=await encrypt(imported,cfg.pass);
+   restoreStage='запись в облако';
+   writeStarted=true;
    await writeCas(payload,expectedRevision);
+   restoreStage='локальное применение';
    state=imported;
    localStorage.setItem(KEY,JSON.stringify(state));
    localStorage.setItem(RESTORE_EPOCH_KEY,String(epoch));
    render();drawSettings();cloudState('Восстановлено · облако обновлено','on');toast('Данные заменены на всех устройствах');
+  }catch(error){
+   let detail=error.message||String(error);
+   if(writeStarted&&restoreId){
+    try{
+     const check=await request('GET','move_spaces?id=eq.'+encodeURIComponent(session.user.id)+'&select=payload,revision');
+     if(check.length){
+      const current=await decrypt(check[0].payload,cfg.pass);
+      if(current.restoreId===restoreId){
+       state=current;localStorage.setItem(KEY,JSON.stringify(state));
+       localStorage.setItem(RESTORE_EPOCH_KEY,String(Number(state.restoreEpoch)||0));
+       render();drawSettings();cloudState('Восстановлено · ответ сервера потерян','on');
+       toast('Восстановлено: сервер подтвердил запись');return;
+      }
+      detail+='; проверка: запись не подтверждена (версия '+check[0].revision+')';
+     }
+    }catch(checkError){detail+='; проверка сервера: '+(checkError.message||String(checkError))}
+   }
+   cloudState('Восстановление · '+restoreStage+': '+detail,'err');
+   toast('Восстановление · '+restoreStage+': '+detail);
+   throw Object.assign(new Error(detail),{restoreHandled:true});
   }finally{busy=false;restoreInProgress=false}
- }catch(err){toast('Восстановление: '+err.message)}
+ }catch(err){if(!err.restoreHandled)toast('Восстановление: '+err.message)}
  finally{e.target.value=''}
 };
 
