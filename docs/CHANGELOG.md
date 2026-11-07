@@ -1,5 +1,12 @@
 # Tabi · CHANGELOG
 
+## [Unreleased] — UI-07 room controls
+- Collapse/expand rooms with local-only preference; reorder rooms in Settings by handle or arrows (existing synced room order).
+- Minimal room-delete SVG matching Settings close icon; deletion safeguards preserved.
+- LABEL-01: defer custom status labels, colors, ordering and deletion until a separate architecture review.
+- UI-07 awaits mobile/iPad acceptance; no changes to accepted UI-01–05 or sync architecture.
+
+
 ## [Accepted] — UI-05 filter simplification (2026-11-07)
 - Removed the experimental four-chip filter row after review: its actions duplicated existing interactive statistics, decision counter and unfinished-only toggle.
 - Restored `index.html` exactly to the accepted UI-04 version; no changes to existing filters, layout, data, or sync.
