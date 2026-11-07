@@ -13,6 +13,10 @@
 - Preserved the existing explicit sync action and fallback notice when the account is not configured.
 - UI changes restricted to header SVGs and their alignment CSS; no storage, network, or auth changes in this revision.
 
+### Mobile feedback revision (2026-11-07)
+- **UI-01:** replaced the overly subtle settings icon with a solid, eight-tooth gear silhouette. The eight protruding teeth remain visible at the 21–22 px mobile glyph size; a contrasting central hole remains.
+- **UI-04 (planned):** recorded automatic layout reflow after rotating the phone in `UI-REGISTRY.md`. No orientation code changed in this patch.
+
 ### Verification pending
 - Visual review at 320/360/390/768px with Komorebi and Dusk.
 - Mobile browser comparison and end-user approval before merging into main.
