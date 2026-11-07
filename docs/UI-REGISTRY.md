@@ -1,6 +1,6 @@
 # Tabi · UI Registry
 
-**Spec:** UI-AUDIT-1.0 · **Date:** 2026-10-31 · **Status:** UI-01, UI-02 and UI-11 accepted; all three frozen pending an explicitly approved change request.
+**Spec:** UI-AUDIT-1.0 · **Date:** 2026-10-31 · **Status:** UI-01, UI-02, UI-03 and UI-11 accepted; frozen pending an explicitly approved change request.
 
 ## Immutable development rules
 1. Every change specifies module ID, scope, acceptance criteria, and files touched before editing.
@@ -16,7 +16,7 @@
 |---|---|---|---|
 | UI-01 | Header controls | Center kanji 旅 inside its tile; coherent sync/settings icons in equal tiles. **FROZEN: approved 2026-11-07.** | Accepted — no further changes |
 | UI-02 | Hero | Dynamic heading based on inventory states; no new persisted phase field. | Accepted 2026-11-07 — frozen |
-| UI-03 | Stats | Counts become interactive filters without changing values or visual card layout: Total resets, Rooms shows occupied room groups, Tagged filters colored objects. | Implemented in candidate; manual review pending |
+| UI-03 | Stats | Counts become interactive filters without changing values or visual card layout: Total resets, Rooms shows occupied room groups, Tagged filters colored objects. | Accepted 2026-11-07 — frozen |
 | UI-04 | Navigation & viewport | Swipe between Objects and Kanban; **responsive reflow when device orientation changes (portrait ↔ landscape)** without manual page zoom. | Pending: touch gesture conflicts and orientation QA |
 | UI-05 | Search & filters | Compact filter chips. | Chips and composition TBD |
 | UI-06 | Progress | **No change.** Existing computation and interaction frozen. | Frozen |
