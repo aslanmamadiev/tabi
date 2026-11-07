@@ -17,7 +17,7 @@
 | UI-01 | Header controls | Center kanji 旅 inside its tile; coherent sync/settings icons in equal tiles. **FROZEN: approved 2026-11-07.** | Accepted — no further changes |
 | UI-02 | Hero | Dynamic heading based on inventory states; no new persisted phase field. | Accepted 2026-11-07 — frozen |
 | UI-03 | Stats | Counts become interactive filters without changing values or visual card layout: Total resets, Rooms shows occupied room groups, Tagged filters colored objects. | Accepted 2026-11-07 — frozen |
-| UI-04 | Navigation & viewport | Swipe between Objects and Kanban; **responsive reflow when device orientation changes (portrait ↔ landscape)** without manual page zoom. | Pending: touch gesture conflicts and orientation QA |
+| UI-04 | Navigation & viewport | Touch swipe between Objects/Kanban, preserving drag and Kanban horizontal scrolling; responsive reflow when device orientation changes. | Implemented in candidate; device acceptance pending |
 | UI-05 | Search & filters | Compact filter chips. | Chips and composition TBD |
 | UI-06 | Progress | **No change.** Existing computation and interaction frozen. | Frozen |
 | UI-07 | Rooms | Collapsible groups and reorder rooms. | Persistence design TBD |
@@ -27,6 +27,13 @@
 | UI-11 | Project name | Tap the text after “Tabi ·” to edit project title inline; default “Мой переезд”; Enter/blur saves, Escape cancels, empty title keeps previous; max 48 characters. Independent local-only browser storage, no cloud sync. | Accepted 2026-11-07 — frozen |
 | CORE-01 | Storage & sync | **No change.** Keep local data, account login, Supabase, encryption, sync and schemas intact. | Frozen |
 | DS-01 | Design system | Subtle animations (respect reduced-motion) **and consistent focus/active-state colors across Komorebi / Dusk**; keep native iPadOS/iOS text-selection handles. | Focus styling accepted as requirement 2026-11-07; implementation pending |
+
+## UI-04 implemented candidate — swipe gestures and viewport
+- In Objects, a short horizontal finger swipe (≥75 px in ≤700 ms; horizontal displacement ≥1.7× vertical, vertical displacement ≤65 px) left opens Kanban; right opens Objects (if not already selected).
+- In Kanban, horizontal scrolling of columns remains native; **right swipe at the leftmost board scroll edge** returns to Objects. A swipe over buttons, links, inputs, or text editors does not switch tabs.
+- Long-hold card drag retains priority; gesture code neither prevents native scrolling nor modifies persisted data. No new storage keys or Supabase operations.
+- Layout width remeasured from document viewport on resize/orientationchange/screen.orientation/visualViewport.resize (plus delayed second measure to accommodate mobile browser UI). CSS is responsive in shallow landscape and narrow portrait viewports. No forced zoom or viewport-meta edits.
+- Manual device checks pending: iPad portrait ↔ landscape, Android/iOS, both themes, long-press drag, horizontal Kanban, form editing, pagination/filters and touch navigation.
 
 ## UI-04 additional acceptance criteria — orientation (requested 2026-11-07)
 - After rotating a phone between portrait and landscape, viewport width and layout must recalculate automatically; no manual pinch-to-zoom, page refresh, or viewport reset required.
