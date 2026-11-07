@@ -1,9 +1,8 @@
 # Tabi · CHANGELOG
 
-## [Unreleased] — UI-05 quick filter chips
-- Compact view-only chips: All, Unfinished, Decision pending, Tagged; responsive horizontal scroll on mobile.
-- Reuses existing filter state, without modifying inventory, progress, sync, or accepted UI-01/02/03/04/11.
-- Pending mobile and iPad visual acceptance.
+## [Accepted] — UI-05 filter simplification (2026-11-07)
+- Removed the experimental four-chip filter row after review: its actions duplicated existing interactive statistics, decision counter and unfinished-only toggle.
+- Restored `index.html` exactly to the accepted UI-04 version; no changes to existing filters, layout, data, or sync.
 
 
 ## [Accepted] — UI-04 interactive swipe refinement (2026-11-07)
