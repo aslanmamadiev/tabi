@@ -616,7 +616,7 @@ $('importFile').onchange=async e=>{
   const imported=hydrate(JSON.parse(await file.text()));
   if(!Array.isArray(imported.rooms)||!imported.rooms.every(r=>typeof r==='string')||!imported.items.every(i=>typeof i.room==='string'||typeof i.room==='undefined'))throw Error('Некорректные комнаты или предметы');
   const connected=!!(session?.access_token&&cfg.pass);
-  const warning=connected?'Заменить все данные?\\n\\nJSON заменит предметы, комнаты и метки на всех подключённых устройствах. Текущие данные будут сохранены в резервную копию.':'Заменить локальные данные?\\n\\nJSON заменит предметы, комнаты и метки на этом устройстве. Облачная замена требует подключения.';
+  const warning=connected?'Заменить все данные?\n\nJSON заменит предметы, комнаты и метки на всех подключённых устройствах. Текущие данные будут сохранены в резервную копию.':'Заменить локальные данные?\n\nJSON заменит предметы, комнаты и метки на этом устройстве. Облачная замена требует подключения.';
   if(!confirm(warning))return;
   if(restoreInProgress||busy)throw Error('Дождитесь завершения синхронизации');
   if(!connected){
