@@ -122,3 +122,8 @@ Approval / status:
 - Existing four status labels remain fixed; label creation/reordering/removal and custom palette are on **stop-list LABEL-01** because they would change status semantics, Kanban, completion and sync.
 - No new label delete X is introduced because labels are not deletable in the current data model; room delete X is restyled.
 - UI-07 candidate requires testing on iPad/phone: collapse, rename, add to collapsed room, reorder by touch/arrow, existing item drag, both themes, persistence after reload.
+
+## UI-07 refinement · Drag insertion feedback
+- While dragging a room handle in Settings, an accent-colored horizontal insertion line appears above/below the target room according to the actual reorder destination.
+- Releasing applies the same existing `moveRoom(from,to)` operation; pointer cancel clears feedback without moving anything.
+- Scope limited to UI-07 room drag affordance; label and sync logic unchanged. Pending touch-device acceptance.
