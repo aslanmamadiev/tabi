@@ -1,5 +1,17 @@
 # Tabi · CHANGELOG
 
+## [Unreleased] — v1.5.6 candidate
+
+### Added
+- **UI-11 · Project title:** tap “Мой переезд” beside Tabi in the header to rename the current project inline; Enter or blur saves, Escape cancels. Default title “Мой переезд”; maximum 48 characters.
+- Project title is stored in a separate browser-only key `tabi-project-name-v1` and shown in the browser tab title. It does **not** sync via Supabase; no modification to CORE-01.
+
+### Scope and approvals
+- UI-01 controls, accepted 2026-11-07, are frozen and unchanged by UI-11.
+- Upcoming orientation reflow remains tracked under UI-04, not implemented here.
+- Candidate awaiting mobile verification and approval; neither `main` nor GitHub Pages updated.
+
+
 ## [Unreleased] — v1.5.5 candidate
 
 ### Changed
