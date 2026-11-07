@@ -1,5 +1,11 @@
 # Tabi · CHANGELOG
 
+## [Unreleased] — UI-04 interactive swipe refinement (2026-11-07)
+- Finger-tracked horizontal displacement in the active list/board area; easing on completion and elastic snap-back when the gesture is too short.
+- Supports `prefers-reduced-motion`. Does not modify accepted components or Supabase.
+- Release is a new candidate, not merged to `main`. Manual iPad/Android swipe and scrolling checks still required.
+
+
 ## [Unreleased] — UI-04 navigation and orientation candidate
 
 ### Added
