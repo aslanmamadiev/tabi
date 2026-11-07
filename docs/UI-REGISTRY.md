@@ -14,7 +14,7 @@
 
 | ID | Component | Approved change / contract | Status |
 |---|---|---|---|
-| UI-01 | Header | Center kanji 旅 inside its tile. Use coherent sync/settings icons precisely centered in equal-size tiles across viewport widths. | Implemented in v1.5.5 candidate; visual acceptance pending |
+| UI-01 | Header controls | Center kanji 旅 inside its tile; coherent sync/settings icons in equal tiles. **FROZEN: approved 2026-11-07.** | Accepted — no further changes |
 | UI-02 | Hero | Dynamic title based on relocation phase. | Phase rules TBD |
 | UI-03 | Stats | Counts become interactive filters. | Mappings and reset TBD |
 | UI-04 | Navigation & viewport | Swipe between Objects and Kanban; **responsive reflow when device orientation changes (portrait ↔ landscape)** without manual page zoom. | Pending: touch gesture conflicts and orientation QA |
@@ -24,6 +24,7 @@
 | UI-08 | Item cards | Edit item title inline. | Save/cancel rules TBD |
 | UI-09 | Kanban | Optional compact cards. | Density controls TBD |
 | UI-10 | Settings | Reduce visual density; simplify without removing functions. | Layout TBD |
+| UI-11 | Project name | Tap the text after “Tabi ·” to edit project title inline; default “Мой переезд”; Enter/blur saves, Escape cancels, empty title keeps previous; max 48 characters. Independent local-only browser storage, no cloud sync. | Candidate v1.5.6 — review pending |
 | CORE-01 | Storage & sync | **No change.** Keep local data, account login, Supabase, encryption, sync and schemas intact. | Frozen |
 | DS-01 | Design system | Add subtle animations; honor reduced-motion preference. | Motion spec TBD |
 
@@ -33,6 +34,13 @@
 - Keep active Objects/Kanban view, filter state, and local data intact; orientation must not trigger data mutations or Supabase requests.
 - Check on Android Chrome and iOS Safari; test both Komorebi and Dusk.
 - **Not implemented**: this is an added acceptance requirement for UI-04; do not change orientation handling during UI-01.
+
+## UI-11 · Project name change request (2026-11-07)
+- Allowed: text label immediately after “Tabi ·”, its editor control, a new independent localStorage key `tabi-project-name-v1`, and browser tab title.
+- Prohibited: changing approved UI-01 icon shapes / button sizes / alignment, hero, progress, room and item data models, Supabase, authentication, encryption or existing storage keys.
+- Default project title: **Мой переезд**; edit by tapping; save on Enter or blur; cancel on Escape; avoid accidental empty names, HTML injection and overflow.
+- **Storage caveat:** name is device/browser-origin local; it is not synced across devices. Adding cloud sync would require separate CORE-01 approval.
+- Test narrow screens, Komorebi/Dusk, persistence after reload, and both action buttons unaffected.
 
 ## Design invariants
 - Two visual identities: Komorebi (light) and Dusk (dark). Keep approved semantics: red = leave; yellow = undecided; green = send/take; gray = unclassified.
