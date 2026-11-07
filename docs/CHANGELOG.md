@@ -1,5 +1,17 @@
 # Tabi · CHANGELOG
 
+## [Unreleased] — UI-04 navigation and orientation candidate
+
+### Added
+- Touch-only horizontal swipes between Objects and Kanban, with guards for editable controls, long-press drag and the Kanban scrolling region.
+- A right swipe from the left edge of the Kanban board scroll range returns to Objects; horizontal column scrolling retains priority elsewhere.
+- Responsive layout recomputation after phone/tablet rotation, including delayed mobile browser resize settling. Narrow landscape/portrait refinements; no forced zoom.
+
+### Safety and verification
+- No changes to frozen UI-01 / UI-02 / UI-03 / UI-11, progress, storage contracts, encryption or sync.
+- JavaScript syntax check done; mobile gestures/orientation and visual layouts require user acceptance on real hardware.
+
+
 ## [Planned] — DS-01 focus indicator alignment (approved requirement 2026-11-07)
 - iPadOS Dusk observation: an old light-green `#b0c7b7` generic focus outline conflicts with the warm-gold input border, while blue text-selection handles are native iPadOS behavior.
 - Approved future solution: unify app focus/active outlines with theme tokens (Komorebi `#A65B48`, Dusk `#D5A76E`), preserve keyboard visibility and native iPadOS selection, check both iPad orientations.
