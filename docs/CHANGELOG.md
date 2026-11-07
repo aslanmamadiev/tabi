@@ -1,5 +1,11 @@
 # Tabi · CHANGELOG
 
+## [Unreleased] — UI-10 settings density
+- Backup and encrypted cloud sync grouped into native collapsible settings sections.
+- Appearance, rooms and color categories remain immediately visible; backup and sync controls remain intact inside their sections.
+- No schema, storage, authentication, sync or label logic changes; pending device acceptance.
+
+
 ## [Unreleased] — UI-09 compact Kanban
 - Kanban-only compact/normal density toggle above columns; compact reduces card and column spacing while retaining title, room, checkbox and drag behavior.
 - View preference stored locally in `tabi-board-density-v1`, not synced with inventory.
