@@ -366,6 +366,13 @@ projectNameInput.addEventListener('keydown',event=>{
   if(event.key==='Escape'){event.preventDefault();endProjectNameEdit(false)}
 });
 projectNameInput.addEventListener('blur',()=>endProjectNameEdit(true));
+// On iOS/iPadOS a tap outside a focused input does not always trigger blur.
+// Commit explicitly on an outside pointer interaction; keep Enter/Escape behavior.
+document.addEventListener('pointerdown',event=>{
+  if(projectNameInput.classList.contains('hidden'))return;
+  if(event.target===projectNameInput||projectNameInput.contains(event.target))return;
+  endProjectNameEdit(true);
+},true);
 showProjectName();
 function saveCfg(){localStorage.setItem(CFG,JSON.stringify({pass:cfg.pass||'',theme:cfg.theme||'system'}))}
 function applyTheme(){let m=cfg.theme==='system'?(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):cfg.theme;document.documentElement.dataset.theme=m;let meta=$('themeColorMeta');if(meta)meta.setAttribute('content',m==='dark'?'#EEF3F1':'#FAFBF8');let sel=$('themeMode');if(sel)sel.value=cfg.theme||'system'}
