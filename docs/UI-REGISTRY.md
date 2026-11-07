@@ -28,6 +28,14 @@
 | CORE-01 | Storage & sync | **No change.** Keep local data, account login, Supabase, encryption, sync and schemas intact. | Frozen |
 | DS-01 | Design system | Subtle animations (respect reduced-motion) **and consistent focus/active-state colors across Komorebi / Dusk**; keep native iPadOS/iOS text-selection handles. | Focus styling accepted as requirement 2026-11-07; implementation pending |
 
+## UI-04 · Interactive swipe refinement (candidate, 2026-11-07)
+- Approved to prototype **finger-following** transitions instead of instantaneous switch. Content `#content` follows the horizontal finger displacement (clamped at 38% width), with a short completion or snap-back animation.
+- Release commits after a deliberate horizontal distance threshold (min(96px, 24% of content width)) or a short quick flick (>=42px, >=0.55px/ms); otherwise returns to original tab.
+- Native vertical scroll, buttons/forms, drag-and-drop, and horizontal Kanban scrolling remain higher priority; initial motion must be horizontally dominant and directed toward the adjacent tab.
+- Reduced-motion preference disables moving animations but retains navigation. Ordinary tab taps are unchanged.
+- **Only UI-04** swipe code was changed; no layout redesign, data mutation, Supabase changes or modifications to accepted UI-01 / UI-02 / UI-03 / UI-11.
+- Manual acceptance needed on real touch devices, especially iPad Safari and Kanban board at leftmost scroll edge.
+
 ## UI-04 implemented candidate — swipe gestures and viewport
 - In Objects, a short horizontal finger swipe (≥75 px in ≤700 ms; horizontal displacement ≥1.7× vertical, vertical displacement ≤65 px) left opens Kanban; right opens Objects (if not already selected).
 - In Kanban, horizontal scrolling of columns remains native; **right swipe at the leftmost board scroll edge** returns to Objects. A swipe over buttons, links, inputs, or text editors does not switch tabs.

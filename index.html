@@ -329,31 +329,95 @@ document.addEventListener('touchmove',e=>{if(dragging?.active){e.preventDefault(
 document.addEventListener('touchend',()=>{if(dragging?.active)finishDrag()});
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{cleanDrag();tab=b.dataset.tab;render()});
 
-/* UI-04 · touch swipe navigation. Native Kanban horizontal scrolling takes precedence. */
-let ui04Swipe=null;
-const swipeAreas=[document.querySelector('.tabs'),$('content')];
-for(const area of swipeAreas){
-  area.addEventListener('touchstart',e=>{
-    ui04Swipe=null;
-    if(e.touches.length!==1||dragging?.active||e.target.closest('button,input,select,textarea,a,[contenteditable="true"]'))return;
-    const board=e.target.closest('.board');
-    // At the Kanban's leftmost scroll boundary, a right swipe returns to Objects.
-    // Otherwise preserve native horizontal board scrolling.
-    if(board&&(tab!=='board'||board.scrollLeft>2))return;
-    const t=e.touches[0];ui04Swipe={id:t.identifier,x:t.clientX,y:t.clientY,at:performance.now(),area,board};
-  },{passive:true});
-  area.addEventListener('touchend',e=>{
-    const start=ui04Swipe;ui04Swipe=null;
-    if(!start||start.area!==area||dragging?.active||e.changedTouches.length!==1)return;
-    const t=e.changedTouches[0];if(t.identifier!==start.id)return;
-    const dx=t.clientX-start.x,dy=t.clientY-start.y;
-    if(performance.now()-start.at>700||Math.abs(dx)<75||Math.abs(dx)<Math.abs(dy)*1.7||Math.abs(dy)>65)return;
-    if(start.board&&(dx<0||start.board.scrollLeft>2))return;
-    const target=dx<0?'board':'objects';
-    if(tab!==target){cleanDrag();tab=target;render()}
-  },{passive:true});
-  area.addEventListener('touchcancel',()=>{ui04Swipe=null},{passive:true});
+/* UI-04 · interactive page swipe: finger-tracked, cancellable, reduced-motion aware.
+   No persistence, data calculation, or Kanban scroll changes. */
+let ui04Swipe=null,ui04Transition=false;
+const ui04ReducedMotion=()=>window.matchMedia?.('(prefers-reduced-motion: reduce)').matches===true;
+const ui04GestureArea=$('content');
+const ui04Clamp=(value,min,max)=>Math.max(min,Math.min(max,value));
+function ui04ClearVisual(){
+  ui04GestureArea.style.transform='';
+  ui04GestureArea.style.opacity='';
+  ui04GestureArea.style.willChange='';
+  ui04GestureArea.style.transition='';
 }
+function ui04Animate(el,frames,options){
+  if(ui04ReducedMotion()||!el.animate)return Promise.resolve();
+  const animation=el.animate(frames,options);
+  return animation.finished.catch(()=>{}).then(()=>{animation.cancel()});
+}
+async function ui04FinishSwipe(gesture,deltaX,velocity){
+  if(ui04Transition)return;
+  ui04Transition=true;
+  const el=ui04GestureArea;
+  const eligible=(gesture.from==='objects'&&deltaX<0)||(gesture.from==='board'&&deltaX>0);
+  const valid=eligible&&(Math.abs(deltaX)>=Math.min(96,gesture.width*.24)||(Math.abs(deltaX)>=42&&Math.abs(velocity)>.55));
+  const fromX=gesture.locked?ui04Clamp(gesture.dragX??deltaX,-gesture.width*.38,gesture.width*.38):0;
+  const fromOpacity=gesture.locked?.96:1;
+  try{
+    if(!valid){
+      if(gesture.locked)await ui04Animate(el,[{transform:`translate3d(${fromX}px,0,0)`,opacity:fromOpacity},{transform:'translate3d(0,0,0)',opacity:1}],{duration:185,easing:'cubic-bezier(.2,.8,.2,1)'});
+      return;
+    }
+    const dir=deltaX<0?-1:1;
+    if(!ui04ReducedMotion())await ui04Animate(el,[{transform:`translate3d(${fromX}px,0,0)`,opacity:fromOpacity},{transform:`translate3d(${dir*gesture.width*.30}px,0,0)`,opacity:.45}],{duration:125,easing:'ease-out'});
+    cleanDrag();
+    tab=dir<0?'board':'objects';
+    ui04ClearVisual();
+    render();
+    if(!ui04ReducedMotion()){
+      await ui04Animate(el,[{transform:`translate3d(${-dir*Math.min(90,gesture.width*.22)}px,0,0)`,opacity:.6},{transform:'translate3d(0,0,0)',opacity:1}],{duration:245,easing:'cubic-bezier(.16,1,.3,1)'});
+    }
+  }finally{
+    ui04ClearVisual();
+    ui04Transition=false;
+  }
+}
+ui04GestureArea.addEventListener('touchstart',e=>{
+  ui04Swipe=null;
+  if(ui04Transition||e.touches.length!==1||dragging?.active||e.target.closest('button,input,select,textarea,a,[contenteditable="true"]'))return;
+  const board=e.target.closest('.board');
+  if(board&&(tab!=='board'||board.scrollLeft>2))return;
+  const t=e.touches[0];
+  ui04Swipe={id:t.identifier,x:t.clientX,y:t.clientY,lastX:t.clientX,lastTime:performance.now(),started:performance.now(),width:Math.max(1,ui04GestureArea.clientWidth),from:tab,board,locked:false,vertical:false};
+},{passive:true});
+ui04GestureArea.addEventListener('touchmove',e=>{
+  const g=ui04Swipe;
+  if(!g||ui04Transition||e.touches.length!==1||dragging?.active)return;
+  const t=Array.from(e.touches).find(p=>p.identifier===g.id);if(!t)return;
+  const dx=t.clientX-g.x,dy=t.clientY-g.y;
+  if(!g.locked){
+    if(g.vertical)return;
+    if(Math.abs(dy)>12&&Math.abs(dy)>Math.abs(dx)){g.vertical=true;return}
+    if(Math.abs(dx)<12||Math.abs(dx)<Math.abs(dy)*1.4)return;
+    if((g.from==='objects'&&dx>=0)||(g.from==='board'&&dx<=0)){ui04Swipe=null;return}
+    if(g.board&&(dx<=0||g.board.scrollLeft>2)){ui04Swipe=null;return}
+    g.locked=true;ui04GestureArea.style.willChange='transform,opacity';
+  }
+  if(e.cancelable)e.preventDefault();
+  g.dragX=dx;g.lastX=t.clientX;g.lastTime=performance.now();
+  if(!ui04ReducedMotion()){
+    const x=ui04Clamp(dx,-g.width*.38,g.width*.38);
+    ui04GestureArea.style.transform=`translate3d(${x}px,0,0)`;
+    ui04GestureArea.style.opacity=String(1-Math.min(Math.abs(x)/g.width*.1,.05));
+  }
+},{passive:false});
+ui04GestureArea.addEventListener('touchend',e=>{
+  const g=ui04Swipe;ui04Swipe=null;
+  if(!g||ui04Transition||dragging?.active)return;
+  const t=Array.from(e.changedTouches).find(p=>p.identifier===g.id);
+  if(!t){ui04ClearVisual();return}
+  const dx=t.clientX-g.x,dy=t.clientY-g.y;
+  const duration=Math.max(1,performance.now()-g.started);
+  // Average speed is used to accept a deliberate short flick; vertical scroll never switches.
+  const speed=dx/duration;
+  if(g.vertical||Math.abs(dx)<Math.abs(dy)*1.4){ui04FinishSwipe(g,0,0);return}
+  ui04FinishSwipe(g,dx,speed);
+},{passive:true});
+ui04GestureArea.addEventListener('touchcancel',()=>{
+  const g=ui04Swipe;ui04Swipe=null;
+  if(g&&!ui04Transition)ui04FinishSwipe(g,0,0);
+},{passive:true});
 /* Browser-driven responsive layout: recalculate after iPad/phone orientation changes.
    Never write inventory, alter zoom, or request cloud sync here. */
 let ui04ViewportFrame=0,ui04ViewportTimer=0;
@@ -365,7 +429,7 @@ function ui04RefreshViewport(){
   });
 }
 function ui04OrientationRefresh(){
-  ui04Swipe=null;ui04RefreshViewport();
+  ui04Swipe=null;if(!ui04Transition)ui04ClearVisual();ui04RefreshViewport();
   clearTimeout(ui04ViewportTimer);ui04ViewportTimer=setTimeout(ui04RefreshViewport,180);
 }
 window.addEventListener('resize',ui04RefreshViewport,{passive:true});
