@@ -1,5 +1,11 @@
 # Tabi · CHANGELOG
 
+## [Unreleased] — UI-09 compact Kanban
+- Kanban-only compact/normal density toggle above columns; compact reduces card and column spacing while retaining title, room, checkbox and drag behavior.
+- View preference stored locally in `tabi-board-density-v1`, not synced with inventory.
+- Draft preview; mobile testing and approval pending. No merge to main.
+
+
 ## [Unreleased] — UI-08 Kanban + bulk actions
 - Inline item-title editing now also works in Kanban (same Enter, blur, Escape semantics).
 - Existing Select multiple action menu now includes confirmed bulk deletion, using existing soft-delete flag and sync path.
