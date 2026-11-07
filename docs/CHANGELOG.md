@@ -1,5 +1,10 @@
 # Tabi · CHANGELOG
 
+## [Unreleased] — UI-07 room reorder feedback
+- Accent insertion line tracks the target position during room-handle dragging; cancel clears the marker without reordering.
+- Only UI-07 room drag interaction changed. Awaiting device acceptance.
+
+
 ## [Unreleased] — UI-07 room controls
 - Collapse/expand rooms with local-only preference; reorder rooms in Settings by handle or arrows (existing synced room order).
 - Minimal room-delete SVG matching Settings close icon; deletion safeguards preserved.
