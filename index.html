@@ -1,90 +1,751 @@
 <!doctype html>
-<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#f8f8f5"><title>Tabi · Переезд 2026</title>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta id="themeColorMeta" name="theme-color" content="#F8F6F0"><title>Tabi · Переезд 2026 · Komorebi / Dusk</title><link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2218%22 fill=%22%23EFE7D7%22/%3E%3Ctext x=%2232%22 y=%2244%22 text-anchor=%22middle%22 font-size=%2234%22 font-family=%22Noto Serif JP, serif%22 fill=%22%23A65B48%22%3E%E6%97%85%3C/text%3E%3C/svg%3E">
 <style>
-:root{--bg:#f7f7f4;--card:#fff;--ink:#242927;--muted:#858c87;--line:#e7e9e3;--accent:#4d695d;--light:#e9efea;--shadow:0 8px 30px #283c2e0a;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink)}button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #b0c7b7;outline-offset:2px}button:disabled{opacity:.45;cursor:default}.wrap{max-width:1220px;margin:0 auto;padding:27px 26px 110px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px}.brand{display:flex;align-items:center;gap:12px}.mark{background:#dce6dd;color:#466354;font-size:24px;display:grid;place-items:center;width:45px;height:45px;border-radius:14px}.brand b{font-size:19px;letter-spacing:-.7px}.brand small{display:block;color:var(--muted);font-size:11px;margin-top:3px}.top-actions{display:flex;align-items:center;gap:8px}.iconbtn{background:var(--card);border:1px solid var(--line);width:39px;height:39px;border-radius:12px;font-size:19px;color:#637367}.syncdot{height:8px;width:8px;border-radius:50%;background:#bbc1bb;display:inline-block;margin-right:5px}.syncdot.on{background:#7eae86}.syncdot.busy{background:#e4b66d}.syncdot.err{background:#d78176}.hero{margin-top:36px;display:flex;justify-content:space-between;gap:16px;align-items:flex-end}.eyebrow{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8c9e90;font-weight:750}.hero h1{font-size:clamp(32px,4.8vw,47px);line-height:1.12;margin:8px 0 10px;letter-spacing:-2px;font-weight:740}.hero p{margin:0;color:var(--muted);font-size:14px}.primary{border:0;background:var(--accent);color:white;padding:12px 18px;border-radius:13px;font-weight:700;white-space:nowrap;box-shadow:0 5px 12px #4d695d28}.primary:hover{background:#3f584b}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:26px 0 24px}.stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 19px;box-shadow:var(--shadow)}.stat strong{font-size:27px;display:block;letter-spacing:-1px}.stat span{font-size:12px;color:var(--muted)}.tabs{display:flex;gap:5px;background:#e9ebe6;border-radius:13px;padding:4px;width:fit-content;margin-bottom:18px}.tab{border:0;background:transparent;color:#7b847c;border-radius:10px;padding:10px 21px;font-weight:700;font-size:13px}.tab.active{background:white;box-shadow:0 1px 7px #1b302014;color:#33473b}.tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px}.search{background:white;border:1px solid var(--line);border-radius:12px;padding:11px 15px;flex:1;min-width:180px;color:var(--ink)}.filter{background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px 12px;color:#435348;max-width:200px}.room-section{margin:23px 0}.room-title{display:flex;align-items:center;gap:10px;margin-bottom:12px}.room-title h2{font-size:17px;letter-spacing:-.5px;margin:0}.count{font-size:11px;color:#8b968c;background:#e8ebe6;border-radius:20px;padding:3px 8px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.item{border:1px solid var(--line);border-radius:14px;background:white;min-height:92px;padding:13px;box-shadow:var(--shadow);display:flex;flex-direction:column;justify-content:space-between;gap:14px}.itemline{display:flex;align-items:flex-start;gap:8px;justify-content:space-between}.itemname{font-size:14px;font-weight:650;line-height:1.35;overflow-wrap:anywhere}.tiny{background:none;border:0;color:#a2aaa3;padding:0 4px;font-size:21px;line-height:1}.badge{border-radius:7px;padding:5px 9px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:6px;width:fit-content}.badge:before{content:"";width:7px;height:7px;background:currentColor;border-radius:50%;opacity:.75}.badge.red{background:#f9e9e7;color:#b76c61}.badge.yellow{background:#f9f0df;color:#b28a46}.badge.blue{background:#e9eff9;color:#6786b5}.badge.green{background:#e5f1e8;color:#5e9470}.badge.none{background:#eef0ed;color:#959e96}.muted{color:var(--muted);font-size:12px}.empty{padding:50px 20px;text-align:center;border:1px dashed #d6dcd3;border-radius:16px;color:var(--muted)}.board{display:flex;gap:12px;overflow-x:auto;align-items:flex-start;padding:2px 1px 19px;scroll-snap-type:x proximity}.column{flex:1 0 205px;min-width:205px;background:#edefe9;border-radius:16px;padding:12px;scroll-snap-align:start}.colhead{display:flex;align-items:center;justify-content:space-between;padding:7px 3px 15px}.colhead strong{font-size:13px}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px}.colhead .count{background:#fff}.kanitem{background:white;border-radius:12px;border:1px solid #e6e9e2;padding:13px;margin-bottom:8px;cursor:pointer;box-shadow:0 3px 9px #283c2e06}.kanitem strong{display:block;font-size:13px;line-height:1.35;margin-bottom:9px}.kanitem small{color:#99a29a;font-size:11px}.kanitem .move{display:flex;gap:5px;margin-top:10px}.move button{flex:1;background:#f4f5f2;border:0;border-radius:6px;padding:5px;color:#657268}.footer{margin-top:34px;padding-top:15px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;color:#a0a9a0;font-size:11px}.overlay{position:fixed;inset:0;background:#1a28227a;display:flex;align-items:center;justify-content:center;padding:18px;z-index:10}.overlay.hidden{display:none}.modal{background:#fff;border-radius:21px;box-shadow:0 25px 90px #18251c36;width:min(100%,460px);max-height:min(94dvh,850px);overflow:auto;padding:25px}.modal.wide{width:min(100%,570px)}.modal h2{font-size:23px;letter-spacing:-.9px;margin:0 0 8px}.modal .desc{font-size:13px;color:var(--muted);line-height:1.6;margin:0 0 20px}.field{display:block;font-size:12px;font-weight:750;margin-top:16px}.field input,.field select{display:block;width:100%;margin-top:7px;border:1px solid #dde3dc;border-radius:11px;padding:12px;background:#fff;color:#2e3a30}.colors{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.colorpick{border:2px solid transparent;background:#f5f6f3;border-radius:9px;padding:9px 10px;font-size:12px;font-weight:700}.colorpick.active{border-color:#526e5b}.colorpick .dot{vertical-align:middle}.modal-actions{margin-top:25px;display:flex;gap:9px;justify-content:flex-end}.secondary{border:1px solid #dfe4de;background:white;border-radius:12px;padding:11px 15px;color:#58675a;font-weight:650}.danger{color:#b86660;margin-right:auto}.hint{border-radius:11px;background:#f3f6f1;padding:12px;font-size:12px;line-height:1.6;color:#627367;margin-top:17px}.settings-row{display:flex;gap:8px;margin-top:10px}.settings-row button{flex:1}.settings-title{margin-top:25px;font-size:13px;font-weight:800}.statusinput{display:flex;align-items:center;gap:9px;margin:8px 0}.statusinput .dot{flex:none}.statusinput input{width:100%;border:1px solid var(--line);border-radius:9px;padding:9px}.small{font-size:11px;color:#9ca69d;line-height:1.5}.hidden{display:none!important}.toast{position:fixed;left:50%;bottom:25px;transform:translateX(-50%);background:#2b3c31;color:white;border-radius:12px;padding:12px 18px;font-size:12px;box-shadow:0 10px 35px #23352933;z-index:30;max-width:85%;text-align:center}.toast.hidden{display:none}@media(max-width:780px){.wrap{padding:20px 15px 90px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{margin-top:29px}.hero h1{font-size:36px}.stats{margin-top:24px}.stat{padding:14px}.stat strong{font-size:24px}}@media(max-width:480px){.grid{grid-template-columns:1fr 1fr;gap:8px}.item{padding:12px;min-height:100px}.itemname{font-size:13px}.hero{align-items:flex-start}.hero h1{font-size:35px}.hero p{font-size:12px}.primary{padding:12px}.stats{gap:7px}.stat span{font-size:10px}.stat{padding:12px 10px;border-radius:12px}.brand b{font-size:17px}.top-actions{gap:5px}.tabs{width:100%}.tab{flex:1}.filter{max-width:100%;flex:1}.board{margin-right:-15px}.column{flex-basis:78vw;min-width:78vw}.modal{padding:20px}.footer{flex-wrap:wrap}}
+:root{--bg:#f7f7f4;--card:#fff;--ink:#242927;--muted:#858c87;--line:#e7e9e3;--accent:#4d695d;--light:#e9efea;--shadow:0 8px 30px #283c2e0a;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink)}button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--accent);outline-offset:3px}button:disabled{opacity:.45;cursor:default}.wrap{max-width:1220px;margin:0 auto;padding:27px 26px 110px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px}.brand{display:flex;align-items:center;gap:12px}.mark{background:#dce6dd;color:#466354;font-size:24px;display:grid;place-items:center;width:45px;height:45px;border-radius:14px}.brand b{font-size:19px;letter-spacing:-.7px}.brand small{display:block;color:var(--muted);font-size:11px;margin-top:3px}.top-actions{display:flex;align-items:center;gap:8px}.iconbtn{background:var(--card);border:1px solid var(--line);width:39px;height:39px;border-radius:12px;font-size:19px;color:#637367}.syncdot{height:8px;width:8px;border-radius:50%;background:#bbc1bb;display:inline-block;margin-right:5px}.syncdot.on{background:#7eae86}.syncdot.busy{background:#e4b66d}.syncdot.err{background:#d78176}.hero{margin-top:36px;display:flex;justify-content:space-between;gap:16px;align-items:flex-end}.eyebrow{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#8c9e90;font-weight:750}.hero h1{font-size:clamp(32px,4.8vw,47px);line-height:1.12;margin:8px 0 10px;letter-spacing:-2px;font-weight:740}.hero p{margin:0;color:var(--muted);font-size:14px}.primary{border:0;background:var(--accent);color:white;padding:12px 18px;border-radius:13px;font-weight:700;white-space:nowrap;box-shadow:0 5px 12px #4d695d28}.primary:hover{background:#3f584b}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:26px 0 24px}.stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 19px;box-shadow:var(--shadow)}.stat strong{font-size:27px;display:block;letter-spacing:-1px}.stat span{font-size:12px;color:var(--muted)}.tabs{display:flex;gap:5px;background:#e9ebe6;border-radius:13px;padding:4px;width:fit-content;margin-bottom:18px}.tab{border:0;background:transparent;color:#7b847c;border-radius:10px;padding:10px 21px;font-weight:700;font-size:13px}.tab.active{background:white;box-shadow:0 1px 7px #1b302014;color:#33473b}.tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px}.search{background:white;border:1px solid var(--line);border-radius:12px;padding:11px 15px;flex:1;min-width:180px;color:var(--ink)}.filter{background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px 12px;color:#435348;max-width:200px}.room-section{margin:23px 0}.room-title{display:flex;align-items:center;gap:10px;margin-bottom:12px}.room-title h2{font-size:17px;letter-spacing:-.5px;margin:0}.count{font-size:11px;color:#8b968c;background:#e8ebe6;border-radius:20px;padding:3px 8px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.item{border:1px solid var(--line);border-radius:14px;background:white;min-height:92px;padding:13px;box-shadow:var(--shadow);display:flex;flex-direction:column;justify-content:space-between;gap:14px}.itemline{display:flex;align-items:flex-start;gap:8px;justify-content:space-between}.itemname{font-size:14px;font-weight:650;line-height:1.35;overflow-wrap:anywhere}.tiny{background:none;border:0;color:#a2aaa3;padding:0 4px;font-size:21px;line-height:1}.badge{border-radius:7px;padding:5px 9px;font-size:11px;font-weight:700;display:inline-flex;align-items:center;gap:6px;width:fit-content}.badge:before{content:"";width:7px;height:7px;background:currentColor;border-radius:50%;opacity:.75}.badge.red{background:#f9e9e7;color:#b76c61}.badge.yellow{background:#f9f0df;color:#b28a46}.badge.blue{background:#e9eff9;color:#6786b5}.badge.green{background:#e5f1e8;color:#5e9470}.badge.none{background:#eef0ed;color:#959e96}.muted{color:var(--muted);font-size:12px}.empty{padding:50px 20px;text-align:center;border:1px dashed #d6dcd3;border-radius:16px;color:var(--muted)}.board{display:flex;gap:12px;overflow-x:auto;align-items:flex-start;padding:2px 1px 19px;scroll-snap-type:x proximity}.column{flex:1 0 205px;min-width:205px;background:#edefe9;border-radius:16px;padding:12px;scroll-snap-align:start}.colhead{display:flex;align-items:center;justify-content:space-between;padding:7px 3px 15px}.colhead strong{font-size:13px}.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px}.colhead .count{background:#fff}.kanitem{background:white;border-radius:12px;border:1px solid #e6e9e2;padding:13px;margin-bottom:8px;cursor:pointer;box-shadow:0 3px 9px #283c2e06}.kanitem strong{display:block;font-size:13px;line-height:1.35;margin-bottom:9px}.kanitem small{color:#99a29a;font-size:11px}.kanitem .move{display:flex;gap:5px;margin-top:10px}.move button{flex:1;background:#f4f5f2;border:0;border-radius:6px;padding:5px;color:#657268}.footer{margin-top:34px;padding-top:15px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;color:#a0a9a0;font-size:11px}.overlay{position:fixed;inset:0;background:#1a28227a;display:flex;align-items:center;justify-content:center;padding:18px;z-index:10}.overlay.hidden{display:none}.modal{background:#fff;border-radius:21px;box-shadow:0 25px 90px #18251c36;width:min(100%,460px);max-height:min(94dvh,850px);overflow:auto;padding:25px}.modal.wide{width:min(100%,570px)}.modal h2{font-size:23px;letter-spacing:-.9px;margin:0 0 8px}.modal .desc{font-size:13px;color:var(--muted);line-height:1.6;margin:0 0 20px}.field{display:block;font-size:12px;font-weight:750;margin-top:16px}.field input,.field select{display:block;width:100%;margin-top:7px;border:1px solid #dde3dc;border-radius:11px;padding:12px;background:#fff;color:#2e3a30}.colors{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}.colorpick{border:2px solid transparent;background:#f5f6f3;border-radius:9px;padding:9px 10px;font-size:12px;font-weight:700}.colorpick.active{border-color:#526e5b}.colorpick .dot{vertical-align:middle}.modal-actions{margin-top:25px;display:flex;gap:9px;justify-content:flex-end}.secondary{border:1px solid #dfe4de;background:white;border-radius:12px;padding:11px 15px;color:#58675a;font-weight:650}.danger{color:#b86660;margin-right:auto}.hint{border-radius:11px;background:#f3f6f1;padding:12px;font-size:12px;line-height:1.6;color:#627367;margin-top:17px}.settings-row{display:flex;gap:8px;margin-top:10px}.settings-row button{flex:1}.settings-title{margin-top:25px;font-size:13px;font-weight:800}.statusinput{display:flex;align-items:center;gap:9px;margin:8px 0}.statusinput .dot{flex:none}.statusinput input{width:100%;border:1px solid var(--line);border-radius:9px;padding:9px}.small{font-size:11px;color:#9ca69d;line-height:1.5}.hidden{display:none!important}.toast{position:fixed;left:50%;bottom:25px;transform:translateX(-50%);background:#2b3c31;color:white;border-radius:12px;padding:12px 18px;font-size:12px;box-shadow:0 10px 35px #23352933;z-index:30;max-width:85%;text-align:center}.toast.hidden{display:none}@media(max-width:780px){.wrap{padding:20px 15px 90px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{margin-top:29px}.hero h1{font-size:36px}.stats{margin-top:24px}.stat{padding:14px}.stat strong{font-size:24px}}@media(max-width:480px){.grid{grid-template-columns:1fr 1fr;gap:8px}.item{padding:12px;min-height:100px}.itemname{font-size:13px}.hero{align-items:flex-start}.hero h1{font-size:35px}.hero p{font-size:12px}.primary{padding:12px}.stats{gap:7px}.stat span{font-size:10px}.stat{padding:12px 10px;border-radius:12px}.brand b{font-size:17px}.top-actions{gap:5px}.tabs{width:100%}.tab{flex:1}.filter{max-width:100%;flex:1}.board{margin-right:-15px}.column{flex-basis:78vw;min-width:78vw}.modal{padding:20px}.footer{flex-wrap:wrap}}
 
 /* Independent completion state, available in both views */
 .checkdone{appearance:none;-webkit-appearance:none;flex:0 0 23px;width:23px;height:23px;border-radius:7px;border:1.7px solid #83958a;background:#ffffffb8;display:inline-grid;place-items:center;cursor:pointer;margin:0;touch-action:manipulation}
 .checkdone:checked{background:#4d695d;border-color:#4d695d}
 .checkdone:checked:after{content:'✓';font-size:16px;font-weight:800;color:white;line-height:1}
-.checkdone:focus-visible{outline:3px solid #aec5b6;outline-offset:2px}
+.checkdone:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .item.completed .itemname,.kanitem.completed strong{text-decoration:line-through;opacity:.58}
 .itemline .itemname{flex:1}.kanitem .kan-top{display:flex;align-items:flex-start;gap:9px}.kanitem .kan-top strong{flex:1;margin-bottom:9px}
 /* Mobile-first colour selection and hold-to-drag */
 .item{transition:background .16s,border-color .16s;touch-action:pan-y;user-select:none;-webkit-user-select:none}
 .item.tone-red{background:#f7dfdc;border-color:#eac4bf}.item.tone-yellow{background:#f8ebca;border-color:#ebd89d}.item.tone-blue{background:#dfebfa;border-color:#bfd1eb}.item.tone-green{background:#deefe1;border-color:#b9d9bf}.item.tone-none{background:#fff}
-.color-dots{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.quick-dot{border:2px solid transparent;border-radius:50%;padding:3px;background:transparent;display:grid;place-items:center;width:27px;height:27px;touch-action:manipulation}.quick-dot span{display:block;width:17px;height:17px;border-radius:50%;box-shadow:0 0 0 1px #00000013}.quick-dot.active{border-color:#43564b;background:#ffffff65}.quick-dot:focus-visible{outline:2px solid #425b4a;outline-offset:2px}
+.color-dots{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.quick-dot{border:2px solid transparent;border-radius:50%;padding:3px;background:transparent;display:grid;place-items:center;width:27px;height:27px;touch-action:manipulation}.quick-dot span{display:block;width:17px;height:17px;border-radius:50%;box-shadow:0 0 0 1px #00000013}.quick-dot.active{border-color:#43564b;background:#ffffff65}.quick-dot:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .item .itemline{min-height:30px}.kanitem{touch-action:pan-y;user-select:none;-webkit-user-select:none;cursor:grab}.item{cursor:grab}.item .tiny{cursor:pointer}.kanitem strong{margin-bottom:7px}
-.drag-ghost{position:fixed;z-index:100;pointer-events:none;opacity:.94;box-shadow:0 16px 40px #18251c3d;transform:rotate(-2deg) scale(1.03);width:210px;max-width:70vw;min-height:60px;overflow:hidden}.drag-source{opacity:.28}.drop-highlight{outline:2px dashed #5c8a6d!important;outline-offset:2px}.drop-before{box-shadow:0 -4px #4a8065!important}.drop-after{box-shadow:0 4px #4a8065!important}
+.drag-ghost{position:fixed;z-index:100;pointer-events:none;opacity:.94;box-shadow:0 16px 40px #18251c3d;transform:rotate(-2deg) scale(1.03);width:210px;max-width:70vw;min-height:60px;overflow:hidden}.drag-source{opacity:.28}.drop-highlight{outline:2px dashed var(--accent)!important;outline-offset:2px}.drop-before{box-shadow:0 -4px var(--accent)!important}.drop-after{box-shadow:0 4px var(--accent)!important}
 .dragging-active,.dragging-active *{cursor:grabbing!important}.drag-help{font-size:11px;color:#839187;margin:-5px 0 15px}.room-section{min-height:90px}.room-section.drop-highlight{border-radius:14px}
 @media(hover:hover){.quick-dot:hover{transform:scale(1.13)}}
 
 .progressbox{background:#fff;border:1px solid var(--line);border-radius:15px;padding:14px 17px;margin:0 0 15px}.progresshead{display:flex;justify-content:space-between;font-size:13px;margin-bottom:9px}.progresshead span{font-weight:700;color:#6c8776}.progressrail{background:#e9ece7;height:9px;border-radius:99px;overflow:hidden}.progressrail>div{height:100%;width:0;background:#86b398;border-radius:99px;transition:width .2s}.progressbox small{color:#89978c;display:block;margin-top:8px}.extra-tools{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:13px}.toggle{display:flex;align-items:center;gap:7px;font-size:12px;color:#526659}.toggle input,.bulkcheck{accent-color:#668e75;width:18px;height:18px;flex:none}.bulkbar{display:flex;gap:8px;align-items:center;background:#e6eee6;padding:12px;border-radius:13px;margin-bottom:13px;flex-wrap:wrap}.bulkbar span{font-size:12px;font-weight:700}.bulkbar select{background:white;border:1px solid #d7dfd7;padding:10px;border-radius:9px;min-width:110px;flex:1}.bulkbar .primary{padding:10px 13px}.checkdone:disabled{opacity:.3;cursor:not-allowed}@media(max-width:480px){.extra-tools .secondary{padding:9px;font-size:12px}.bulkbar select{width:100%}}
-</style></head><body><main class="wrap"><header class="top"><div class="brand"><div class="mark">⌂</div><div><b>Tabi <span style="color:#a1ada2">· Переезд 2026</span></b><small>Всё на своих местах</small></div></div><div class="top-actions"><button class="iconbtn" id="syncBtn" title="Синхронизировать">↻</button><button class="iconbtn" id="settingsBtn" title="Настройки и данные">⚙</button></div></header><section class="hero"><div><div class="eyebrow">МОЙ ПЕРЕЕЗД · ИНВЕНТАРЬ</div><h1>Порядок в вещах.</h1><p>Одна система для всех комнат и этапов.</p></div><button class="primary" id="addBtn">＋ Добавить</button></section><section class="stats"><div class="stat"><strong id="totalCount">0</strong><span>Всего объектов</span></div><div class="stat"><strong id="roomCount">0</strong><span>Комнат</span></div><div class="stat"><strong id="taggedCount">0</strong><span>С цветной меткой</span></div></section><nav class="tabs"><button class="tab active" data-tab="objects">☷ &nbsp; Объекты</button><button class="tab" data-tab="board">▥ &nbsp; Канбан</button></nav><div class="tools"><input class="search" id="search" placeholder="⌕  Поиск по объектам..." type="search"><select class="filter" id="roomFilter" aria-label="Фильтр по комнатам"></select></div><div class="progressbox"><div class="progresshead"><strong>Прогресс переезда</strong><span id="progressText">0 / 0</span></div><div class="progressrail"><div id="progressFill"></div></div><small id="progressHint">Завершённые действия</small></div><div class="extra-tools"><label class="toggle"><input id="unfinishedOnly" type="checkbox"> Только незавершённые</label><button class="secondary" id="bulkToggle" type="button">Выбрать несколько</button></div><div id="bulkBar" class="bulkbar hidden"><span id="bulkCount">0 выбрано</span><select id="bulkAction"><option value="">Выберите действие</option><option value="red">Оставить</option><option value="yellow">Не знаю</option><option value="green">Отправить / взять</option><option value="none">Без метки</option><option value="done">✓ Отметить выполненными</option><option value="undone">Снять галочки</option></select><select id="bulkRoom"></select><button id="bulkApply" class="primary" type="button">Применить</button></div><div id="content"></div><footer class="footer"><span id="saveState">● Сохранено на устройстве</span><span>Локально · JSON · облачная синхронизация</span></footer></main>
+
+/* ===== v1.5 Theme + UI refresh ===== */
+:root{
+  --bg:#f2efe8;
+  --card:#fffaf3;
+  --ink:#23282d;
+  --muted:#7c857f;
+  --line:#ddd7ce;
+  --accent:#587066;
+  --accent-strong:#496158;
+  --soft:#e8e3da;
+  --brand:#dce2d8;
+  --chip:#ece7de;
+  --chip-2:#e3ece7;
+  --shadow:0 12px 30px #22332710;
+  --red:#c8877f;
+  --yellow:#d4b06a;
+  --green:#88a59a;
+  --none:#b8beb7;
+  --red-bg:#f3dfdb;
+  --yellow-bg:#f5e8c7;
+  --green-bg:#dfede6;
+  --none-bg:#fffaf3;
+  --link:#5f7b70;
+}
+html[data-theme="dark"]{
+  --bg:#171a1d;
+  --card:#202529;
+  --ink:#edf0eb;
+  --muted:#9ba49e;
+  --line:#32393e;
+  --accent:#89a79a;
+  --accent-strong:#a1b8ad;
+  --soft:#262c30;
+  --brand:#2b312f;
+  --chip:#2a3034;
+  --chip-2:#243029;
+  --shadow:0 16px 36px #00000030;
+  --red:#d29890;
+  --yellow:#dabb7c;
+  --green:#8eb3a4;
+  --none:#707b79;
+  --red-bg:#392624;
+  --yellow-bg:#3b3321;
+  --green-bg:#23352d;
+  --none-bg:#202529;
+  --link:#9dc0b1;
+}
+html,body{background:var(--bg);color:var(--ink)}
+body,.search,.filter,.stat,.item,.kanitem,.modal,.secondary,.field input,.field select,.column,.tabs,.tab.active,.progressbox,.hint{transition:background-color .2s,color .2s,border-color .2s,box-shadow .2s}
+.wrap{max-width:1220px}
+.mark{background:var(--brand)!important;color:var(--accent)!important;font-size:28px!important;font-weight:700;letter-spacing:-1px;border:1px solid color-mix(in srgb,var(--accent) 8%, transparent)}
+.top-actions{flex:0 0 auto;gap:10px}
+.iconbtn{position:relative;display:grid;place-items:center;width:48px!important;height:48px!important;border-radius:14px!important;background:var(--card)!important;border:1px solid var(--line)!important;color:var(--accent)!important;box-shadow:var(--shadow)}
+.iconbtn .syncicon,.iconbtn .gearicon{font-size:22px;line-height:1}
+.iconbtn .syncdot{position:absolute;top:10px;right:10px;margin:0;width:10px;height:10px;border:2px solid var(--card)}
+.brand small,.hero p,.stat span,.muted,.small{color:var(--muted)!important}
+.brand b span{color:color-mix(in srgb,var(--muted) 86%, white) !important}
+.primary{background:var(--accent)!important;box-shadow:0 8px 20px color-mix(in srgb,var(--accent) 25%, transparent)!important}
+.primary:hover{background:var(--accent-strong)!important}
+.secondary{background:var(--card)!important;border-color:var(--line)!important;color:var(--accent)!important}
+.tabs,.column{background:var(--soft)!important}
+.tab{color:var(--muted)!important}
+.tab.active,.stat,.item,.kanitem,.search,.filter,.modal,.progressbox{background:var(--card)!important;border-color:var(--line)!important;box-shadow:var(--shadow)!important}
+.progressbox{border:1px solid var(--line);border-radius:18px;padding:18px 20px;margin:0 0 16px}
+.progresshead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}
+.progresshead strong{font-size:17px}
+.progressrail{height:14px;border-radius:999px;background:var(--soft);overflow:hidden}
+.progressrail #progressFill{display:block;height:100%;background:linear-gradient(90deg,var(--accent),color-mix(in srgb,var(--accent) 50%, white));border-radius:999px;width:0}
+#progressHint{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:14px;color:var(--muted)}
+.progress-link{border:0;background:none;color:var(--link);font:inherit;font-weight:700;padding:0;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.progress-link.active{color:var(--accent)}
+.extra-tools{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.toggle{display:flex;align-items:center;gap:10px;color:var(--muted);font-weight:600}
+.toggle input{width:28px;height:28px}
+.room-title{justify-content:space-between;align-items:center;gap:12px}
+.room-title .left{display:flex;align-items:center;gap:10px;min-width:0}
+.room-actions{display:flex;align-items:center;gap:8px}
+.room-add{width:34px;height:34px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--accent);font-size:22px;line-height:1;display:grid;place-items:center;box-shadow:var(--shadow)}
+.room-add:hover{background:var(--chip-2)}
+.drag-help{color:var(--muted);font-size:12px;margin:4px 0 14px}
+.item.tone-red{background:var(--red-bg)!important;border-color:color-mix(in srgb,var(--red) 46%, var(--line))!important}
+.item.tone-yellow{background:var(--yellow-bg)!important;border-color:color-mix(in srgb,var(--yellow) 46%, var(--line))!important}
+.item.tone-green{background:var(--green-bg)!important;border-color:color-mix(in srgb,var(--green) 46%, var(--line))!important}
+.item.tone-none{background:var(--none-bg)!important}
+.quick-dot.active{border-color:var(--accent)!important;background:color-mix(in srgb,var(--card) 65%, transparent)!important}
+.quick-dot span{box-shadow:0 0 0 1px #00000022}
+.checkdone{border-color:color-mix(in srgb,var(--accent) 65%, var(--line));background:color-mix(in srgb,var(--card) 88%, transparent)}
+.checkdone:checked{background:var(--accent)!important;border-color:var(--accent)!important}
+.bulkbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 14px;background:var(--chip);border:1px solid var(--line);border-radius:14px;margin-bottom:14px}
+.bulkbar select{flex:1;min-width:180px;background:var(--card);border:1px solid var(--line);color:var(--ink);padding:10px 12px;border-radius:12px}
+.composer{gap:12px}
+.composer-input{width:100%;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px;padding:12px 14px;font:inherit}
+.composer-actions{display:flex;justify-content:flex-end;gap:8px}
+.mini{padding:9px 12px;border-radius:10px;font-size:12px}
+.statusinput{align-items:center}
+#themeMode{min-width:220px}
+.hint{background:var(--chip-2)!important;color:var(--ink)!important;border:1px solid var(--line)}
+.footer{border-color:var(--line)!important;color:var(--muted)!important}
+.empty{border-color:var(--line)!important;background:var(--card)}
+@media (max-width:780px){
+  .hero{align-items:flex-start}
+  .top{align-items:flex-start}
+  .top-actions{margin-left:auto}
+}
+@media (max-width:540px){
+  .top{gap:10px}
+  .brand{min-width:0;flex:1}
+  .hero{flex-direction:column;align-items:stretch}
+  .stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .progressbox{padding:16px}
+  .room-title{align-items:flex-start}
+  .room-title h2{font-size:16px}
+  .extra-tools{align-items:flex-start}
+  .toggle input{width:24px;height:24px}
+}
+
+/* Tabi v1.5.2 — Komorebi / Dusk */
+:root{--bg:#F8F6F0;--card:#FFFEFA;--ink:#352F29;--text:#352F29;--muted:#867C70;--line:#E8DFD0;--accent:#A65B48;--accent-strong:#894934;--accent-hover:#894934;--accent-soft:#F1E6DE;--soft-tech:#EDE7D8;--soft:#F2EEE6;--panel:#F2EEE6;--brand:#EFE7D7;--chip:#F3EEE5;--chip-2:#F1E6DE;--link:#92503C;--red:#B97163;--red-bg:#F8ECE7;--yellow:#B99754;--yellow-bg:#FAF3E3;--green:#789781;--green-bg:#EDF3EA;--none:#B3ADA4;--none-bg:#FFFEFA;--shadow:0 9px 28px rgba(77,56,35,.055);color-scheme:light}
+html[data-theme="dark"]{--bg:#282D2D;--card:#383D3A;--ink:#F4EDE1;--text:#F4EDE1;--muted:#C2B9A9;--line:#555A50;--accent:#D5A76E;--accent-strong:#E7BC83;--accent-hover:#E7BC83;--accent-soft:#4B4035;--soft-tech:#454840;--soft:#303633;--panel:#303633;--brand:#45443B;--chip:#3F443D;--chip-2:#474038;--link:#E2B780;--red:#D69484;--red-bg:#513A36;--yellow:#DAB979;--yellow-bg:#504736;--green:#A4BDA0;--green-bg:#394B40;--none:#B6B6A9;--none-bg:#383D3A;--shadow:0 10px 30px rgba(0,0,0,.14);color-scheme:dark}
+body,.modal,.item,.stat,.kanitem,.progressbox,.search,.filter,.column,.tabs,.tab.active,.field input,.field select,.statusinput input,.colorpick,.secondary,.room-add,.composer-input,.bulkbar select,.count,.colhead .count,.move button{color:var(--ink);border-color:var(--line)}
+body{background:var(--bg)}
+.modal,.item,.stat,.kanitem,.progressbox,.search,.filter,.tab.active,.field input,.field select,.statusinput input,.colorpick,.secondary,.composer-input{background:var(--card)!important}
+.column,.tabs,.count,.move button{background:var(--soft)!important}
+.room-add{background:var(--card);color:var(--accent)}.tab.active{color:var(--ink)!important}
+.item.tone-red{background:var(--red-bg)!important;border-color:color-mix(in srgb,var(--red) 25%,var(--line))!important}.item.tone-yellow{background:var(--yellow-bg)!important;border-color:color-mix(in srgb,var(--yellow) 25%,var(--line))!important}.item.tone-green{background:var(--green-bg)!important;border-color:color-mix(in srgb,var(--green) 25%,var(--line))!important}.item.tone-none{background:var(--card)!important}
+.primary{color:#fffaf2!important}html[data-theme="dark"] .primary{color:#292822!important}
+.mark{background:var(--brand)!important;color:var(--accent)!important}.eyebrow{color:var(--accent)!important}
+.progressrail{background:var(--soft)!important}#progressFill{background:var(--accent)!important}.progress-link{color:var(--link)!important}.progress-link.active{color:var(--accent)!important}
+.checkdone{background:var(--card);border-color:var(--muted)}.checkdone:checked{background:var(--accent)!important;border-color:var(--accent)!important}html[data-theme="dark"] .checkdone:checked:after{color:#282D2D}
+.modal .desc,.kanitem small,.drag-help,.toggle,.footer{color:var(--muted)!important}.quick-dot.active{border-color:var(--accent)!important;background:var(--soft)!important}.colorpick.active{border-color:var(--accent)!important}.statusinput input{background:var(--card);color:var(--ink)}
+.toast{background:var(--ink);color:var(--card)}html[data-theme="dark"] .toast{background:#E9D6B8;color:#292D2C}::placeholder{color:var(--muted);opacity:.75}
+
+/* v1.5.3 alignment polish */
+.iconbtn{display:grid;place-items:center;position:relative;padding:0;width:56px;height:56px;line-height:1}
+.iconbtn .syncicon,.iconbtn .gearicon{display:block;line-height:1;transform:translateY(-1px)}
+.syncdot{position:absolute;top:12px;right:12px;margin:0;width:10px;height:10px;border:2px solid var(--card)}
+.filter,.field select,#themeMode{-webkit-appearance:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%23b9b1a2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 7 5 6 5-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-size:18px;padding-right:42px}
+html[data-theme="dark"] .filter,html[data-theme="dark"] .field select,html[data-theme="dark"] #themeMode{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%23d8b77f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 7 5 6 5-6'/%3E%3C/svg%3E")}
+.modal{position:relative}
+.modal-close{position:absolute;top:18px;right:18px;width:50px;height:50px;padding:0;border-radius:16px;border:1px solid var(--line);background:var(--card);color:#5dbc62;display:grid;place-items:center;font-size:30px;line-height:1;box-shadow:var(--shadow)}
+.modal-close:hover{background:var(--chip-2)}
+.statusinput{align-items:center}
+.statusinput > button.secondary[data-remove-room]{width:56px;min-width:56px;height:56px;padding:0;border-radius:16px;display:grid;place-items:center;font-size:28px;line-height:1}
+.room-add{width:42px;height:42px;font-size:28px;padding:0}
+@media(max-width:540px){.iconbtn{width:52px;height:52px}.modal-close{top:16px;right:16px;width:48px;height:48px}.statusinput > button.secondary[data-remove-room]{width:52px;min-width:52px;height:52px}.room-add{width:40px;height:40px}}
+
+/* v1.5.4 — strict shared geometry for header controls */
+.top-actions{display:grid!important;grid-template-columns:repeat(2,48px);align-items:center;gap:10px;flex:0 0 auto;margin-left:auto}
+.top-actions .iconbtn{box-sizing:border-box;display:grid!important;place-items:center!important;width:48px!important;height:48px!important;min-width:48px;min-height:48px;margin:0!important;padding:0!important;position:relative;border-radius:14px;line-height:1}
+.action-svg{display:block;width:22px;height:22px;flex:none;overflow:visible}
+.top-actions .syncdot{position:absolute;top:8px;right:8px;width:8px;height:8px;box-sizing:border-box;margin:0;border:1.5px solid var(--card);transform:none;pointer-events:none}
+.modal-close{box-sizing:border-box;width:44px!important;height:44px!important;border:0!important;border-radius:10px!important;background:transparent!important;box-shadow:none!important;display:grid;place-items:center;padding:0!important;color:var(--muted)!important;top:13px!important;right:14px!important;font-size:inherit!important}
+.modal-close svg{display:block;width:19px;height:19px}
+.modal-close:hover,.modal-close:focus-visible{background:var(--soft)!important;color:var(--ink)!important}
+#settingsOverlay .modal.wide>h2{padding-right:44px}
+@media(max-width:540px){.top-actions{grid-template-columns:repeat(2,44px);gap:8px}.top-actions .iconbtn{width:44px!important;height:44px!important;min-width:44px;min-height:44px}.action-svg{width:21px;height:21px}.modal-close{top:12px!important;right:10px!important}}
+
+/* UI-01 review fixes: remove superfluous status dot from refresh glyph. */
+#syncBtn .syncdot{display:none!important}
+/* UI-01 · v1.5.5 — header tiles and glyph alignment only */
+.top{min-width:0}
+.brand{min-width:0}
+.brand>div:last-child{min-width:0}
+.mark{
+  box-sizing:border-box;flex:0 0 48px;width:48px;height:48px;
+  display:grid;place-items:center;padding:0;
+  line-height:1;font-family:"Noto Serif JP","Yu Mincho",serif;
+  font-size:28px!important;font-weight:700;letter-spacing:0;
+}
+.top-actions{grid-template-columns:repeat(2,48px);gap:10px}
+.top-actions .iconbtn{display:grid!important;place-items:center!important;flex:none;vertical-align:middle}
+.top-actions .action-svg{display:block;margin:auto;width:22px;height:22px}
+@media(max-width:540px){
+  .mark{flex-basis:44px;width:44px;height:44px;font-size:26px!important}
+  .top-actions{grid-template-columns:repeat(2,44px);gap:8px}
+  .top-actions .action-svg{width:21px;height:21px}
+  .brand{gap:9px}
+}
+@media(max-width:360px){
+  .top{gap:7px}
+  .brand{gap:7px}
+  .brand b{font-size:15px}
+  .brand small{font-size:10px}
+}
+
+/* UI-01 final review: SVG-only action glyphs, no overlay status indicator. */
+#syncBtn .syncdot{display:none!important}
+.top-actions .action-svg{display:block;width:22px;height:22px;overflow:visible;transform:none!important}
+@media(max-width:540px){.top-actions .action-svg{width:21px;height:21px}}
+
+/* UI-11 — project title editor, intentionally isolated from accepted UI-01 controls */
+.project-label{color:var(--muted);font-weight:650;min-width:0}
+.project-name-btn{display:inline-block;max-width:min(45vw,280px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:baseline;border:0;padding:0;background:none;color:inherit;font-weight:inherit;font-size:inherit;letter-spacing:inherit;text-align:left;text-decoration:underline;text-decoration-color:transparent;text-underline-offset:3px;transition:text-decoration-color .15s}
+.project-name-btn:hover,.project-name-btn:focus-visible{text-decoration-color:currentColor}
+.project-name-btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:3px}
+.project-name-input{box-sizing:border-box;display:inline-block;width:min(43vw,255px);min-width:95px;max-width:100%;padding:2px 5px;border:1px solid var(--accent);border-radius:5px;color:var(--ink);background:var(--card);font:inherit;letter-spacing:inherit}
+@media(max-width:540px){.project-name-btn{max-width:31vw}.project-name-input{width:30vw;min-width:80px}}
+
+/* UI-03 interactive statistics: preserve card appearance, add clear focus/selection */
+button.stat{font:inherit;color:var(--ink);text-align:left;display:block;width:100%;min-width:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+button.stat:hover{border-color:var(--accent)!important}
+button.stat[aria-pressed="true"]{border-color:var(--accent)!important;box-shadow:var(--shadow),inset 0 0 0 1px var(--accent)!important}
+button.stat:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+
+/* UI-04 · orientation-aware containment, no edits to accepted components */
+:root{--tabi-viewport-width:100vw}
+.wrap{width:min(100%,var(--tabi-viewport-width));min-width:0}
+.hero,.hero>div,.stats,.tools,#content{min-width:0}
+.stats>*{min-width:0}
+.board{max-width:100%}
+@media (orientation:landscape) and (max-height:540px){
+  .hero{margin-top:22px}
+  .hero h1{font-size:clamp(29px,3.5vw,41px)}
+  .stats{margin-top:18px;margin-bottom:18px}
+  .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (orientation:portrait) and (max-width:540px){
+  .hero h1{font-size:clamp(29px,8vw,35px)}
+}
+
+/* UI-07 rooms: collapsible headers and unified minimal icon controls */
+.room-collapse,.room-delete,.room-order,.room-handle{border:0;background:transparent;color:var(--muted);display:grid;place-items:center;flex:none;border-radius:9px;cursor:pointer;padding:0}
+.room-collapse{width:28px;height:28px}.room-collapse svg{width:17px;height:17px;transition:transform .18s ease}.room-collapse[aria-expanded="false"] svg{transform:rotate(-90deg)}
+.room-delete{width:38px;height:38px}.room-delete svg{width:19px;height:19px;stroke:currentColor;stroke-width:1.8;stroke-linecap:round}
+.room-order{width:28px;height:34px;font-size:18px}.room-order:disabled{opacity:.25;cursor:default}
+.room-handle{width:31px;height:36px;touch-action:none;cursor:grab;font-size:21px}
+.room-editor-row{display:flex;gap:6px;align-items:center;margin-bottom:8px;min-width:0}.room-editor-row input{flex:1;min-width:0}
+.room-editor-row.is-dragging{outline:1px dashed var(--accent);border-radius:8px;opacity:.75}
+/* UI-07 refinement: visible insertion position during handle drag. */
+.room-editor-row{position:relative}
+.room-editor-row.is-drop-before::before,.room-editor-row.is-drop-after::after{content:"";position:absolute;left:0;right:0;height:3px;border-radius:3px;background:var(--accent);pointer-events:none;z-index:2;box-shadow:0 0 0 2px var(--card)}
+.room-editor-row.is-drop-before::before{top:-5px}
+.room-editor-row.is-drop-after::after{bottom:-5px}
+/* Keep the Rooms heading clear of the first insertion indicator. */
+#roomEditor{margin-top:16px}
+
+.room-collapse:hover,.room-delete:hover,.room-order:hover,.room-handle:hover{background:var(--chip-2)}
+.room-collapse:focus-visible,.room-delete:focus-visible,.room-order:focus-visible,.room-handle:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.room-section.is-collapsed{margin-bottom:14px}
+@media(prefers-reduced-motion:reduce){.room-collapse svg{transition:none}}
+
+/* UI-08: inline item title editor; drag still starts on long press outside the editor. */
+.itemname[data-inline-name]{cursor:text;border-radius:5px;min-width:0}
+.itemname[data-inline-name]:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.inline-item-name{font:inherit;font-size:14px;font-weight:650;line-height:1.35;min-width:0;width:100%;max-width:100%;box-sizing:border-box;padding:4px 6px;margin:-5px -7px;border:1px solid var(--accent);border-radius:7px;background:var(--card);color:var(--ink);outline:none}
+.inline-item-name:focus{box-shadow:0 0 0 2px var(--soft)}
+.kanitem .itemname{display:block;flex:1;min-width:0;overflow-wrap:anywhere}
+
+/* UI-09: density control affects Kanban only; status and drag behavior unchanged. */
+.board-density-bar{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin:0 0 10px}
+.board-density-toggle{font:inherit;font-size:12px;font-weight:650;padding:7px 11px;border:1px solid var(--line);border-radius:9px;background:var(--card);color:inherit;cursor:pointer;min-height:34px}
+.board-density-toggle[aria-pressed="true"]{border-color:var(--accent)}
+.board.is-compact .kanitem{padding:8px 10px;margin-bottom:5px;border-radius:10px}
+.board.is-compact .kanitem strong{margin-bottom:3px;line-height:1.3}
+.board.is-compact .kanitem small{font-size:11px}
+.board.is-compact .colhead{padding-bottom:9px}
+.board.is-compact .column{padding:9px}
+.board.is-compact .kan-top{gap:7px}
+.board-density-toggle:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* UI-10: progressive disclosure of infrequently used settings, no functional changes. */
+.settings-fold{margin-top:22px;border-top:1px solid var(--line);padding-top:4px}
+.settings-fold>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;min-height:40px;font-size:13px;font-weight:800}
+.settings-fold>summary::-webkit-details-marker{display:none}
+.settings-fold>summary::before{content:"›";font-size:20px;font-weight:500;line-height:1;display:inline-block;transition:transform .18s ease}
+.settings-fold[open]>summary::before{transform:rotate(90deg)}
+.settings-fold-note{margin-left:auto;font-size:11px;font-weight:500;color:var(--muted);text-align:right}
+.settings-fold>summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+.settings-fold>.settings-row:first-of-type{margin-top:12px}
+@media(prefers-reduced-motion:reduce){.settings-fold>summary::before{transition:none}}
+
+/* DS-01: one theme-aware keyboard focus language. Native iOS selection UI untouched. */
+:root{--focus-ring:var(--accent)}
+:where(button,input,select,textarea,summary,[role="button"]):focus-visible{outline:2px solid var(--focus-ring);outline-offset:3px}
+:where(button,input,select,textarea,summary,[role="button"]):focus:not(:focus-visible){outline:none}
+:where(input[type="checkbox"],input[type="radio"]){accent-color:var(--accent)}
+/* The inline editor already has an accent border; suppress legacy green focus outline and glow. */
+input.inline-item-name:focus,
+input.inline-item-name:focus-visible{outline:none;box-shadow:none;border-color:var(--accent)}
+/* Inputs with their own accent border must not gain a second ring. */
+input.project-name-input:focus,
+input.project-name-input:focus-visible,
+select#themeMode:focus,
+select#themeMode:focus-visible{outline:none;box-shadow:none;border-color:var(--accent)}
+/* Native selects without an accent border retain a single theme-colored focus ring. */
+select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+@media(prefers-reduced-motion:reduce){:where(button,input,select,textarea,summary,[role="button"]){scroll-behavior:auto}}
+.restore-overlay{z-index:30}.restore-dialog{width:min(100%,390px);background:var(--card);color:var(--ink);border:1px solid var(--line)}.restore-dialog .desc{margin:0 0 18px}.restore-dialog .modal-actions{margin-top:20px}.restore-dialog .modal-actions button{flex:1}.restore-dialog .restore-confirm{background:var(--accent);color:white;border:0;border-radius:12px;padding:11px 14px;font-weight:700}
+</style></head><body><main class="wrap"><header class="top"><div class="brand"><div class="mark" aria-hidden="true">旅</div><div><b>Tabi <span class="project-label">· <button type="button" id="projectNameBtn" class="project-name-btn" title="Изменить название проекта" aria-label="Изменить название проекта">Мой переезд</button><input id="projectNameInput" class="project-name-input hidden" type="text" maxlength="48" autocomplete="off" aria-label="Название проекта"></span></b><small>Всё на своих местах</small></div></div><div class="top-actions"><button class="iconbtn" id="syncBtn" title="Синхронизировать" aria-label="Синхронизировать"><svg class="action-svg" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8.1 8.1 0 0 0-15.5-2M4 4v5h5"/><path d="M4 13a8.1 8.1 0 0 0 15.5 2M20 20v-5h-5"/></svg></button><button class="iconbtn" id="settingsBtn" title="Настройки и данные" aria-label="Настройки и данные"><svg class="action-svg" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><circle cx="12" cy="12" r="7.3"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(0 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(45 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(90 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(135 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(180 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(225 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(270 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(315 12 12)"/><circle cx="12" cy="12" r="3.15" fill="var(--card)"/></svg></button></div></header><section class="hero"><div><div class="eyebrow">МОЙ ПЕРЕЕЗД · ИНВЕНТАРЬ</div><h1 id="heroTitle" aria-live="polite">Порядок в вещах.</h1><p>Одна система для всех комнат и этапов.</p></div><button class="primary" id="addBtn">＋ Добавить</button></section><section class="stats" aria-label="Интерактивная статистика"><button type="button" class="stat" data-stat-filter="all" aria-pressed="true" title="Показать все объекты и сбросить фильтры"><strong id="totalCount">0</strong><span>Всего объектов</span></button><button type="button" class="stat" data-stat-filter="rooms" aria-pressed="false" title="Показать только комнаты с объектами"><strong id="roomCount">0</strong><span>Комнат</span></button><button type="button" class="stat" data-stat-filter="tagged" aria-pressed="false" title="Показать только объекты с цветной меткой"><strong id="taggedCount">0</strong><span>С цветной меткой</span></button></section><nav class="tabs"><button class="tab active" data-tab="objects">☷ &nbsp; Объекты</button><button class="tab" data-tab="board">▥ &nbsp; Канбан</button></nav><div class="tools"><input class="search" id="search" placeholder="⌕  Поиск по объектам..." type="search"><select class="filter" id="roomFilter" aria-label="Фильтр по комнатам"></select></div><div class="progressbox"><div class="progresshead"><strong>Прогресс переезда</strong><span id="progressText">0 / 0</span></div><div class="progressrail"><div id="progressFill"></div></div><small id="progressHint"></small></div><div class="extra-tools"><label class="toggle"><input id="unfinishedOnly" type="checkbox"> Только незавершённые</label><button class="secondary" id="bulkToggle" type="button">Выбрать несколько</button></div><div id="bulkBar" class="bulkbar hidden"><span id="bulkCount">0 выбрано</span><select id="bulkAction"><option value="">Выберите действие</option><option value="red">Оставить</option><option value="yellow">Не знаю</option><option value="green">Отправить / взять</option><option value="none">Без метки</option><option value="done">✓ Отметить выполненными</option><option value="undone">Снять галочки</option><option value="delete">Удалить выбранные…</option></select><select id="bulkRoom"></select><button id="bulkApply" class="primary" type="button">Применить</button></div><div id="content"></div><footer class="footer"><span id="saveState">● Сохранено на устройстве</span><span>Локально · JSON · облачная синхронизация</span></footer></main>
 <div class="overlay hidden" id="itemOverlay"><section class="modal" role="dialog" aria-modal="true" aria-label="Объект"><h2 id="itemTitle">Новый объект</h2><p class="desc">Добавьте вещь, назначьте комнату и цветовую метку.</p><label class="field">Название<input id="itemName" placeholder="Например, книги" maxlength="160"></label><label class="field">Комната<select id="itemRoom"></select></label><label class="field">Цветовая метка</label><div class="colors" id="colorPicks"></div><label class="field" style="display:flex;align-items:center;gap:10px"><input type="checkbox" id="itemDone" style="width:20px;height:20px;margin:0"> Готово</label><div class="modal-actions"><button class="secondary danger hidden" id="deleteBtn">Удалить</button><button class="secondary" id="cancelItem">Отмена</button><button class="primary" id="saveItem">Сохранить</button></div></section></div>
-<div class="overlay hidden" id="settingsOverlay"><section class="modal wide" role="dialog" aria-modal="true" aria-label="Настройки"><h2>Настройки и данные</h2><p class="desc">Комнаты и названия статусов можно менять. Ваши данные остаются доступны без интернета на этом устройстве.</p><div class="settings-title">Комнаты</div><div id="roomEditor"></div><div class="settings-row"><input id="newRoom" class="search" placeholder="Новая комната"><button id="addRoom" class="secondary">Добавить</button></div><div class="settings-title">Цветовые категории</div><div id="statusEditor"></div><div class="settings-title">Резервное копирование</div><div class="settings-row"><button class="secondary" id="exportBtn">↓ Экспорт JSON</button><button class="secondary" id="importBtn">↑ Импорт JSON</button><input type="file" id="importFile" accept="application/json,.json" hidden></div><div class="settings-title">Защищённая синхронизация · Supabase Auth</div><p class="small">Создайте аккаунт по email или войдите в существующий. Каждый аккаунт имеет доступ только к своим записям. Для шифрования базы задайте отдельный пароль и введите его на обоих устройствах. Пароль шифрования не восстанавливается через email.</p><label class="field">Email<input id="authEmail" type="email" autocomplete="username" placeholder="you@example.com"></label><label class="field">Пароль аккаунта<input id="authPassword" type="password" autocomplete="current-password" placeholder="Пароль для входа"></label><div class="settings-row"><button class="secondary" id="authSignUp">Регистрация</button><button class="primary" id="authSignIn">Войти</button><button class="secondary" id="authSignOut">Выйти</button></div><label class="field">Пароль шифрования данных<input id="cloudPassword" type="password" placeholder="Отдельный пароль от 10 символов" autocomplete="off"></label><div class="settings-row"><button class="primary" id="cloudConnect">Сохранить пароль и синхронизировать</button></div><div id="cloudMsg" class="hint">Войдите в аккаунт. Локальные данные сохранены на устройстве.</div><div class="modal-actions"><button class="secondary" id="closeSettings">Готово</button></div></section></div><div id="toast" class="toast hidden"></div>
+<div class="overlay hidden" id="settingsOverlay"><section class="modal wide" role="dialog" aria-modal="true" aria-label="Настройки"><button class="modal-close" id="closeSettingsTop" aria-label="Закрыть настройки" title="Закрыть"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button><h2>Настройки и данные</h2><p class="desc">Комнаты и названия статусов можно менять. Ваши данные остаются доступны без интернета на этом устройстве.</p><div class="settings-title">Внешний вид</div><div class="settings-row"><select class="filter" id="themeMode"><option value="system">Системная тема</option><option value="light">Komorebi · День</option><option value="dark">Dusk · Вечер</option></select></div><p class="small">Komorebi — дневной свет; Dusk — графит и янтарь. Изменение вступает в силу сразу и запоминается на устройстве.</p><div class="settings-title">Комнаты</div><div id="roomEditor"></div><div class="settings-row"><input id="newRoom" class="search" placeholder="Новая комната"><button id="addRoom" class="secondary">Добавить</button></div><div class="settings-title">Цветовые категории</div><div id="statusEditor"></div><details class="settings-fold" id="backupFold"><summary>Резервное копирование <span class="settings-fold-note">JSON</span></summary><div class="settings-row"><button class="secondary" id="exportBtn">↓ Экспорт JSON</button><button class="secondary" id="importBtn">↑ Импорт JSON</button><button class="secondary" id="restoreBackupBtn" type="button" hidden>↓ Копия до восстановления</button><input type="file" id="importFile" accept="application/json,.json" hidden></div></details><details class="settings-fold" id="syncFold"><summary>Защищённая синхронизация <span class="settings-fold-note">Аккаунт · шифрование</span></summary><p class="small">Создайте аккаунт по email или войдите в существующий. Каждый аккаунт имеет доступ только к своим записям. Для шифрования базы задайте отдельный пароль и введите его на обоих устройствах. Пароль шифрования не восстанавливается через email.</p><label class="field">Email<input id="authEmail" type="email" autocomplete="username" placeholder="you@example.com"></label><label class="field">Пароль аккаунта<input id="authPassword" type="password" autocomplete="current-password" placeholder="Пароль для входа"></label><div class="settings-row"><button class="secondary" id="authSignUp">Регистрация</button><button class="primary" id="authSignIn">Войти</button><button class="secondary" id="authSignOut">Выйти</button></div><label class="field">Пароль шифрования данных<input id="cloudPassword" type="password" placeholder="Отдельный пароль от 10 символов" autocomplete="off"></label><div class="settings-row"><button class="primary" id="cloudConnect">Сохранить пароль и синхронизировать</button></div><div id="cloudMsg" class="hint">Войдите в аккаунт. Локальные данные сохранены на устройстве.</div></details><div class="modal-actions"><button class="secondary" id="closeSettings">Готово</button></div></section></div><div class="overlay restore-overlay hidden" id="restoreOverlay"><section class="modal restore-dialog" role="alertdialog" aria-modal="true" aria-labelledby="restoreTitle" aria-describedby="restoreDescription"><h2 id="restoreTitle">Заменить данные?</h2><p class="desc" id="restoreDescription"></p><div class="modal-actions"><button type="button" class="secondary" id="restoreCancel">Отмена</button><button type="button" class="restore-confirm" id="restoreConfirm">Заменить</button></div></section></div><div id="toast" class="toast hidden"></div>
 <script>
 (()=>{'use strict';
-const KEY='move2026-v1', CFG='move2026-cloud-v1';
-const statuses=[{id:'red',color:'#c87970',name:'Оставить'},{id:'yellow',color:'#ddb66d',name:'Не знаю'},{id:'green',color:'#8bac94',name:'Отправить / взять'},{id:'none',color:'#b8beb7',name:'Без метки'}];
-const initial={version:1,rooms:['Гардеробная','Гостиная','Кухня','Ванная'],labels:{red:'Оставить',yellow:'Не знаю',green:'Отправить / взять',none:'Без метки'},labelsUpdated:0,roomsUpdated:0,items:[]};
-const seeds={'Гардеробная':['Тёплые вещи + вешалки','Робот-пылесос'],'Гостиная':['Гитара','Книги, фигурки','Уход за лицом','Одежда + вешалки','ТВ-приставка','Постельное бельё, полотенца','PS4 Pro + диски'],'Кухня':['Ящик с инструментами','Тарелки','Мусорное ведро','Столовые приборы','Дуршлаги','Инструменты на ящике'],'Ванная':['Химикаты','Ёмкости для гелей для стирки','Шарики для стирки','Мешки для деликатной стирки']};
+const KEY='move2026-v1', CFG='move2026-cloud-v1', RESTORE_EPOCH_KEY='tabi-restore-epoch-v1';
+const BOARD_DENSITY_KEY='tabi-board-density-v1';
+let compactBoard=false;
+try{compactBoard=localStorage.getItem(BOARD_DENSITY_KEY)==='compact'}catch{}
+const statuses=[{id:'red',color:'#D78F87',name:'Оставить'},{id:'yellow',color:'#D8BE7B',name:'Не знаю'},{id:'green',color:'#92B8AA',name:'Отправить / взять'},{id:'none',color:'#B7C2BD',name:'Без метки'}];
+const initial={version:2,rooms:['Гардеробная','Гостиная','Кухня','Ванная'],labels:{red:'Оставить',yellow:'Не знаю',green:'Отправить / взять',none:'Без метки'},labelsUpdated:0,roomsUpdated:0,items:[]};
 const $=id=>document.getElementById(id), copy=o=>JSON.parse(JSON.stringify(o)), uid=()=>crypto.randomUUID(), now=()=>Date.now();
 function hydrate(o){if(!o||!Array.isArray(o.items)||!Array.isArray(o.rooms))throw Error('Неверный формат данных');return {...copy(initial),...o,labels:{...initial.labels,...o.labels},items:o.items.filter(i=>i&&typeof i.id==='string'&&typeof i.name==='string').map((i,index)=>({...i,updatedAt:Number(i.updatedAt)||0,status:i.status==='blue'?'yellow':(i.status||'none'),done:i.status!=='blue'&&i.status!=='yellow'&&i.status!=='none'&&i.done===true,order:Number.isFinite(Number(i.order))?Number(i.order):index}))}};
-let state;try{state=hydrate(JSON.parse(localStorage.getItem(KEY)))}catch{state=copy(initial);let t=1000,seedIndex=0;for(const [room,names] of Object.entries(seeds))for(const name of names)state.items.push({id:'seed-'+(++seedIndex),name,room,status:'none',done:false,order:seedIndex,updatedAt:++t});localStorage.setItem(KEY,JSON.stringify(state))}
-let cfg={};try{cfg=JSON.parse(localStorage.getItem(CFG))||{}}catch{};cfg={url:'https://cnipeaesgwgxgkvuwpql.supabase.co',key:'sb_publishable_D4ndInZlPKCEaXb5idNC-A_pTfra8Ml',pass:cfg.pass||''};const AUTHKEY='move2026-auth-v2';let session=null;try{session=JSON.parse(localStorage.getItem(AUTHKEY))}catch{};let tab='objects',editId=null,chosen='none',busy=false,delay=null,timer=null,unfinishedOnly=false,bulkMode=false,selected=new Set();
+let state;try{state=hydrate(JSON.parse(localStorage.getItem(KEY)))}catch{state=copy(initial);localStorage.setItem(KEY,JSON.stringify(state))}
+let cfg={};try{cfg=JSON.parse(localStorage.getItem(CFG))||{}}catch{};cfg={url:'https://cnipeaesgwgxgkvuwpql.supabase.co',key:'sb_publishable_D4ndInZlPKCEaXb5idNC-A_pTfra8Ml',pass:cfg.pass||'',theme:cfg.theme||'system'};const AUTHKEY='move2026-auth-v2';let session=null;try{session=JSON.parse(localStorage.getItem(AUTHKEY))}catch{};/* UI-07: room collapse stays local, room order uses existing synced rooms array. */
+const ROOM_COLLAPSE_KEY='tabi-collapsed-rooms-v1';
+let collapsedRooms=new Set();
+try{const stored=JSON.parse(localStorage.getItem(ROOM_COLLAPSE_KEY)||'[]');if(Array.isArray(stored))collapsedRooms=new Set(stored.filter(x=>typeof x==='string'))}catch{}
+function saveCollapsedRooms(){try{localStorage.setItem(ROOM_COLLAPSE_KEY,JSON.stringify([...collapsedRooms]))}catch{}}
+const roomChevron='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+const removeIcon='<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>';
+let tab='objects',editId=null,chosen='none',busy=false,delay=null,timer=null,unfinishedOnly=false,decisionOnly=false,bulkMode=false,selected=new Set(),draftRoom=null,statFilter='all';
+
+/* UI-11: local-only, independent project title; does not change synced inventory schema. */
+const PROJECT_NAME_KEY='tabi-project-name-v1', DEFAULT_PROJECT_NAME='Мой переезд';
+let projectName=DEFAULT_PROJECT_NAME;
+try{const stored=localStorage.getItem(PROJECT_NAME_KEY);if(stored&&stored.trim())projectName=stored.trim().slice(0,48)}catch{}
+const projectNameBtn=$('projectNameBtn'),projectNameInput=$('projectNameInput');
+function showProjectName(){
+  projectNameBtn.textContent=projectName;
+  projectNameBtn.title='Изменить название: '+projectName;
+  document.title='Tabi · '+projectName+' · Komorebi / Dusk';
+}
+function endProjectNameEdit(save){
+  if(projectNameInput.classList.contains('hidden'))return;
+  if(save){
+    const next=projectNameInput.value.trim().replace(/\s+/g,' ').slice(0,48);
+    if(next){
+      projectName=next;
+      try{localStorage.setItem(PROJECT_NAME_KEY,projectName)}catch{toast('Название изменено, но сохранить его на устройстве не удалось')}
+    }
+  }
+  projectNameInput.classList.add('hidden');
+  projectNameBtn.classList.remove('hidden');
+  showProjectName();
+}
+projectNameBtn.addEventListener('click',()=>{
+  projectNameBtn.classList.add('hidden');
+  projectNameInput.classList.remove('hidden');
+  projectNameInput.value=projectName;
+  projectNameInput.focus();
+  projectNameInput.select();
+});
+projectNameInput.addEventListener('keydown',event=>{
+  if(event.key==='Enter'){event.preventDefault();endProjectNameEdit(true)}
+  if(event.key==='Escape'){event.preventDefault();endProjectNameEdit(false)}
+});
+projectNameInput.addEventListener('blur',()=>endProjectNameEdit(true));
+// On iOS/iPadOS a tap outside a focused input does not always trigger blur.
+// Commit explicitly on an outside pointer interaction; keep Enter/Escape behavior.
+document.addEventListener('pointerdown',event=>{
+  if(projectNameInput.classList.contains('hidden'))return;
+  if(event.target===projectNameInput||projectNameInput.contains(event.target))return;
+  endProjectNameEdit(true);
+},true);
+showProjectName();
+function saveCfg(){localStorage.setItem(CFG,JSON.stringify({pass:cfg.pass||'',theme:cfg.theme||'system'}))}
+function applyTheme(){let m=cfg.theme==='system'?(window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):cfg.theme;document.documentElement.dataset.theme=m;let meta=$('themeColorMeta');if(meta)meta.setAttribute('content',m==='dark'?'#EEF3F1':'#FAFBF8');let sel=$('themeMode');if(sel)sel.value=cfg.theme||'system'}
+function requiresDecision(i){return ['yellow','none'].includes(i.status||'none')}
 function persist(){localStorage.setItem(KEY,JSON.stringify(state));$('saveState').textContent='● Сохранено на устройстве';render();if(session?.access_token&&cfg.pass){clearTimeout(delay);delay=setTimeout(()=>sync(false),1800)}}
 function toast(msg){$('toast').textContent=msg;$('toast').classList.remove('hidden');clearTimeout(toast.t);toast.t=setTimeout(()=>$('toast').classList.add('hidden'),2700)}
 function escape(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function checkDone(i){return `<input type="checkbox" class="checkdone" data-done-id="${escape(i.id)}" ${i.done?'checked':''} ${!['red','green'].includes(i.status)?'disabled':''} aria-label="${i.done?'Снять отметку готово: ':'Отметить готовым: '}${escape(i.name)}" title="${i.done?'Снять отметку':'Готово'}">`}
 function dotChoices(i){return `<div class="color-dots" aria-label="Цветовые метки">${statuses.map(st=>`<button type="button" class="quick-dot ${((i.status||'none')===st.id)?'active':''}" data-set-color="${st.id}" data-id="${escape(i.id)}" title="${escape(state.labels[st.id])}" aria-label="${escape(state.labels[st.id])}" aria-pressed="${(i.status||'none')===st.id}"><span style="background:${st.color}"></span></button>`).join('')}</div>`}
-function filtered(){let q=$('search').value.toLocaleLowerCase('ru').trim(),r=$('roomFilter').value;return state.items.filter(i=>!i.deleted&&(!unfinishedOnly||!i.done)&&(!r||i.room===r)&&(!q||i.name.toLocaleLowerCase('ru').includes(q))).sort((a,b)=>Number(a.done)-Number(b.done)||(Number(a.order??a.updatedAt)||0)-(Number(b.order??b.updatedAt)||0))}
-function render(){let live=state.items.filter(i=>!i.deleted);$('totalCount').textContent=live.length;$('roomCount').textContent=new Set(live.map(i=>i.room)).size;$('taggedCount').textContent=live.filter(i=>i.status!=='none').length;let finished=live.filter(i=>i.done).length;$('progressText').textContent=finished+' / '+live.length;$('progressFill').style.width=(live.length?100*finished/live.length:0)+'%';$('progressHint').textContent=(live.length?Math.round(100*finished/live.length):0)+'% завершено · '+live.filter(i=>i.status==='yellow').length+' требуют решения';$('bulkCount').textContent=selected.size+' выбрано';$('bulkBar').classList.toggle('hidden',!bulkMode);$('bulkToggle').textContent=bulkMode?'Отменить выбор':'Выбрать несколько';$('bulkRoom').innerHTML='<option value="">Переместить в комнату…</option>'+state.rooms.map(r=>`<option value="${escape(r)}">${escape(r)}</option>`).join('');let old=$('roomFilter').value;let rooms=[...new Set([...state.rooms,...live.map(i=>i.room)])];$('roomFilter').innerHTML='<option value="">Все комнаты</option>'+rooms.map(r=>`<option value="${escape(r)}">${escape(r)}</option>`).join('');$('roomFilter').value=rooms.includes(old)?old:'';document.querySelectorAll('[data-tab]').forEach(e=>e.classList.toggle('active',e.dataset.tab===tab));let items=filtered();let allShown=!$('roomFilter').value&&!$('search').value.trim();if(tab==='objects'){let html='<p class="drag-help">Нажмите цветную точку для смены метки · удерживайте карточку для перемещения</p>';for(const room of rooms){let subset=items.filter(i=>i.room===room);if(!subset.length&&!allShown)continue;html+=`<section class="room-section" data-room-drop="${escape(room)}"><div class="room-title"><h2>${escape(room)}</h2><span class="count">${subset.length}</span></div><div class="grid">${subset.map(i=>`<article class="item ${i.done?'completed':''} tone-${statuses.some(s=>s.id===i.status)?i.status:'none'}" data-card-id="${escape(i.id)}"><div class="itemline">${bulkMode?`<input type="checkbox" class="bulkcheck" data-select-id="${escape(i.id)}" ${selected.has(i.id)?'checked':''} aria-label="Выбрать объект">`:checkDone(i)}<span class="itemname">${escape(i.name)}</span><button class="tiny" data-edit="${escape(i.id)}" aria-label="Редактировать">⋯</button></div>${dotChoices(i)}</article>`).join('')}</div></section>`}$('content').innerHTML=html+(items.length?'':!allShown?'<div class="empty">Ничего не найдено. Измените фильтры.</div>':'')}else{$('content').innerHTML=`<p class="drag-help">Удерживайте карточку и перетащите в нужную колонку</p><div class="board">${statuses.map(st=>{let group=items.filter(i=>(i.status||'none')===st.id);return `<section class="column" data-status-drop="${st.id}"><div class="colhead"><strong><span class="dot" style="background:${st.color}"></span>${escape(state.labels[st.id])}</strong><span class="count">${group.length}</span></div>${group.map(i=>`<article class="kanitem ${i.done?'completed':''}" data-card-id="${escape(i.id)}"><div class="kan-top">${bulkMode?`<input type="checkbox" class="bulkcheck" data-select-id="${escape(i.id)}" ${selected.has(i.id)?'checked':''} aria-label="Выбрать объект">`:checkDone(i)}<strong>${escape(i.name)}</strong></div><small>${escape(i.room)}</small></article>`).join('')||'<div class="muted" style="padding:8px">Перетащите сюда</div>'}</section>`}).join('')}</div>`}}
+function filtered(){let q=$('search').value.toLocaleLowerCase('ru').trim(),r=$('roomFilter').value;return state.items.filter(i=>!i.deleted&&(!unfinishedOnly||!i.done)&&(!decisionOnly||requiresDecision(i))&&(statFilter!=='tagged'||i.status!=='none')&&(!r||i.room===r)&&(!q||i.name.toLocaleLowerCase('ru').includes(q))).sort((a,b)=>Number(a.done)-Number(b.done)||(Number(a.order??a.updatedAt)||0)-(Number(b.order??b.updatedAt)||0))}
+/* UI-02: determine the current stage solely from existing inventory data. */
+function updateHeroTitle(items,needsDecision,finished){
+  let title;
+  if(items.length===0)title='Порядок в вещах.';
+  else if(finished===items.length)title='Всё на своих местах.';
+  else if(finished>0)title='Шаг за шагом.';
+  else if(needsDecision>0)title='Время определиться.';
+  else title='План обретает форму.';
+  $('heroTitle').textContent=title;
+}
+function render(){let live=state.items.filter(i=>!i.deleted),needsDecision=live.filter(requiresDecision).length;$('totalCount').textContent=live.length;$('roomCount').textContent=new Set(live.map(i=>i.room)).size;$('taggedCount').textContent=live.filter(i=>i.status!=='none').length;let finished=live.filter(i=>i.done).length;updateHeroTitle(live,needsDecision,finished);$('progressText').textContent=finished+' / '+live.length;$('progressFill').style.width=(live.length?100*finished/live.length:0)+'%';$('progressHint').innerHTML=`<span>${live.length?Math.round(100*finished/live.length):0}% завершено</span><span>·</span><button type="button" class="progress-link ${decisionOnly?'active':''}" data-filter-decision="toggle">${needsDecision} требуют решения</button>`;$('bulkCount').textContent=selected.size+' выбрано';$('bulkBar').classList.toggle('hidden',!bulkMode);$('bulkToggle').textContent=bulkMode?'Отменить выбор':'Выбрать несколько';$('bulkRoom').innerHTML='<option value="">Переместить в комнату…</option>'+state.rooms.map(r=>`<option value="${escape(r)}">${escape(r)}</option>`).join('');let old=$('roomFilter').value;let rooms=[...new Set([...state.rooms,...live.map(i=>i.room)])];$('roomFilter').innerHTML='<option value="">Все комнаты</option>'+rooms.map(r=>`<option value="${escape(r)}">${escape(r)}</option>`).join('');$('roomFilter').value=rooms.includes(old)?old:'';document.querySelectorAll('[data-tab]').forEach(e=>e.classList.toggle('active',e.dataset.tab===tab));let items=filtered();document.querySelectorAll('[data-stat-filter]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.statFilter===statFilter)));let allShown=!$('roomFilter').value&&!$('search').value.trim()&&!decisionOnly&&statFilter!=='rooms'&&statFilter!=='tagged';if(tab==='objects'){let html='<p class="drag-help">Нажмите цветную точку для смены метки · удерживайте карточку для перемещения</p>';for(const room of rooms){let subset=items.filter(i=>i.room===room);if(!subset.length&&!allShown&&draftRoom!==room)continue;let composer=draftRoom===room?`<article class="item composer tone-none"><div class="composer-head"><input class="composer-input" id="draftName" maxlength="160" placeholder="Новый предмет"></div><div class="composer-actions"><button class="secondary mini" type="button" data-cancel-draft>Отмена</button><button class="primary mini" type="button" data-save-draft="${escape(room)}">Добавить</button></div></article>`:'';html+=`<section class="room-section ${collapsedRooms.has(room)?'is-collapsed':''}" data-room-drop="${escape(room)}"><div class="room-title"><div class="left"><button type="button" class="room-collapse" data-collapse-room="${escape(room)}" aria-expanded="${!collapsedRooms.has(room)}" aria-label="${collapsedRooms.has(room)?'Развернуть':'Свернуть'} комнату ${escape(room)}">${roomChevron}</button><h2>${escape(room)}</h2><span class="count">${subset.length}</span></div><div class="room-actions"><button type="button" class="room-add" data-add-room-item="${escape(room)}" aria-label="Добавить предмет в комнату ${escape(room)}" title="Добавить предмет">＋</button></div></div>${collapsedRooms.has(room)?'':'<div class="grid">'}${collapsedRooms.has(room)?'':subset.map(i=>`<article class="item ${i.done?'completed':''} tone-${statuses.some(s=>s.id===i.status)?i.status:'none'}" data-card-id="${escape(i.id)}"><div class="itemline">${bulkMode?`<input type="checkbox" class="bulkcheck" data-select-id="${escape(i.id)}" ${selected.has(i.id)?'checked':''} aria-label="Выбрать объект">`:checkDone(i)}<span class="itemname" data-inline-name="${escape(i.id)}" role="button" tabindex="0" aria-label="Изменить название: ${escape(i.name)}" title="Нажмите для изменения названия">${escape(i.name)}</span><button class="tiny" data-edit="${escape(i.id)}" aria-label="Редактировать">⋯</button></div>${dotChoices(i)}</article>`).join('')}${composer}${collapsedRooms.has(room)?'':'</div>'}</section>`}$('content').innerHTML=html+(items.length||draftRoom?'' : !allShown?'<div class="empty">Ничего не найдено. Измените фильтры.</div>':'<div class="empty">Здесь пока пусто. Добавьте первый предмет.</div>')}else{$('content').innerHTML=`<div class="board-density-bar"><button type="button" class="board-density-toggle" data-board-density aria-pressed="${compactBoard}" aria-label="Компактный режим Канбана">${compactBoard?'▤ Обычный вид':'▥ Компактный вид'}</button></div><p class="drag-help">Удерживайте карточку и перетащите в нужную колонку</p><div class="board ${compactBoard?'is-compact':''}">${statuses.map(st=>{let group=items.filter(i=>(i.status||'none')===st.id);return `<section class="column" data-status-drop="${st.id}"><div class="colhead"><strong><span class="dot" style="background:${st.color}"></span>${escape(state.labels[st.id])}</strong><span class="count">${group.length}</span></div>${group.map(i=>`<article class="kanitem ${i.done?'completed':''}" data-card-id="${escape(i.id)}"><div class="kan-top">${bulkMode?`<input type="checkbox" class="bulkcheck" data-select-id="${escape(i.id)}" ${selected.has(i.id)?'checked':''} aria-label="Выбрать объект">`:checkDone(i)}<strong class="itemname" data-inline-name="${escape(i.id)}" role="button" tabindex="0" aria-label="Изменить название: ${escape(i.name)}" title="Нажмите для изменения названия">${escape(i.name)}</strong></div><small>${escape(i.room)}</small></article>`).join('')||'<div class="muted" style="padding:8px">Перетащите сюда</div>'}</section>`}).join('')}</div>`}if(draftRoom&&tab==='objects')setTimeout(()=>{$('draftName')?.focus()},0)}
 function closeItem(){$('itemOverlay').classList.add('hidden')}
 function openItem(id){editId=id||null;let i=id?state.items.find(x=>x.id===id):null;chosen=i?.status||'none';$('itemTitle').textContent=i?'Редактировать объект':'Новый объект';$('itemName').value=i?.name||'';$('itemDone').checked=!!i?.done;syncModalDone();let rooms=[...new Set([...state.rooms,...state.items.filter(x=>!x.deleted).map(x=>x.room)])];$('itemRoom').innerHTML=rooms.map(r=>`<option value="${escape(r)}">${escape(r)}</option>`).join('');$('itemRoom').value=i?.room||rooms[0];$('deleteBtn').classList.toggle('hidden',!i);drawColors();$('itemOverlay').classList.remove('hidden');$('itemName').focus()}
 function syncModalDone(){let allowed=['red','green'].includes(chosen);$('itemDone').disabled=!allowed;if(!allowed)$('itemDone').checked=false;$('itemDone').parentElement.title=allowed?'Отметить выполненное действие':'Сначала выберите «Оставить» или «Отправить / взять»'}
 function drawColors(){syncModalDone();$('colorPicks').innerHTML=statuses.map(s=>`<button class="colorpick ${chosen===s.id?'active':''}" data-color="${s.id}"><span class="dot" style="background:${s.color}"></span>${escape(state.labels[s.id])}</button>`).join('')}
 $('colorPicks').onclick=e=>{let b=e.target.closest('[data-color]');if(b){chosen=b.dataset.color;drawColors()}};
 $('addBtn').onclick=()=>openItem();$('cancelItem').onclick=closeItem;$('itemOverlay').onclick=e=>{if(e.target===$('itemOverlay'))closeItem()};$('saveItem').onclick=()=>{let name=$('itemName').value.trim(),room=$('itemRoom').value;if(!name||!room){toast('Укажите название и комнату');return}if(editId){let i=state.items.find(x=>x.id===editId);Object.assign(i,{name,room,status:chosen,done:(chosen===i.status&&['red','green'].includes(chosen))?$('itemDone').checked:false,updatedAt:now()})}else state.items.push({id:uid(),name,room,status:chosen,done:['red','green'].includes(chosen)&&$('itemDone').checked,order:Math.max(0,...state.items.map(x=>Number(x.order)||0))+1,updatedAt:now()});persist();closeItem();toast('Объект сохранён')};$('deleteBtn').onclick=()=>{if(!confirm('Удалить объект?'))return;let i=state.items.find(x=>x.id===editId);if(i){i.deleted=true;i.updatedAt=now();persist()}closeItem()};
-$('content').onclick=e=>{if(suppressClick){suppressClick=false;return}let bulk=e.target.closest('[data-select-id]');if(bulk){if(bulk.checked)selected.add(bulk.dataset.selectId);else selected.delete(bulk.dataset.selectId);$('bulkCount').textContent=selected.size+' выбрано';return}let check=e.target.closest('[data-done-id]');if(check){let i=state.items.find(x=>x.id===check.dataset.doneId);if(i){i.done=check.checked;i.updatedAt=now();persist()}return}let pick=e.target.closest('[data-set-color]');if(pick){let i=state.items.find(x=>x.id===pick.dataset.id);if(i&&i.status!==pick.dataset.setColor){i.status=pick.dataset.setColor;i.done=false;i.updatedAt=now();persist()}return}let btn=e.target.closest('[data-edit]');if(btn){openItem(btn.dataset.edit);return}let card=e.target.closest('.kanitem[data-card-id]');if(card)openItem(card.dataset.cardId)};
+$('content').onclick=e=>{const density=e.target.closest('[data-board-density]');if(density){compactBoard=!compactBoard;try{localStorage.setItem(BOARD_DENSITY_KEY,compactBoard?'compact':'normal')}catch{}render();return}const collapse=e.target.closest('[data-collapse-room]');if(collapse){const room=collapse.dataset.collapseRoom;if(collapsedRooms.has(room))collapsedRooms.delete(room);else collapsedRooms.add(room);saveCollapsedRooms();render();return}if(suppressClick){suppressClick=false;return}let addRoomItem=e.target.closest('[data-add-room-item]');if(addRoomItem){draftRoom=addRoomItem.dataset.addRoomItem;if(collapsedRooms.delete(draftRoom))saveCollapsedRooms();render();return}let cancelDraft=e.target.closest('[data-cancel-draft]');if(cancelDraft){draftRoom=null;render();return}let saveDraft=e.target.closest('[data-save-draft]');if(saveDraft){let room=saveDraft.dataset.saveDraft,name=$('draftName')?.value.trim();if(!name){toast('Введите название предмета');$('draftName')?.focus();return}state.items.push({id:uid(),name,room,status:'none',done:false,order:Math.max(0,...state.items.map(x=>Number(x.order)||0))+1,updatedAt:now()});draftRoom=null;persist();toast('Предмет добавлен');return}let bulk=e.target.closest('[data-select-id]');if(bulk){if(bulk.checked)selected.add(bulk.dataset.selectId);else selected.delete(bulk.dataset.selectId);$('bulkCount').textContent=selected.size+' выбрано';return}let check=e.target.closest('[data-done-id]');if(check){let i=state.items.find(x=>x.id===check.dataset.doneId);if(i){i.done=check.checked;i.updatedAt=now();persist()}return}let pick=e.target.closest('[data-set-color]');if(pick){let i=state.items.find(x=>x.id===pick.dataset.id);if(i&&i.status!==pick.dataset.setColor){i.status=pick.dataset.setColor;i.done=false;i.updatedAt=now();persist()}return}let title=e.target.closest('[data-inline-name]');if(title){if(!bulkMode)startInlineItemName(title);return}let btn=e.target.closest('[data-edit]');if(btn){openItem(btn.dataset.edit);return}let card=e.target.closest('.kanitem[data-card-id]');if(card)openItem(card.dataset.cardId)};
+let inlineNameEdit=null;
+function finishInlineItemName(save){
+  const edit=inlineNameEdit;if(!edit)return;
+  inlineNameEdit=null;
+  const input=edit.input,raw=input.value.trim();
+  if(save){
+    if(!raw){toast('Название не может быть пустым');input.value=edit.original;save=false}
+    else if(raw!==edit.original){const item=state.items.find(i=>i.id===edit.id&&!i.deleted);if(item){item.name=raw;item.updatedAt=now();persist();return}}
+  }
+  if(input.isConnected){input.replaceWith(edit.title);edit.title.textContent=edit.original}
+}
+function startInlineItemName(title){
+  if(bulkMode||inlineNameEdit)return;
+  const id=title.dataset.inlineName,item=state.items.find(i=>i.id===id&&!i.deleted);if(!item)return;
+  cleanDrag();
+  const input=document.createElement('input');input.type='text';input.className='inline-item-name';input.maxLength=160;input.value=item.name;input.setAttribute('aria-label','Название предмета');
+  inlineNameEdit={id,original:item.name,title,input};
+  title.replaceWith(input);
+  input.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();finishInlineItemName(true)}else if(e.key==='Escape'){e.preventDefault();finishInlineItemName(false)}e.stopPropagation()});
+  input.addEventListener('blur',()=>finishInlineItemName(true),{once:true});
+  input.focus();input.select();
+}
+$('content').addEventListener('keydown',e=>{if(!bulkMode&&e.target.matches('[data-inline-name]')&&(e.key==='Enter'||e.key===' ')){e.preventDefault();startInlineItemName(e.target);return}if(e.target.id==='draftName'&&e.key==='Enter'){e.preventDefault();e.target.closest('.composer')?.querySelector('[data-save-draft]')?.click()}if(e.target.id==='draftName'&&e.key==='Escape'){draftRoom=null;render()}});
 // Press and hold (touch / mouse / pen) to drag cards across rooms or colour columns.
 let dragging=null,pressTimer=null,suppressClick=false;
 function cleanDrag(){clearTimeout(pressTimer);pressTimer=null;if(!dragging)return;dragging.ghost?.remove();dragging.source?.classList.remove('drag-source');document.querySelectorAll('.drop-highlight,.drop-before,.drop-after').forEach(el=>el.classList.remove('drop-highlight','drop-before','drop-after'));document.body.classList.remove('dragging-active');dragging=null}
 function moveAt(clientX,clientY){if(!dragging?.active)return;let d=dragging;d.ghost.style.left=(clientX-d.offsetX)+'px';d.ghost.style.top=(clientY-d.offsetY)+'px';document.querySelectorAll('.drop-highlight,.drop-before,.drop-after').forEach(el=>el.classList.remove('drop-highlight','drop-before','drop-after'));let target=document.elementFromPoint(clientX,clientY),zone=target?.closest(tab==='objects'?'[data-room-drop]':'[data-status-drop]');if(!zone){d.zone=null;d.near=null;return}let cards=[...zone.querySelectorAll('[data-card-id]')].filter(c=>c.dataset.cardId!==d.id);let near=target.closest('[data-card-id]');if(!near||near.dataset.cardId===d.id||!zone.contains(near))near=null;let after=near?clientY>near.getBoundingClientRect().top+near.getBoundingClientRect().height/2:false;d.zone=zone;d.near=near;d.after=after;zone.classList.add('drop-highlight');if(near)near.classList.add(after?'drop-after':'drop-before')}
 function finishDrag(){let d=dragging;if(!d)return;let valid=d.active&&d.zone;if(valid){let item=state.items.find(x=>x.id===d.id);if(item){let groupKey=tab==='objects'?'room':'status',next=tab==='objects'?d.zone.dataset.roomDrop:d.zone.dataset.statusDrop;let group=state.items.filter(x=>!x.deleted&&x.id!==item.id&&(groupKey==='room'?x.room:x.status||'none')===next).sort((a,b)=>(Number(a.order??a.updatedAt)||0)-(Number(b.order??b.updatedAt)||0));let pos=d.near?group.findIndex(x=>x.id===d.near.dataset.cardId):-1;let idx=pos<0?group.length:pos+(d.after?1:0);group.splice(idx,0,item);if(groupKey==='status'&&item.status!==next)item.done=false;item[groupKey]=next;let tick=now();group.forEach((x,index)=>{x.order=tick+index;x.updatedAt=tick+index});persist();toast(tab==='objects'?'Комната и порядок обновлены':'Метка и порядок обновлены')}}if(d.active){suppressClick=true;setTimeout(()=>suppressClick=false,350)}cleanDrag()}
-$('content').addEventListener('pointerdown',e=>{if(bulkMode||e.button!==0||e.target.closest('button,input,select,a'))return;let source=e.target.closest('[data-card-id]');if(!source)return;cleanDrag();let rect=source.getBoundingClientRect();dragging={id:source.dataset.cardId,source,x:e.clientX,y:e.clientY,offsetX:e.clientX-rect.left,offsetY:e.clientY-rect.top,active:false,pointerId:e.pointerId};pressTimer=setTimeout(()=>{if(!dragging||dragging.source!==source)return;dragging.active=true;let ghost=source.cloneNode(true);ghost.classList.add('drag-ghost');ghost.style.width=rect.width+'px';ghost.style.height=rect.height+'px';document.body.append(ghost);dragging.ghost=ghost;source.classList.add('drag-source');document.body.classList.add('dragging-active');moveAt(dragging.x,dragging.y);if(navigator.vibrate)navigator.vibrate(18)},320)},{passive:true});
+$('content').addEventListener('pointerdown',e=>{if(bulkMode||inlineNameEdit||e.button!==0||e.target.closest('button,input,select,a'))return;let source=e.target.closest('[data-card-id]');if(!source)return;cleanDrag();let rect=source.getBoundingClientRect();dragging={id:source.dataset.cardId,source,x:e.clientX,y:e.clientY,offsetX:e.clientX-rect.left,offsetY:e.clientY-rect.top,active:false,pointerId:e.pointerId};pressTimer=setTimeout(()=>{if(!dragging||dragging.source!==source)return;dragging.active=true;let ghost=source.cloneNode(true);ghost.classList.add('drag-ghost');ghost.style.width=rect.width+'px';ghost.style.height=rect.height+'px';document.body.append(ghost);dragging.ghost=ghost;source.classList.add('drag-source');document.body.classList.add('dragging-active');moveAt(dragging.x,dragging.y);if(navigator.vibrate)navigator.vibrate(18)},320)},{passive:true});
 document.addEventListener('pointermove',e=>{if(!dragging||e.pointerId!==dragging.pointerId)return;if(!dragging.active){if(Math.hypot(e.clientX-dragging.x,e.clientY-dragging.y)>9)cleanDrag();return}e.preventDefault();dragging.x=e.clientX;dragging.y=e.clientY;moveAt(e.clientX,e.clientY)},{passive:false});
 document.addEventListener('pointerup',e=>{if(dragging&&e.pointerId===dragging.pointerId)finishDrag()});document.addEventListener('pointercancel',()=>cleanDrag());
-// Touchmove non-passive keeps the browser from cancelling an established long-press gesture.
 document.addEventListener('touchmove',e=>{if(dragging?.active){e.preventDefault();let t=e.touches[0];if(t){dragging.x=t.clientX;dragging.y=t.clientY;moveAt(t.clientX,t.clientY)}}},{passive:false});
 document.addEventListener('touchend',()=>{if(dragging?.active)finishDrag()});
-document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{cleanDrag();tab=b.dataset.tab;render()});$('search').oninput=render;$('roomFilter').onchange=render;$('unfinishedOnly').onchange=e=>{unfinishedOnly=e.target.checked;render()};$('bulkToggle').onclick=()=>{bulkMode=!bulkMode;selected.clear();render()};$('bulkApply').onclick=()=>{if(!selected.size){toast('Выберите объекты');return}let action=$('bulkAction').value,room=$('bulkRoom').value;if(!action&&!room){toast('Выберите действие или комнату');return}let count=0;for(let i of state.items){if(!selected.has(i.id)||i.deleted)continue;if(room)i.room=room;if(['red','yellow','green','none'].includes(action)&&i.status!==action){i.status=action;i.done=false}if(action==='done'&&['red','green'].includes(i.status))i.done=true;if(action==='undone')i.done=false;i.updatedAt=now()+count++;}selected.clear();bulkMode=false;$('bulkAction').value='';persist();toast('Обновлено объектов: '+count)};
-function showSettings(){$('settingsOverlay').classList.remove('hidden');$('cloudPassword').value=cfg.pass||'';$('authEmail').value=session?.user?.email||'';$('authSignOut').disabled=!session?.access_token;drawSettings()}
-function drawSettings(){$('roomEditor').innerHTML=state.rooms.map((r,idx)=>`<div class="statusinput"><input aria-label="Имя комнаты" data-room="${idx}" value="${escape(r)}"><button class="secondary" data-remove-room="${idx}" title="Удалить комнату">×</button></div>`).join('');$('statusEditor').innerHTML=statuses.map(s=>`<div class="statusinput"><span class="dot" style="background:${s.color}"></span><input data-label="${s.id}" value="${escape(state.labels[s.id])}" aria-label="Название метки"></div>`).join('')}
-$('settingsBtn').onclick=showSettings;$('closeSettings').onclick=()=>{$('settingsOverlay').classList.add('hidden');render()};$('settingsOverlay').onclick=e=>{if(e.target===$('settingsOverlay'))$('settingsOverlay').classList.add('hidden')};
-$('roomEditor').onchange=e=>{let input=e.target.closest('[data-room]');if(!input)return;let idx=Number(input.dataset.room),old=state.rooms[idx],next=input.value.trim();if(!next||state.rooms.some((r,i)=>i!==idx&&r===next)){input.value=old;toast('Введите уникальное название');return}state.rooms[idx]=next;state.roomsUpdated=now();for(let i of state.items)if(i.room===old){i.room=next;i.updatedAt=now()}persist()};
-$('roomEditor').onclick=e=>{let b=e.target.closest('[data-remove-room]');if(!b)return;let idx=Number(b.dataset.removeRoom),room=state.rooms[idx];if(state.items.some(i=>!i.deleted&&i.room===room)){toast('Сначала перенесите объекты из комнаты');return}state.rooms.splice(idx,1);state.roomsUpdated=now();persist();drawSettings()};
+document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{cleanDrag();tab=b.dataset.tab;render()});
+
+/* UI-04 · interactive page swipe: finger-tracked, cancellable, reduced-motion aware.
+   No persistence, data calculation, or Kanban scroll changes. */
+let ui04Swipe=null,ui04Transition=false;
+const ui04ReducedMotion=()=>window.matchMedia?.('(prefers-reduced-motion: reduce)').matches===true;
+const ui04GestureArea=$('content');
+const ui04Clamp=(value,min,max)=>Math.max(min,Math.min(max,value));
+function ui04ClearVisual(){
+  ui04GestureArea.style.transform='';
+  ui04GestureArea.style.opacity='';
+  ui04GestureArea.style.willChange='';
+  ui04GestureArea.style.transition='';
+}
+function ui04Animate(el,frames,options){
+  if(ui04ReducedMotion()||!el.animate)return Promise.resolve();
+  const animation=el.animate(frames,options);
+  return animation.finished.catch(()=>{}).then(()=>{animation.cancel()});
+}
+async function ui04FinishSwipe(gesture,deltaX,velocity){
+  if(ui04Transition)return;
+  ui04Transition=true;
+  const el=ui04GestureArea;
+  const eligible=(gesture.from==='objects'&&deltaX<0)||(gesture.from==='board'&&deltaX>0);
+  const valid=eligible&&(Math.abs(deltaX)>=Math.min(96,gesture.width*.24)||(Math.abs(deltaX)>=42&&Math.abs(velocity)>.55));
+  const fromX=gesture.locked?ui04Clamp(gesture.dragX??deltaX,-gesture.width*.38,gesture.width*.38):0;
+  const fromOpacity=gesture.locked?.96:1;
+  try{
+    if(!valid){
+      if(gesture.locked)await ui04Animate(el,[{transform:`translate3d(${fromX}px,0,0)`,opacity:fromOpacity},{transform:'translate3d(0,0,0)',opacity:1}],{duration:185,easing:'cubic-bezier(.2,.8,.2,1)'});
+      return;
+    }
+    const dir=deltaX<0?-1:1;
+    if(!ui04ReducedMotion())await ui04Animate(el,[{transform:`translate3d(${fromX}px,0,0)`,opacity:fromOpacity},{transform:`translate3d(${dir*gesture.width*.30}px,0,0)`,opacity:.45}],{duration:125,easing:'ease-out'});
+    cleanDrag();
+    tab=dir<0?'board':'objects';
+    ui04ClearVisual();
+    render();
+    if(!ui04ReducedMotion()){
+      await ui04Animate(el,[{transform:`translate3d(${-dir*Math.min(90,gesture.width*.22)}px,0,0)`,opacity:.6},{transform:'translate3d(0,0,0)',opacity:1}],{duration:245,easing:'cubic-bezier(.16,1,.3,1)'});
+    }
+  }finally{
+    ui04ClearVisual();
+    ui04Transition=false;
+  }
+}
+ui04GestureArea.addEventListener('touchstart',e=>{
+  ui04Swipe=null;
+  if(ui04Transition||e.touches.length!==1||dragging?.active||e.target.closest('button,input,select,textarea,a,[contenteditable="true"]'))return;
+  const board=e.target.closest('.board');
+  if(board&&(tab!=='board'||board.scrollLeft>2))return;
+  const t=e.touches[0];
+  ui04Swipe={id:t.identifier,x:t.clientX,y:t.clientY,lastX:t.clientX,lastTime:performance.now(),started:performance.now(),width:Math.max(1,ui04GestureArea.clientWidth),from:tab,board,locked:false,vertical:false};
+},{passive:true});
+ui04GestureArea.addEventListener('touchmove',e=>{
+  const g=ui04Swipe;
+  if(!g||ui04Transition||e.touches.length!==1||dragging?.active)return;
+  const t=Array.from(e.touches).find(p=>p.identifier===g.id);if(!t)return;
+  const dx=t.clientX-g.x,dy=t.clientY-g.y;
+  if(!g.locked){
+    if(g.vertical)return;
+    if(Math.abs(dy)>12&&Math.abs(dy)>Math.abs(dx)){g.vertical=true;return}
+    if(Math.abs(dx)<12||Math.abs(dx)<Math.abs(dy)*1.4)return;
+    if((g.from==='objects'&&dx>=0)||(g.from==='board'&&dx<=0)){ui04Swipe=null;return}
+    if(g.board&&(dx<=0||g.board.scrollLeft>2)){ui04Swipe=null;return}
+    g.locked=true;ui04GestureArea.style.willChange='transform,opacity';
+  }
+  if(e.cancelable)e.preventDefault();
+  g.dragX=dx;g.lastX=t.clientX;g.lastTime=performance.now();
+  if(!ui04ReducedMotion()){
+    const x=ui04Clamp(dx,-g.width*.38,g.width*.38);
+    ui04GestureArea.style.transform=`translate3d(${x}px,0,0)`;
+    ui04GestureArea.style.opacity=String(1-Math.min(Math.abs(x)/g.width*.1,.05));
+  }
+},{passive:false});
+ui04GestureArea.addEventListener('touchend',e=>{
+  const g=ui04Swipe;ui04Swipe=null;
+  if(!g||ui04Transition||dragging?.active)return;
+  const t=Array.from(e.changedTouches).find(p=>p.identifier===g.id);
+  if(!t){ui04ClearVisual();return}
+  const dx=t.clientX-g.x,dy=t.clientY-g.y;
+  const duration=Math.max(1,performance.now()-g.started);
+  // Average speed is used to accept a deliberate short flick; vertical scroll never switches.
+  const speed=dx/duration;
+  if(g.vertical||Math.abs(dx)<Math.abs(dy)*1.4){ui04FinishSwipe(g,0,0);return}
+  ui04FinishSwipe(g,dx,speed);
+},{passive:true});
+ui04GestureArea.addEventListener('touchcancel',()=>{
+  const g=ui04Swipe;ui04Swipe=null;
+  if(g&&!ui04Transition)ui04FinishSwipe(g,0,0);
+},{passive:true});
+/* Browser-driven responsive layout: recalculate after iPad/phone orientation changes.
+   Never write inventory, alter zoom, or request cloud sync here. */
+let ui04ViewportFrame=0,ui04ViewportTimer=0;
+function ui04RefreshViewport(){
+  cancelAnimationFrame(ui04ViewportFrame);
+  ui04ViewportFrame=requestAnimationFrame(()=>{
+    const width=document.documentElement.clientWidth||window.innerWidth;
+    if(width>0)document.documentElement.style.setProperty('--tabi-viewport-width',width+'px');
+  });
+}
+function ui04OrientationRefresh(){
+  ui04Swipe=null;if(!ui04Transition)ui04ClearVisual();ui04RefreshViewport();
+  clearTimeout(ui04ViewportTimer);ui04ViewportTimer=setTimeout(ui04RefreshViewport,180);
+}
+window.addEventListener('resize',ui04RefreshViewport,{passive:true});
+window.addEventListener('orientationchange',ui04OrientationRefresh,{passive:true});
+if(window.screen?.orientation?.addEventListener)window.screen.orientation.addEventListener('change',ui04OrientationRefresh);
+if(window.visualViewport)window.visualViewport.addEventListener('resize',ui04RefreshViewport,{passive:true});
+ui04RefreshViewport();
+/* UI-03: stat filter affects the view only, never the persisted inventory. */
+document.querySelector('.stats').addEventListener('click',event=>{
+  const button=event.target.closest('[data-stat-filter]');
+  if(!button)return;
+  const mode=button.dataset.statFilter;
+  if(mode==='all'){
+    statFilter='all';decisionOnly=false;unfinishedOnly=false;
+    $('unfinishedOnly').checked=false;$('search').value='';$('roomFilter').value='';
+    tab='objects';
+  }else{
+    statFilter=statFilter===mode?'all':mode;
+    if(mode==='rooms')tab='objects';
+  }
+  render();
+});
+$('search').oninput=()=>{decisionOnly=false;render()};$('roomFilter').onchange=()=>{decisionOnly=false;render()};$('unfinishedOnly').onchange=e=>{unfinishedOnly=e.target.checked;render()};$('bulkToggle').onclick=()=>{bulkMode=!bulkMode;selected.clear();render()};$('bulkApply').onclick=()=>{if(!selected.size){toast('Выберите объекты');return}let action=$('bulkAction').value,room=$('bulkRoom').value;if(!action&&!room){toast('Выберите действие или комнату');return}if(action==='delete'){const count=state.items.filter(i=>selected.has(i.id)&&!i.deleted).length;if(!confirm('Удалить выбранные предметы ('+count+')? Это действие нельзя отменить.'))return;let n=0;for(const i of state.items){if(selected.has(i.id)&&!i.deleted){i.deleted=true;i.updatedAt=now()+n++;}}selected.clear();bulkMode=false;$('bulkAction').value='';persist();toast('Удалено объектов: '+n);return}let count=0;for(let i of state.items){if(!selected.has(i.id)||i.deleted)continue;if(room)i.room=room;if(['red','yellow','green','none'].includes(action)&&i.status!==action){i.status=action;i.done=false}if(action==='done'&&['red','green'].includes(i.status))i.done=true;if(action==='undone')i.done=false;i.updatedAt=now()+count++;}selected.clear();bulkMode=false;$('bulkAction').value='';persist();toast('Обновлено объектов: '+count)};$('progressHint').onclick=e=>{let b=e.target.closest('[data-filter-decision]');if(!b)return;decisionOnly=!decisionOnly;tab='objects';$('search').value='';$('roomFilter').value='';render();document.querySelector('.room-section')?.scrollIntoView({behavior:'smooth',block:'start'})};
+function showSettings(){$('settingsOverlay').classList.remove('hidden');$('cloudPassword').value=cfg.pass||'';$('authEmail').value=session?.user?.email||'';$('authSignOut').disabled=!session?.access_token;$('themeMode').value=cfg.theme||'system';drawSettings()}
+function drawSettings(){
+  $('roomEditor').innerHTML=state.rooms.map((r,idx)=>`<div class="room-editor-row" data-room-row="${idx}"><button type="button" class="room-handle" data-room-handle="${idx}" aria-label="Перетащить комнату ${escape(r)}" title="Перетащить комнату">⠿</button><input aria-label="Имя комнаты" data-room="${idx}" value="${escape(r)}"><button type="button" class="room-order" data-move-room="${idx}" data-direction="-1" aria-label="Поднять комнату ${escape(r)}" ${idx===0?'disabled':''}>↑</button><button type="button" class="room-order" data-move-room="${idx}" data-direction="1" aria-label="Опустить комнату ${escape(r)}" ${idx===state.rooms.length-1?'disabled':''}>↓</button><button type="button" class="room-delete" data-remove-room="${idx}" aria-label="Удалить комнату ${escape(r)}" title="Удалить комнату">${removeIcon}</button></div>`).join('');
+  $('statusEditor').innerHTML=statuses.map(s=>`<div class="statusinput"><span class="dot" style="background:${s.color}"></span><input data-label="${s.id}" value="${escape(state.labels[s.id])}" aria-label="Название метки"></div>`).join('');
+}
+$('settingsBtn').onclick=showSettings;const closeSettingsPanel=()=>{$('settingsOverlay').classList.add('hidden');render()};$('closeSettings').onclick=closeSettingsPanel;$('closeSettingsTop').onclick=closeSettingsPanel;$('settingsOverlay').onclick=e=>{if(e.target===$('settingsOverlay'))$('settingsOverlay').classList.add('hidden')};
+$('roomEditor').onchange=e=>{let input=e.target.closest('[data-room]');if(!input)return;let idx=Number(input.dataset.room),old=state.rooms[idx],next=input.value.trim();if(!next||state.rooms.some((r,i)=>i!==idx&&r===next)){input.value=old;toast('Введите уникальное название');return}state.rooms[idx]=next;if(collapsedRooms.delete(old)){collapsedRooms.add(next);saveCollapsedRooms()}state.roomsUpdated=now();drawSettings();for(let i of state.items)if(i.room===old){i.room=next;i.updatedAt=now()}persist()};
+function moveRoom(from,to){if(!Number.isInteger(from)||!Number.isInteger(to)||from<0||to<0||from>=state.rooms.length||to>=state.rooms.length||from===to)return;const [room]=state.rooms.splice(from,1);state.rooms.splice(to,0,room);state.roomsUpdated=now();persist();drawSettings()}
+$('roomEditor').onclick=e=>{const move=e.target.closest('[data-move-room]');if(move){const from=Number(move.dataset.moveRoom);moveRoom(from,from+Number(move.dataset.direction));return}const b=e.target.closest('[data-remove-room]');if(!b)return;let idx=Number(b.dataset.removeRoom),room=state.rooms[idx];if(state.items.some(i=>!i.deleted&&i.room===room)){toast('Сначала перенесите объекты из комнаты');return}state.rooms.splice(idx,1);collapsedRooms.delete(room);saveCollapsedRooms();state.roomsUpdated=now();persist();drawSettings()};
+let roomReorder=null;
+function clearRoomDropIndicator(){
+  $('roomEditor').querySelectorAll('.is-drop-before,.is-drop-after').forEach(row=>row.classList.remove('is-drop-before','is-drop-after'));
+}
+function updateRoomDropIndicator(clientX,clientY){
+  const g=roomReorder;if(!g)return;
+  clearRoomDropIndicator();g.to=null;
+  const row=document.elementFromPoint(clientX,clientY)?.closest('[data-room-row]');
+  if(!row||!$('roomEditor').contains(row))return;
+  const index=Number(row.dataset.roomRow);
+  if(index===g.from)return;
+  g.to=index;
+  row.classList.add(index<g.from?'is-drop-before':'is-drop-after');
+}
+function finishRoomReorder(commit){
+  const g=roomReorder;if(!g)return;
+  roomReorder=null;g.row.classList.remove('is-dragging');clearRoomDropIndicator();
+  if(commit&&g.to!==null)moveRoom(g.from,g.to);
+}
+$('roomEditor').addEventListener('pointerdown',e=>{
+  const handle=e.target.closest('[data-room-handle]');if(!handle||e.button!==0)return;
+  const row=handle.closest('[data-room-row]');
+  roomReorder={pointerId:e.pointerId,from:Number(handle.dataset.roomHandle),to:null,row};
+  handle.setPointerCapture(e.pointerId);row.classList.add('is-dragging');
+});
+$('roomEditor').addEventListener('pointermove',e=>{
+  if(!roomReorder||roomReorder.pointerId!==e.pointerId)return;
+  updateRoomDropIndicator(e.clientX,e.clientY);
+});
+$('roomEditor').addEventListener('pointerup',e=>{
+  if(!roomReorder||roomReorder.pointerId!==e.pointerId)return;
+  updateRoomDropIndicator(e.clientX,e.clientY);
+  finishRoomReorder(true);
+});
+$('roomEditor').addEventListener('pointercancel',()=>finishRoomReorder(false));
 $('addRoom').onclick=()=>{let room=$('newRoom').value.trim();if(!room||state.rooms.includes(room)){toast('Укажите новую комнату');return}state.rooms.push(room);state.roomsUpdated=now();$('newRoom').value='';persist();drawSettings()};
-$('statusEditor').onchange=e=>{let a=e.target.closest('[data-label]');if(!a)return;state.labels[a.dataset.label]=a.value.trim()||initial.labels[a.dataset.label];state.labelsUpdated=now();persist();drawSettings()};
-$('exportBtn').onclick=()=>{let blob=new Blob([JSON.stringify({...state,exportedAt:new Date().toISOString()},null,2)],{type:'application/json'}),u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=`pereezd-2026-${new Date().toISOString().slice(0,10)}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(u),2000);toast('Резервная копия выгружена')};
-$('importBtn').onclick=()=>$('importFile').click();$('importFile').onchange=async e=>{let f=e.target.files[0];if(!f)return;try{let o=hydrate(JSON.parse(await f.text()));if(!confirm(`Импортировать ${o.items.filter(i=>!i.deleted).length} объектов? Текущие локальные данные будут заменены.`))return;state=o;persist();drawSettings();toast('Импорт выполнен')}catch(err){toast('Ошибка импорта: '+err.message)}finally{e.target.value=''}};
+$('statusEditor').onchange=e=>{let a=e.target.closest('[data-label]');if(!a)return;state.labels[a.dataset.label]=a.value.trim()||initial.labels[a.dataset.label];state.labelsUpdated=now();persist();drawSettings()};$('themeMode').onchange=e=>{cfg.theme=e.target.value;saveCfg();applyTheme();toast('Тема обновлена')};
+function downloadJson(data,filename){const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),5000)}
+$('exportBtn').onclick=()=>{downloadJson({...state,exportedAt:new Date().toISOString()},'tabi-backup-'+new Date().toISOString().slice(0,10)+'.json');toast('Резервная копия выгружена')};
+$('importBtn').onclick=()=>$('importFile').click();
+const RESTORE_BACKUP_KEY='tabi.restore.preflight.backup';
+function refreshRestoreBackupButton(){$('restoreBackupBtn').hidden=!localStorage.getItem(RESTORE_BACKUP_KEY)}
+$('restoreBackupBtn').onclick=()=>{const raw=localStorage.getItem(RESTORE_BACKUP_KEY);if(!raw)return toast('Резервная копия не найдена');try{downloadJson(JSON.parse(raw),'tabi-cloud-before-restore.json')}catch(e){toast('Ошибка резервной копии: '+e.message)}};
+refreshRestoreBackupButton();
+let restoreInProgress=false;
+function confirmRestore(connected){
+ return new Promise(resolve=>{
+  const overlay=$('restoreOverlay'),cancel=$('restoreCancel'),accept=$('restoreConfirm');
+  $('restoreTitle').textContent=connected?'Заменить все данные?':'Заменить локальные данные?';
+  $('restoreDescription').textContent=connected?'JSON заменит данные на всех устройствах. Перед заменой сохраним копию.':'JSON заменит данные на этом устройстве. Перед заменой сохраним копию.';
+  overlay.classList.remove('hidden');cancel.focus();
+  let settled=false;
+  const finish=value=>{if(settled)return;settled=true;overlay.classList.add('hidden');overlay.removeEventListener('click',onBackdrop);document.removeEventListener('keydown',onKey,true);cancel.removeEventListener('click',onCancel);accept.removeEventListener('click',onAccept);$('importBtn').focus();resolve(value)};
+  const onCancel=()=>finish(false),onAccept=()=>finish(true);
+  const onBackdrop=e=>{if(e.target===overlay)finish(false)};
+  const onKey=e=>{if(e.key==='Escape'){e.preventDefault();e.stopImmediatePropagation();finish(false)}else if(e.key==='Tab'){const target=e.shiftKey?accept:cancel;if((e.shiftKey&&document.activeElement===cancel)||(!e.shiftKey&&document.activeElement===accept)){e.preventDefault();target.focus()}}};
+  cancel.addEventListener('click',onCancel);accept.addEventListener('click',onAccept);overlay.addEventListener('click',onBackdrop);document.addEventListener('keydown',onKey,true);
+ });
+}
+$('importFile').onchange=async e=>{
+ const file=e.target.files[0];if(!file)return;
+ try{
+  const imported=hydrate(JSON.parse(await file.text()));
+  if(!Array.isArray(imported.rooms)||!imported.rooms.every(r=>typeof r==='string')||!imported.items.every(i=>typeof i.room==='string'||typeof i.room==='undefined'))throw Error('Некорректные комнаты или предметы');
+  const connected=!!(session?.access_token&&cfg.pass);
+  if(!await confirmRestore(connected))return;
+  if(restoreInProgress||busy)throw Error('Дождитесь завершения синхронизации');
+  if(!connected){
+   if(session?.access_token)throw Error('Для облачного восстановления укажите пароль шифрования');
+   downloadJson({...state,exportedAt:new Date().toISOString()},'tabi-before-restore-'+Date.now()+'.json');
+   state=imported;persist();drawSettings();toast('Локальные данные восстановлены');return;
+  }
+  if(!navigator.onLine)throw Error('Для восстановления на всех устройствах требуется интернет');
+  restoreInProgress=true;clearTimeout(delay);busy=true;
+  let restoreStage='подготовка',writeStarted=false,expectedRevision=null,restoreId=null;
+  try{
+   restoreStage='авторизация';
+   await validSession();
+   const id=session.user.id;
+   restoreStage='чтение облака';
+   const rows=await request('GET','move_spaces?id=eq.'+encodeURIComponent(id)+'&select=payload,revision');
+   expectedRevision=Number(rows[0]?.revision)||0;
+   const cloud=rows.length?await decrypt(rows[0].payload,cfg.pass):copy(state);
+   restoreStage='резервная копия';
+   // Keep a recoverable pre-write backup without triggering a Safari download before fetch().
+   localStorage.setItem(RESTORE_BACKUP_KEY,JSON.stringify({...cloud,exportedAt:new Date().toISOString()}));
+   refreshRestoreBackupButton();
+   restoreStage='шифрование';
+   const epoch=Math.max(Number(cloud.restoreEpoch)||0,Number(state.restoreEpoch)||0)+1;
+   imported.restoreEpoch=epoch;
+   restoreId=crypto.randomUUID?crypto.randomUUID():String(Date.now())+'-'+Math.random();
+   imported.restoreId=restoreId;
+   const payload=await encrypt(imported,cfg.pass);
+   restoreStage='запись в облако';
+   writeStarted=true;
+   await writeCas(payload,expectedRevision);
+   restoreStage='локальное применение';
+   state=imported;
+   localStorage.setItem(KEY,JSON.stringify(state));
+   localStorage.setItem(RESTORE_EPOCH_KEY,String(epoch));
+   render();drawSettings();cloudState('Восстановлено · облако обновлено','on');toast('Данные заменены. Скачайте резервную копию в настройках');
+  }catch(error){
+   let detail=error.message||String(error);
+   if(writeStarted&&restoreId){
+    try{
+     const check=await request('GET','move_spaces?id=eq.'+encodeURIComponent(session.user.id)+'&select=payload,revision');
+     if(check.length){
+      const current=await decrypt(check[0].payload,cfg.pass);
+      if(current.restoreId===restoreId){
+       state=current;localStorage.setItem(KEY,JSON.stringify(state));
+       localStorage.setItem(RESTORE_EPOCH_KEY,String(Number(state.restoreEpoch)||0));
+       render();drawSettings();cloudState('Восстановлено · ответ сервера потерян','on');
+       toast('Восстановлено: сервер подтвердил запись');return;
+      }
+      detail+='; проверка: запись не подтверждена (версия '+check[0].revision+')';
+     }
+    }catch(checkError){detail+='; проверка сервера: '+(checkError.message||String(checkError))}
+   }
+   cloudState('Восстановление · '+restoreStage+': '+detail,'err');
+   toast('Восстановление · '+restoreStage+': '+detail);
+   throw Object.assign(new Error(detail),{restoreHandled:true});
+  }finally{busy=false;restoreInProgress=false}
+ }catch(err){if(!err.restoreHandled)toast('Восстановление: '+err.message)}
+ finally{e.target.value=''}
+};
 
 const enc=new TextEncoder(),dec=new TextDecoder();function b64(buf){return btoa(String.fromCharCode(...new Uint8Array(buf)))}function unb64(s){return Uint8Array.from(atob(s),x=>x.charCodeAt(0))}async function keyFor(password,salt){let raw=await crypto.subtle.importKey('raw',enc.encode(password),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:150000,hash:'SHA-256'},raw,{name:'AES-GCM',length:256},false,['encrypt','decrypt'])}
 async function encrypt(o,password){let salt=crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12)),key=await keyFor(password,salt),cipher=await crypto.subtle.encrypt({name:'AES-GCM',iv},key,enc.encode(JSON.stringify(o)));return JSON.stringify({v:1,s:b64(salt),i:b64(iv),d:b64(cipher)})}
 async function decrypt(payload,password){let p=JSON.parse(payload),key=await keyFor(password,unb64(p.s)),plain=await crypto.subtle.decrypt({name:'AES-GCM',iv:unb64(p.i)},key,unb64(p.d));return hydrate(JSON.parse(dec.decode(plain)))}
-function merge(a,b){let out=copy(a),m=new Map(a.items.map(i=>[i.id,i]));for(let i of b.items){let old=m.get(i.id);if(!old||i.updatedAt>old.updatedAt)m.set(i.id,i)}out.items=[...m.values()];if(b.roomsUpdated>a.roomsUpdated){out.rooms=b.rooms;out.roomsUpdated=b.roomsUpdated}if(b.labelsUpdated>a.labelsUpdated){out.labels=b.labels;out.labelsUpdated=b.labelsUpdated}for(let i of out.items)if(!out.rooms.includes(i.room))out.rooms.push(i.room);return out}
-function cloudState(text,status){$('cloudMsg').textContent=text;$('syncBtn').innerHTML=`<span class="syncdot ${status||''}"></span>↻`;if(status==='on')$('saveState').textContent='● Сохранено · облако подключено'}
+function merge(a,b){let ae=Number(a.restoreEpoch)||0,be=Number(b.restoreEpoch)||0;if(ae!==be)return copy(ae>be?a:b);let out=copy(a),m=new Map(a.items.map(i=>[i.id,i]));for(let i of b.items){let old=m.get(i.id);if(!old||i.updatedAt>old.updatedAt)m.set(i.id,i)}out.items=[...m.values()];if(b.roomsUpdated>a.roomsUpdated){out.rooms=b.rooms;out.roomsUpdated=b.roomsUpdated}if(b.labelsUpdated>a.labelsUpdated){out.labels=b.labels;out.labelsUpdated=b.labelsUpdated}for(let i of out.items)if(!out.rooms.includes(i.room))out.rooms.push(i.room);return out}
+function cloudState(text,status){$('cloudMsg').textContent=text;let dot=$('syncBtn').querySelector('.syncdot');if(dot)dot.className='syncdot'+(status?' '+status:'');if(status==='on')$('saveState').textContent='● Сохранено · облако подключено'}
 async function authRequest(path,method='POST',body){const response=await fetch(cfg.url+'/auth/v1/'+path,{method,headers:{apikey:cfg.key,'Content-Type':'application/json',...(session?.access_token?{Authorization:'Bearer '+session.access_token}:{})},body:body?JSON.stringify(body):undefined});let data=await response.json().catch(()=>({}));if(!response.ok)throw Error(data.msg||data.error_description||data.message||'Auth '+response.status);return data}
 function setSession(data){session=data?.access_token?data:null;if(session)localStorage.setItem(AUTHKEY,JSON.stringify(session));else localStorage.removeItem(AUTHKEY);$('authSignOut').disabled=!session;}
 async function refreshSession(){if(!session?.refresh_token)throw Error('Войдите в аккаунт');let data=await authRequest('token?grant_type=refresh_token','POST',{refresh_token:session.refresh_token});setSession(data);return data}
 async function validSession(){if(!session?.access_token)throw Error('Требуется вход');if(session.expires_at&&session.expires_at*1000-Date.now()<90000)await refreshSession();return session}
-async function request(method,path,body){await validSession();const send=()=>fetch(cfg.url+'/rest/v1/'+path,{method,headers:{apikey:cfg.key,Authorization:'Bearer '+session.access_token,'Content-Type':'application/json',...(method==='POST'?{'Prefer':'resolution=merge-duplicates,return=minimal'}:{})},body:body?JSON.stringify(body):undefined});let res=await send();if(res.status===401){await refreshSession();res=await send()}if(!res.ok)throw Error('Supabase '+res.status+': '+(await res.text()).slice(0,180));return method==='GET'?res.json():null}
-async function sync(notify=true){if(busy)return;if(!session?.access_token||!cfg.pass){if(notify)showSettings();return}if(!navigator.onLine){cloudState('Нет сети: изменения сохранены локально','err');return}busy=true;cloudState('Обмен данными с облаком…','busy');try{await validSession();let id=session.user.id;let rows=await request('GET','move_spaces?id=eq.'+encodeURIComponent(id)+'&select=payload');let merged=rows.length?merge(state,await decrypt(rows[0].payload,cfg.pass)):state;await request('POST','move_spaces',[{id,owner_id:id,payload:await encrypt(merged,cfg.pass)}]);state=merged;localStorage.setItem(KEY,JSON.stringify(state));render();cloudState('Синхронизировано · '+new Date().toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'}),'on');if(notify)toast('Синхронизация завершена')}catch(e){cloudState('Ошибка: '+e.message,'err');if(notify)toast('Синхронизация: '+e.message)}finally{busy=false}}
+async function request(method,path,body){await validSession();const send=()=>fetch(cfg.url+'/rest/v1/'+path,{method,headers:{apikey:cfg.key,Authorization:'Bearer '+session.access_token,'Content-Type':'application/json',...(method==='POST'&&!path.startsWith('rpc/')?{'Prefer':'resolution=merge-duplicates,return=minimal'}:{})},body:body?JSON.stringify(body):undefined});let res=await send();if(res.status===401){await refreshSession();res=await send()}if(!res.ok)throw Error('Supabase '+res.status+': '+(await res.text()).slice(0,180));return method==='GET'||path.startsWith('rpc/')?res.json():null}
+async function writeCas(payload,expectedRevision){
+ const rows=await request('POST','rpc/tabi_write_cas',{p_payload:payload,p_expected_revision:expectedRevision});
+ // A successful CAS returns the new revision; null means a conflict.
+ if(!Number.isSafeInteger(rows)||rows<=expectedRevision)throw Error('Версия облака изменилась. Повторите действие');
+ return rows;
+}
+async function sync(notify=true){
+ if(busy||restoreInProgress)return;
+ if(!session?.access_token||!cfg.pass){if(notify)showSettings();return}
+ if(!navigator.onLine){cloudState('Нет сети: изменения сохранены локально','err');return}
+ busy=true;cloudState('Обмен данными с облаком…','busy');
+ try{
+  await validSession();
+  const id=session.user.id;
+  let saved=false;
+  for(let attempt=0;attempt<3;attempt++){
+   const rows=await request('GET','move_spaces?id=eq.'+encodeURIComponent(id)+'&select=payload,revision');
+   const remote=rows.length?await decrypt(rows[0].payload,cfg.pass):null;
+   const expectedRevision=Number(rows[0]?.revision)||0;
+   // An older offline client must never resurrect pre-restore objects.
+   const merged=remote?merge(state,remote):copy(state);
+   const payload=await encrypt(merged,cfg.pass);
+   try{await writeCas(payload,expectedRevision)}
+   catch(e){if(e.message.includes('Версия облака изменилась')&&attempt<2)continue;throw e}
+   state=merged;
+   localStorage.setItem(KEY,JSON.stringify(state));
+   localStorage.setItem(RESTORE_EPOCH_KEY,String(Number(state.restoreEpoch)||0));
+   render();saved=true;break;
+  }
+  if(!saved)throw Error('Конфликт версий. Повторите синхронизацию');
+  cloudState('Синхронизировано · '+new Date().toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'}),'on');
+  if(notify)toast('Синхронизация завершена');
+ }catch(e){cloudState('Ошибка: '+e.message,'err');if(notify)toast('Синхронизация: '+e.message)}
+ finally{busy=false}
+}
 $('authSignUp').onclick=async()=>{let email=$('authEmail').value.trim(),password=$('authPassword').value;if(!email||password.length<6)return toast('Введите email и пароль от 6 символов');try{let data=await authRequest('signup','POST',{email,password});if(data.access_token){setSession(data);cloudState('Аккаунт создан. Укажите пароль шифрования.','on')}else cloudState('Проверьте почту и подтвердите email. Затем войдите.','busy')}catch(e){cloudState('Ошибка регистрации: '+e.message,'err')}};
 $('authSignIn').onclick=async()=>{let email=$('authEmail').value.trim(),password=$('authPassword').value;try{let data=await authRequest('token?grant_type=password','POST',{email,password});setSession(data);cloudState('Вход выполнен. Укажите пароль шифрования и синхронизируйте.','on');if(cfg.pass)await sync(true)}catch(e){cloudState('Ошибка входа: '+e.message,'err')}};
 $('authSignOut').onclick=async()=>{try{if(session?.access_token)await authRequest('logout','POST')}catch{}setSession(null);cloudState('Выход выполнен. Данные на устройстве остаются.','');toast('Вы вышли из аккаунта')};
-$('cloudConnect').onclick=async()=>{let pass=$('cloudPassword').value;if(pass.length<10)return toast('Пароль шифрования — от 10 символов');if(!session?.access_token)return toast('Сначала войдите в аккаунт');cfg.pass=pass;localStorage.setItem(CFG,JSON.stringify({pass}));await sync(true)};
-$('syncBtn').onclick=()=>sync(true);if(session?.access_token){cloudState('Аккаунт подключён · проверяем синхронизацию','busy');if(cfg.pass)setTimeout(()=>sync(false),800)}timer=setInterval(()=>{if(!document.hidden&&session?.access_token&&cfg.pass)sync(false)},20000);
-window.addEventListener('online',()=>sync(false));document.addEventListener('visibilitychange',()=>{if(!document.hidden&&cfg.url)sync(false)});document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('itemOverlay').classList.add('hidden');$('settingsOverlay').classList.add('hidden')}});render();
+$('cloudConnect').onclick=async()=>{let pass=$('cloudPassword').value;if(pass.length<10)return toast('Пароль шифрования — от 10 символов');if(!session?.access_token)return toast('Сначала войдите в аккаунт');cfg.pass=pass;saveCfg();await sync(true)};
+$('syncBtn').onclick=()=>{if(!session?.access_token||!cfg.pass){toast('Синхронизация не настроена. Подключите аккаунт в настройках.');return}sync(true)};if(session?.access_token){cloudState('Аккаунт подключён · проверяем синхронизацию','busy');if(cfg.pass)setTimeout(()=>sync(false),800)}timer=setInterval(()=>{if(!document.hidden&&session?.access_token&&cfg.pass)sync(false)},20000);
+applyTheme();window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{if(cfg.theme==='system')applyTheme()});window.addEventListener('online',()=>sync(false));document.addEventListener('visibilitychange',()=>{if(!document.hidden&&cfg.url)sync(false)});document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('itemOverlay').classList.add('hidden');$('settingsOverlay').classList.add('hidden')}});render();
 })();
 </script></body></html>
