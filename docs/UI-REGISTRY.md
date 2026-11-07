@@ -17,7 +17,7 @@
 | UI-01 | Header | Center kanji 旅 inside its tile. Use coherent sync/settings icons precisely centered in equal-size tiles across viewport widths. | Implemented in v1.5.5 candidate; visual acceptance pending |
 | UI-02 | Hero | Dynamic title based on relocation phase. | Phase rules TBD |
 | UI-03 | Stats | Counts become interactive filters. | Mappings and reset TBD |
-| UI-04 | Navigation | Swipe between Objects and Kanban. | Resolve conflicts with drag/scroll |
+| UI-04 | Navigation & viewport | Swipe between Objects and Kanban; **responsive reflow when device orientation changes (portrait ↔ landscape)** without manual page zoom. | Pending: touch gesture conflicts and orientation QA |
 | UI-05 | Search & filters | Compact filter chips. | Chips and composition TBD |
 | UI-06 | Progress | **No change.** Existing computation and interaction frozen. | Frozen |
 | UI-07 | Rooms | Collapsible groups and reorder rooms. | Persistence design TBD |
@@ -26,6 +26,13 @@
 | UI-10 | Settings | Reduce visual density; simplify without removing functions. | Layout TBD |
 | CORE-01 | Storage & sync | **No change.** Keep local data, account login, Supabase, encryption, sync and schemas intact. | Frozen |
 | DS-01 | Design system | Add subtle animations; honor reduced-motion preference. | Motion spec TBD |
+
+## UI-04 additional acceptance criteria — orientation (requested 2026-11-07)
+- After rotating a phone between portrait and landscape, viewport width and layout must recalculate automatically; no manual pinch-to-zoom, page refresh, or viewport reset required.
+- Preserve readable font sizes, usable touch targets, and no unintended horizontal overflow at typical mobile widths.
+- Keep active Objects/Kanban view, filter state, and local data intact; orientation must not trigger data mutations or Supabase requests.
+- Check on Android Chrome and iOS Safari; test both Komorebi and Dusk.
+- **Not implemented**: this is an added acceptance requirement for UI-04; do not change orientation handling during UI-01.
 
 ## Design invariants
 - Two visual identities: Komorebi (light) and Dusk (dark). Keep approved semantics: red = leave; yellow = undecided; green = send/take; gray = unclassified.
