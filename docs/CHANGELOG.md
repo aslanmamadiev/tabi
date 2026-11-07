@@ -1,5 +1,17 @@
 # Tabi · CHANGELOG
 
+## [Unreleased] — UI-02 dynamic hero candidate
+
+### Changed
+- Main welcome heading now reflects the stage inferred from existing item statuses and completion: empty list, decisions pending, planning, partially completed, fully completed.
+- Only the hero heading changes; counts and progress logic remain unchanged.
+- No new data schema, localStorage key, sync behavior, theme or layout change.
+- UI-11 project rename accepted; UI-01 header controls remain frozen.
+
+### Pending
+- User review of Russian phrases and mobile layout before release.
+
+
 ## [Unreleased] — v1.5.6 candidate
 
 ### Added
