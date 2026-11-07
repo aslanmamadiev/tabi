@@ -335,8 +335,12 @@ const swipeAreas=[document.querySelector('.tabs'),$('content')];
 for(const area of swipeAreas){
   area.addEventListener('touchstart',e=>{
     ui04Swipe=null;
-    if(e.touches.length!==1||dragging?.active||e.target.closest('button,input,select,textarea,a,[contenteditable="true"],.board,.kanitem'))return;
-    const t=e.touches[0];ui04Swipe={id:t.identifier,x:t.clientX,y:t.clientY,at:performance.now(),area};
+    if(e.touches.length!==1||dragging?.active||e.target.closest('button,input,select,textarea,a,[contenteditable="true"]'))return;
+    const board=e.target.closest('.board');
+    // At the Kanban's leftmost scroll boundary, a right swipe returns to Objects.
+    // Otherwise preserve native horizontal board scrolling.
+    if(board&&(tab!=='board'||board.scrollLeft>2))return;
+    const t=e.touches[0];ui04Swipe={id:t.identifier,x:t.clientX,y:t.clientY,at:performance.now(),area,board};
   },{passive:true});
   area.addEventListener('touchend',e=>{
     const start=ui04Swipe;ui04Swipe=null;
@@ -344,6 +348,7 @@ for(const area of swipeAreas){
     const t=e.changedTouches[0];if(t.identifier!==start.id)return;
     const dx=t.clientX-start.x,dy=t.clientY-start.y;
     if(performance.now()-start.at>700||Math.abs(dx)<75||Math.abs(dx)<Math.abs(dy)*1.7||Math.abs(dy)>65)return;
+    if(start.board&&(dx<0||start.board.scrollLeft>2))return;
     const target=dx<0?'board':'objects';
     if(tab!==target){cleanDrag();tab=target;render()}
   },{passive:true});
