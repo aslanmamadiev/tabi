@@ -1,6 +1,6 @@
 # Tabi · CHANGELOG
 
-## [Unreleased] — UI-02 dynamic hero candidate
+## [Unreleased] — UI-02 dynamic hero (approved 2026-11-07)
 
 ### Changed
 - Main welcome heading now reflects the stage inferred from existing item statuses and completion: empty list, decisions pending, planning, partially completed, fully completed.
@@ -8,8 +8,8 @@
 - No new data schema, localStorage key, sync behavior, theme or layout change.
 - UI-11 project rename accepted; UI-01 header controls remain frozen.
 
-### Pending
-- User review of Russian phrases and mobile layout before release.
+### Acceptance
+- User approved Russian headline variants and UI-02 scope on 2026-11-07. The component is now frozen; this is **not** permission to merge into production `main`.
 
 
 ## [Unreleased] — v1.5.6 candidate
