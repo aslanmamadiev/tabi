@@ -1,5 +1,22 @@
 # Tabi · CHANGELOG
 
+## [Planned] — DS-01 focus indicator alignment (approved requirement 2026-11-07)
+- iPadOS Dusk observation: an old light-green `#b0c7b7` generic focus outline conflicts with the warm-gold input border, while blue text-selection handles are native iPadOS behavior.
+- Approved future solution: unify app focus/active outlines with theme tokens (Komorebi `#A65B48`, Dusk `#D5A76E`), preserve keyboard visibility and native iPadOS selection, check both iPad orientations.
+- **Not implemented**. No edits to `index.html`, frozen components, cloud storage, or production.
+
+
+## [Unreleased] — UI-03 statistic filters (approved 2026-11-07)
+
+### Added
+- Interactive statistic cards: **Всего объектов** resets filters and shows the full Objects list; **Комнат** toggles occupied-room groups; **С цветной меткой** toggles colored objects in both Objects and Kanban.
+- Selected card border and accessibility `aria-pressed`; the global counter values and their formulas are unchanged.
+
+### Scope
+- Client-side view filtering only; no local storage schema, Supabase, synchronization, auth, theme, progress, project-name or accepted UI-01/UI-02/UI-11 changes.
+- User approved UI-03 behavior and visual appearance on 2026-11-07. This does not authorize merging into production `main`.
+
+
 ## [Unreleased] — UI-02 dynamic hero (approved 2026-11-07)
 
 ### Changed

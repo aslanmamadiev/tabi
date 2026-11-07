@@ -1,6 +1,6 @@
 # Tabi · UI Registry
 
-**Spec:** UI-AUDIT-1.0 · **Date:** 2026-10-31 · **Status:** UI-01, UI-02 and UI-11 accepted; all three frozen pending an explicitly approved change request.
+**Spec:** UI-AUDIT-1.0 · **Date:** 2026-10-31 · **Status:** UI-01, UI-02, UI-03 and UI-11 accepted; frozen pending an explicitly approved change request.
 
 ## Immutable development rules
 1. Every change specifies module ID, scope, acceptance criteria, and files touched before editing.
@@ -16,7 +16,7 @@
 |---|---|---|---|
 | UI-01 | Header controls | Center kanji 旅 inside its tile; coherent sync/settings icons in equal tiles. **FROZEN: approved 2026-11-07.** | Accepted — no further changes |
 | UI-02 | Hero | Dynamic heading based on inventory states; no new persisted phase field. | Accepted 2026-11-07 — frozen |
-| UI-03 | Stats | Counts become interactive filters. | Mappings and reset TBD |
+| UI-03 | Stats | Counts become interactive filters without changing values or visual card layout: Total resets, Rooms shows occupied room groups, Tagged filters colored objects. | Accepted 2026-11-07 — frozen |
 | UI-04 | Navigation & viewport | Swipe between Objects and Kanban; **responsive reflow when device orientation changes (portrait ↔ landscape)** without manual page zoom. | Pending: touch gesture conflicts and orientation QA |
 | UI-05 | Search & filters | Compact filter chips. | Chips and composition TBD |
 | UI-06 | Progress | **No change.** Existing computation and interaction frozen. | Frozen |
@@ -26,7 +26,7 @@
 | UI-10 | Settings | Reduce visual density; simplify without removing functions. | Layout TBD |
 | UI-11 | Project name | Tap the text after “Tabi ·” to edit project title inline; default “Мой переезд”; Enter/blur saves, Escape cancels, empty title keeps previous; max 48 characters. Independent local-only browser storage, no cloud sync. | Accepted 2026-11-07 — frozen |
 | CORE-01 | Storage & sync | **No change.** Keep local data, account login, Supabase, encryption, sync and schemas intact. | Frozen |
-| DS-01 | Design system | Add subtle animations; honor reduced-motion preference. | Motion spec TBD |
+| DS-01 | Design system | Subtle animations (respect reduced-motion) **and consistent focus/active-state colors across Komorebi / Dusk**; keep native iPadOS/iOS text-selection handles. | Focus styling accepted as requirement 2026-11-07; implementation pending |
 
 ## UI-04 additional acceptance criteria — orientation (requested 2026-11-07)
 - After rotating a phone between portrait and landscape, viewport width and layout must recalculate automatically; no manual pinch-to-zoom, page refresh, or viewport reset required.
@@ -51,6 +51,23 @@
 - Use existing `state.items` and existing `done` / `status` fields; no new stored phase, no changes to progress calculations, filters, or sync.
 - Only the hero `h1` content changes. The subtitle, action buttons, header, themes and frozen UI-01/UI-11 remain unchanged.
 - Five deterministic stage tests and JavaScript syntax check passed; user accepted 2026-11-07. Further changes require separate approval.
+
+## UI-03 · Statistics as filters — acceptance rules (candidate)
+- Counters keep original global totals: all nondeleted items, distinct rooms containing nondeleted items, all items with colored (non-`none`) marks. Searching or filtering must **not** change the counters.
+- **Всего объектов**: reset search, selected room, unfinished-only, pending-decision filter, other stat filters; navigate to Objects.
+- **Комнат**: switch to Objects and toggle display of only room groups with matching objects (hide empty room groups). Do not modify rooms or counts.
+- **С цветной меткой**: toggle visibility of objects whose status is not `none`; work in both Objects and Kanban.
+- Each selected stat displays a subtle border and `aria-pressed`; tap again to clear the toggle. Other existing search/room filters remain composable.
+- Only `index.html` statistics markup, stat-specific CSS, ephemeral `statFilter` state, `filtered()` clause and stat click handler are in scope. **Not in scope:** data models, Supabase, project title, hero heading, progress computations, approved UI-01/02/11.
+- Test empty inventory, mixed colored/uncolored items, room filtering, searching, dark/light theme and mobile widths. No stored filter state.
+
+## DS-01 · Focus / active state consistency — approved requirement (2026-11-07)
+- Evidence: **iPad screenshot**, Dusk mode, editing the project name. A light-green outer outline appears beside the theme-colored input border and blue iPadOS text-selection handles.
+- Root cause in source: legacy generic `button:focus-visible,input:focus-visible,select:focus-visible` uses a fixed `#b0c7b7` outline, independent of the later Komorebi/Dusk design tokens. Treat focus outline and active border as distinct states; do not misclassify iPadOS selection handles as app UI.
+- Unify focus indicators for relevant controls (buttons, inputs, selects, text editors) using theme tokens: Komorebi `--accent: #A65B48` terracotta; Dusk `--accent: #D5A76E` warm gold. Use adequate contrast and keyboard focus visibility; avoid distracting duplicate rings on touch.
+- Preserve **system-native text selection** (iPadOS blue handles), input behavior, hit targets, and semantics. Do not disable focus outlines outright.
+- Test on **iPadOS Safari (landscape and portrait)**, iOS Safari, Android Chrome; both themes; keyboard and touch navigation; project title editing; active stats.
+- Approved as a **future DS-01 design requirement only**. No implementation in currently approved UI-01/UI-02/UI-03/UI-11 and no modification to production `main`.
 
 ## Design invariants
 - Two visual identities: Komorebi (light) and Dusk (dark). Keep approved semantics: red = leave; yellow = undecided; green = send/take; gray = unclassified.
