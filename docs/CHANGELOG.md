@@ -6,6 +6,13 @@
 - **UI-01 Header:** Kanji tile and both header action tiles now share a 48×48 desktop / 44×44 mobile sizing system; center-aligned kanji and SVGs, narrow-screen spacing adjustments.
 - Scope limited to header CSS only. No changes to JavaScript, localStorage, Supabase, encryption, progress, cards or the approved themes.
 
+### Fixed after mobile review (2026-11-07)
+- Replaced the sun-like settings glyph with an eight-tooth cog silhouette and central hole.
+- Replaced uneven custom refresh arcs with balanced standard two-arrow refresh paths.
+- Removed the status dot from the sync button markup (not only hidden with CSS).
+- Preserved the existing explicit sync action and fallback notice when the account is not configured.
+- UI changes restricted to header SVGs and their alignment CSS; no storage, network, or auth changes in this revision.
+
 ### Verification pending
 - Visual review at 320/360/390/768px with Komorebi and Dusk.
 - Mobile browser comparison and end-user approval before merging into main.
