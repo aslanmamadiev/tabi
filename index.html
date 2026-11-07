@@ -643,14 +643,15 @@ $('importFile').onchange=async e=>{
   try{
    await validSession();
    const id=session.user.id;
-   const rows=await request('GET','move_spaces?id=eq.'+encodeURIComponent(id)+'&select=payload');
+   const rows=await request('GET','move_spaces?id=eq.'+encodeURIComponent(id)+'&select=payload,revision');
+   const expectedRevision=Number(rows[0]?.revision)||0;
    const cloud=rows.length?await decrypt(rows[0].payload,cfg.pass):copy(state);
    // Download current cloud state before any destructive write.
    downloadJson({...cloud,exportedAt:new Date().toISOString()},'tabi-cloud-before-restore-'+Date.now()+'.json');
    const epoch=Math.max(Number(cloud.restoreEpoch)||0,Number(state.restoreEpoch)||0)+1;
    imported.restoreEpoch=epoch;
    const payload=await encrypt(imported,cfg.pass);
-   await request('POST','move_spaces',[{id,owner_id:id,payload}]);
+   await writeCas(payload,expectedRevision);
    state=imported;
    localStorage.setItem(KEY,JSON.stringify(state));
    localStorage.setItem(RESTORE_EPOCH_KEY,String(epoch));
@@ -669,8 +670,42 @@ async function authRequest(path,method='POST',body){const response=await fetch(c
 function setSession(data){session=data?.access_token?data:null;if(session)localStorage.setItem(AUTHKEY,JSON.stringify(session));else localStorage.removeItem(AUTHKEY);$('authSignOut').disabled=!session;}
 async function refreshSession(){if(!session?.refresh_token)throw Error('Войдите в аккаунт');let data=await authRequest('token?grant_type=refresh_token','POST',{refresh_token:session.refresh_token});setSession(data);return data}
 async function validSession(){if(!session?.access_token)throw Error('Требуется вход');if(session.expires_at&&session.expires_at*1000-Date.now()<90000)await refreshSession();return session}
-async function request(method,path,body){await validSession();const send=()=>fetch(cfg.url+'/rest/v1/'+path,{method,headers:{apikey:cfg.key,Authorization:'Bearer '+session.access_token,'Content-Type':'application/json',...(method==='POST'?{'Prefer':'resolution=merge-duplicates,return=minimal'}:{})},body:body?JSON.stringify(body):undefined});let res=await send();if(res.status===401){await refreshSession();res=await send()}if(!res.ok)throw Error('Supabase '+res.status+': '+(await res.text()).slice(0,180));return method==='GET'?res.json():null}
-async function sync(notify=true){if(busy||restoreInProgress)return;if(!session?.access_token||!cfg.pass){if(notify)showSettings();return}if(!navigator.onLine){cloudState('Нет сети: изменения сохранены локально','err');return}busy=true;cloudState('Обмен данными с облаком…','busy');try{await validSession();let id=session.user.id;let rows=await request('GET','move_spaces?id=eq.'+encodeURIComponent(id)+'&select=payload');let remote=rows.length?await decrypt(rows[0].payload,cfg.pass):null;let merged=remote?merge(state,remote):state;await request('POST','move_spaces',[{id,owner_id:id,payload:await encrypt(merged,cfg.pass)}]);state=merged;localStorage.setItem(KEY,JSON.stringify(state));localStorage.setItem(RESTORE_EPOCH_KEY,String(Number(state.restoreEpoch)||0));render();cloudState('Синхронизировано · '+new Date().toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'}),'on');if(notify)toast('Синхронизация завершена')}catch(e){cloudState('Ошибка: '+e.message,'err');if(notify)toast('Синхронизация: '+e.message)}finally{busy=false}}
+async function request(method,path,body){await validSession();const send=()=>fetch(cfg.url+'/rest/v1/'+path,{method,headers:{apikey:cfg.key,Authorization:'Bearer '+session.access_token,'Content-Type':'application/json',...(method==='POST'&&!path.startsWith('rpc/')?{'Prefer':'resolution=merge-duplicates,return=minimal'}:{})},body:body?JSON.stringify(body):undefined});let res=await send();if(res.status===401){await refreshSession();res=await send()}if(!res.ok)throw Error('Supabase '+res.status+': '+(await res.text()).slice(0,180));return method==='GET'?res.json():null}
+async function writeCas(payload,expectedRevision){
+ const rows=await request('POST','rpc/tabi_write_cas',{p_payload:payload,p_expected_revision:expectedRevision});
+ // A successful CAS returns the new revision; null means a conflict.
+ if(!Number.isSafeInteger(rows)||rows<=expectedRevision)throw Error('Версия облака изменилась. Повторите действие');
+ return rows;
+}
+async function sync(notify=true){
+ if(busy||restoreInProgress)return;
+ if(!session?.access_token||!cfg.pass){if(notify)showSettings();return}
+ if(!navigator.onLine){cloudState('Нет сети: изменения сохранены локально','err');return}
+ busy=true;cloudState('Обмен данными с облаком…','busy');
+ try{
+  await validSession();
+  const id=session.user.id;
+  let saved=false;
+  for(let attempt=0;attempt<3;attempt++){
+   const rows=await request('GET','move_spaces?id=eq.'+encodeURIComponent(id)+'&select=payload,revision');
+   const remote=rows.length?await decrypt(rows[0].payload,cfg.pass):null;
+   const expectedRevision=Number(rows[0]?.revision)||0;
+   // An older offline client must never resurrect pre-restore objects.
+   const merged=remote?merge(state,remote):copy(state);
+   const payload=await encrypt(merged,cfg.pass);
+   try{await writeCas(payload,expectedRevision)}
+   catch(e){if(e.message.includes('Версия облака изменилась')&&attempt<2)continue;throw e}
+   state=merged;
+   localStorage.setItem(KEY,JSON.stringify(state));
+   localStorage.setItem(RESTORE_EPOCH_KEY,String(Number(state.restoreEpoch)||0));
+   render();saved=true;break;
+  }
+  if(!saved)throw Error('Конфликт версий. Повторите синхронизацию');
+  cloudState('Синхронизировано · '+new Date().toLocaleTimeString('ru',{hour:'2-digit',minute:'2-digit'}),'on');
+  if(notify)toast('Синхронизация завершена');
+ }catch(e){cloudState('Ошибка: '+e.message,'err');if(notify)toast('Синхронизация: '+e.message)}
+ finally{busy=false}
+}
 $('authSignUp').onclick=async()=>{let email=$('authEmail').value.trim(),password=$('authPassword').value;if(!email||password.length<6)return toast('Введите email и пароль от 6 символов');try{let data=await authRequest('signup','POST',{email,password});if(data.access_token){setSession(data);cloudState('Аккаунт создан. Укажите пароль шифрования.','on')}else cloudState('Проверьте почту и подтвердите email. Затем войдите.','busy')}catch(e){cloudState('Ошибка регистрации: '+e.message,'err')}};
 $('authSignIn').onclick=async()=>{let email=$('authEmail').value.trim(),password=$('authPassword').value;try{let data=await authRequest('token?grant_type=password','POST',{email,password});setSession(data);cloudState('Вход выполнен. Укажите пароль шифрования и синхронизируйте.','on');if(cfg.pass)await sync(true)}catch(e){cloudState('Ошибка входа: '+e.message,'err')}};
 $('authSignOut').onclick=async()=>{try{if(session?.access_token)await authRequest('logout','POST')}catch{}setSession(null);cloudState('Выход выполнен. Данные на устройстве остаются.','');toast('Вы вышли из аккаунта')};
