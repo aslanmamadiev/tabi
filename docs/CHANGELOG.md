@@ -1,5 +1,11 @@
 # Tabi · CHANGELOG
 
+## [Unreleased] — UI-08 Kanban + bulk actions
+- Inline item-title editing now also works in Kanban (same Enter, blur, Escape semantics).
+- Existing Select multiple action menu now includes confirmed bulk deletion, using existing soft-delete flag and sync path.
+- Existing bulk room reassignment, label changes, mark done and uncheck remain available.
+- Draft preview only, awaiting device verification and user approval.
+
 ## [Unreleased] — UI-08 inline item titles
 - Tap/click a title in the Objects view to edit directly; Enter/blur saves, Escape cancels.
 - Blank names rejected, 160-character limit retained, existing updatedAt/persist/sync path used.
