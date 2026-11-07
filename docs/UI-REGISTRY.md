@@ -20,7 +20,7 @@
 | UI-04 | Navigation & viewport | Finger-following swipe with snap-back and reduced motion; responsive reflow on rotation; preserves native scrolling and dragging. | Accepted 2026-11-07 — frozen |
 | UI-05 | Search & filters | Review redundant quick-filter shortcuts and retain a single clear access point per action. | Accepted 2026-11-07: no additional chips; existing filters preserved |
 | UI-06 | Progress | **No change.** Existing computation and interaction frozen. | Frozen |
-| UI-07 | Rooms | Collapsible groups and reorder rooms. | Persistence design TBD |
+| UI-07 | Rooms | Collapsible groups, reorder by handle or arrows, minimal deletion icon. | Candidate; device acceptance pending |
 | UI-08 | Item cards | Edit item title inline. | Save/cancel rules TBD |
 | UI-09 | Kanban | Optional compact cards. | Density controls TBD |
 | UI-10 | Settings | Reduce visual density; simplify without removing functions. | Layout TBD |
@@ -114,3 +114,11 @@ Approval / status:
 - **Published:** GitHub `main/index.html`, fetched on 2026-10-31; blob SHA `81fad849978f44cb8eac737f090b699d82372906`; length 41,986 characters.
 - **Visual baseline:** v1.5.4 is committed to `release/1.5.4-candidate` and deployed to Vercel Preview. UI-01 work is isolated on `feature/ui-01-header-v1.5.5`.
 - Treat these as separate version tracks until an explicit release.
+
+## UI-07 · Rooms candidate (2026-11-07)
+- Room header toggles collapsed/expanded state; collapse state stored only on device in `tabi-collapsed-rooms-v1`, never added to synced inventory.
+- Settings room order changed using dedicated drag handle or keyboard/touch accessible ↑/↓ buttons; existing `state.rooms` array and `roomsUpdated` timestamp used for persistence/sync. Item drag remains separate.
+- Room deletion uses the same 19px, 1.8px-stroke X SVG as Settings close; deletion still blocked if live items belong to room.
+- Existing four status labels remain fixed; label creation/reordering/removal and custom palette are on **stop-list LABEL-01** because they would change status semantics, Kanban, completion and sync.
+- No new label delete X is introduced because labels are not deletable in the current data model; room delete X is restyled.
+- UI-07 candidate requires testing on iPad/phone: collapse, rename, add to collapsed room, reorder by touch/arrow, existing item drag, both themes, persistence after reload.
