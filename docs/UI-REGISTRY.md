@@ -16,7 +16,7 @@
 |---|---|---|---|
 | UI-01 | Header controls | Center kanji 旅 inside its tile; coherent sync/settings icons in equal tiles. **FROZEN: approved 2026-11-07.** | Accepted — no further changes |
 | UI-02 | Hero | Dynamic heading based on inventory states; no new persisted phase field. | Accepted 2026-11-07 — frozen |
-| UI-03 | Stats | Counts become interactive filters. | Mappings and reset TBD |
+| UI-03 | Stats | Counts become interactive filters without changing values or visual card layout: Total resets, Rooms shows occupied room groups, Tagged filters colored objects. | Implemented in candidate; manual review pending |
 | UI-04 | Navigation & viewport | Swipe between Objects and Kanban; **responsive reflow when device orientation changes (portrait ↔ landscape)** without manual page zoom. | Pending: touch gesture conflicts and orientation QA |
 | UI-05 | Search & filters | Compact filter chips. | Chips and composition TBD |
 | UI-06 | Progress | **No change.** Existing computation and interaction frozen. | Frozen |
@@ -51,6 +51,15 @@
 - Use existing `state.items` and existing `done` / `status` fields; no new stored phase, no changes to progress calculations, filters, or sync.
 - Only the hero `h1` content changes. The subtitle, action buttons, header, themes and frozen UI-01/UI-11 remain unchanged.
 - Five deterministic stage tests and JavaScript syntax check passed; user accepted 2026-11-07. Further changes require separate approval.
+
+## UI-03 · Statistics as filters — acceptance rules (candidate)
+- Counters keep original global totals: all nondeleted items, distinct rooms containing nondeleted items, all items with colored (non-`none`) marks. Searching or filtering must **not** change the counters.
+- **Всего объектов**: reset search, selected room, unfinished-only, pending-decision filter, other stat filters; navigate to Objects.
+- **Комнат**: switch to Objects and toggle display of only room groups with matching objects (hide empty room groups). Do not modify rooms or counts.
+- **С цветной меткой**: toggle visibility of objects whose status is not `none`; work in both Objects and Kanban.
+- Each selected stat displays a subtle border and `aria-pressed`; tap again to clear the toggle. Other existing search/room filters remain composable.
+- Only `index.html` statistics markup, stat-specific CSS, ephemeral `statFilter` state, `filtered()` clause and stat click handler are in scope. **Not in scope:** data models, Supabase, project title, hero heading, progress computations, approved UI-01/02/11.
+- Test empty inventory, mixed colored/uncolored items, room filtering, searching, dark/light theme and mobile widths. No stored filter state.
 
 ## Design invariants
 - Two visual identities: Komorebi (light) and Dusk (dark). Keep approved semantics: red = leave; yellow = undecided; green = send/take; gray = unclassified.
