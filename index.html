@@ -249,6 +249,12 @@ button.stat:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 .room-handle{width:31px;height:36px;touch-action:none;cursor:grab;font-size:21px}
 .room-editor-row{display:flex;gap:6px;align-items:center;margin-bottom:8px;min-width:0}.room-editor-row input{flex:1;min-width:0}
 .room-editor-row.is-dragging{outline:1px dashed var(--accent);border-radius:8px;opacity:.75}
+/* UI-07 refinement: visible insertion position during handle drag. */
+.room-editor-row{position:relative}
+.room-editor-row.is-drop-before::before,.room-editor-row.is-drop-after::after{content:"";position:absolute;left:0;right:0;height:3px;border-radius:3px;background:var(--accent);pointer-events:none;z-index:2;box-shadow:0 0 0 2px var(--card)}
+.room-editor-row.is-drop-before::before{top:-5px}
+.room-editor-row.is-drop-after::after{bottom:-5px}
+
 .room-collapse:hover,.room-delete:hover,.room-order:hover,.room-handle:hover{background:var(--chip-2)}
 .room-collapse:focus-visible,.room-delete:focus-visible,.room-order:focus-visible,.room-handle:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .room-section.is-collapsed{margin-bottom:14px}
@@ -483,9 +489,40 @@ $('roomEditor').onchange=e=>{let input=e.target.closest('[data-room]');if(!input
 function moveRoom(from,to){if(!Number.isInteger(from)||!Number.isInteger(to)||from<0||to<0||from>=state.rooms.length||to>=state.rooms.length||from===to)return;const [room]=state.rooms.splice(from,1);state.rooms.splice(to,0,room);state.roomsUpdated=now();persist();drawSettings()}
 $('roomEditor').onclick=e=>{const move=e.target.closest('[data-move-room]');if(move){const from=Number(move.dataset.moveRoom);moveRoom(from,from+Number(move.dataset.direction));return}const b=e.target.closest('[data-remove-room]');if(!b)return;let idx=Number(b.dataset.removeRoom),room=state.rooms[idx];if(state.items.some(i=>!i.deleted&&i.room===room)){toast('Сначала перенесите объекты из комнаты');return}state.rooms.splice(idx,1);collapsedRooms.delete(room);saveCollapsedRooms();state.roomsUpdated=now();persist();drawSettings()};
 let roomReorder=null;
-$('roomEditor').addEventListener('pointerdown',e=>{const handle=e.target.closest('[data-room-handle]');if(!handle||e.button!==0)return;const row=handle.closest('[data-room-row]');roomReorder={pointerId:e.pointerId,from:Number(handle.dataset.roomHandle),row};handle.setPointerCapture(e.pointerId);row.classList.add('is-dragging')});
-$('roomEditor').addEventListener('pointerup',e=>{const g=roomReorder;if(!g||g.pointerId!==e.pointerId)return;roomReorder=null;g.row.classList.remove('is-dragging');const target=document.elementFromPoint(e.clientX,e.clientY)?.closest('[data-room-row]');if(target&&$('roomEditor').contains(target))moveRoom(g.from,Number(target.dataset.roomRow))});
-$('roomEditor').addEventListener('pointercancel',()=>{roomReorder?.row.classList.remove('is-dragging');roomReorder=null});
+function clearRoomDropIndicator(){
+  $('roomEditor').querySelectorAll('.is-drop-before,.is-drop-after').forEach(row=>row.classList.remove('is-drop-before','is-drop-after'));
+}
+function updateRoomDropIndicator(clientX,clientY){
+  const g=roomReorder;if(!g)return;
+  clearRoomDropIndicator();g.to=null;
+  const row=document.elementFromPoint(clientX,clientY)?.closest('[data-room-row]');
+  if(!row||!$('roomEditor').contains(row))return;
+  const index=Number(row.dataset.roomRow);
+  if(index===g.from)return;
+  g.to=index;
+  row.classList.add(index<g.from?'is-drop-before':'is-drop-after');
+}
+function finishRoomReorder(commit){
+  const g=roomReorder;if(!g)return;
+  roomReorder=null;g.row.classList.remove('is-dragging');clearRoomDropIndicator();
+  if(commit&&g.to!==null)moveRoom(g.from,g.to);
+}
+$('roomEditor').addEventListener('pointerdown',e=>{
+  const handle=e.target.closest('[data-room-handle]');if(!handle||e.button!==0)return;
+  const row=handle.closest('[data-room-row]');
+  roomReorder={pointerId:e.pointerId,from:Number(handle.dataset.roomHandle),to:null,row};
+  handle.setPointerCapture(e.pointerId);row.classList.add('is-dragging');
+});
+$('roomEditor').addEventListener('pointermove',e=>{
+  if(!roomReorder||roomReorder.pointerId!==e.pointerId)return;
+  updateRoomDropIndicator(e.clientX,e.clientY);
+});
+$('roomEditor').addEventListener('pointerup',e=>{
+  if(!roomReorder||roomReorder.pointerId!==e.pointerId)return;
+  updateRoomDropIndicator(e.clientX,e.clientY);
+  finishRoomReorder(true);
+});
+$('roomEditor').addEventListener('pointercancel',()=>finishRoomReorder(false));
 $('addRoom').onclick=()=>{let room=$('newRoom').value.trim();if(!room||state.rooms.includes(room)){toast('Укажите новую комнату');return}state.rooms.push(room);state.roomsUpdated=now();$('newRoom').value='';persist();drawSettings()};
 $('statusEditor').onchange=e=>{let a=e.target.closest('[data-label]');if(!a)return;state.labels[a.dataset.label]=a.value.trim()||initial.labels[a.dataset.label];state.labelsUpdated=now();persist();drawSettings()};$('themeMode').onchange=e=>{cfg.theme=e.target.value;saveCfg();applyTheme();toast('Тема обновлена')};
 $('exportBtn').onclick=()=>{let blob=new Blob([JSON.stringify({...state,exportedAt:new Date().toISOString()},null,2)],{type:'application/json'}),u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=`pereezd-2026-${new Date().toISOString().slice(0,10)}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(u),2000);toast('Резервная копия выгружена')};
