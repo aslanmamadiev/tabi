@@ -1,5 +1,12 @@
 # Tabi · CHANGELOG
 
+## [Unreleased] — DS-01 legacy focus audit
+- Removed duplicate focus outlines from project name input and theme select; retained a single theme-accent border.
+- Replaced hard-coded legacy green focus outlines on buttons, inputs, selects, completion checkboxes, and color dots with theme accent.
+- Replaced hard-coded green drag/drop insertion markers with theme accent, retaining existing drag behavior.
+- Native iOS blue text selection handles remain untouched. Preview requires visual device validation.
+
+
 ## [Unreleased] — DS-01 focus consistency
 - Harmonized keyboard focus rings to the existing theme accent (Komorebi terracotta / Dusk gold), with a consistent 2px outline and 3px offset.
 - Native checkbox/radio accent aligns with theme; iOS text selection controls are not overridden.
