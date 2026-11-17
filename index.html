@@ -799,8 +799,8 @@ function startInlineItemName(title){
 }
 $('content').addEventListener('keydown',e=>{if(!bulkMode&&e.target.matches('[data-inline-name]')&&(e.key==='Enter'||e.key===' ')){e.preventDefault();startInlineItemName(e.target);return}if(e.target.id==='draftName'&&e.key==='Enter'){e.preventDefault();e.target.closest('.composer')?.querySelector('[data-save-draft]')?.click()}if(e.target.id==='draftName'&&e.key==='Escape'){draftRoom=null;render()}});
 // Press and hold (touch / mouse / pen) to drag cards across rooms or colour columns.
-let dragging=null,pressTimer=null,suppressClick=false,draggingTap=null;
-function cleanDrag(){clearTimeout(pressTimer);pressTimer=null;if(!dragging)return;const d=dragging;d.ghost?.remove();d.placeholder?.remove();d.source?.classList.remove('drag-source');document.querySelectorAll('.drop-highlight,.drop-before,.drop-after').forEach(el=>el.classList.remove('drop-highlight','drop-before','drop-after'));document.body.classList.remove('dragging-active');dragging=null}
+let dragging=null,pressTimer=null,suppressClick=false,draggingTap=null,dragScrollFrame=0;
+function cleanDrag(){clearTimeout(pressTimer);pressTimer=null;cancelAnimationFrame(dragScrollFrame);dragScrollFrame=0;if(!dragging)return;const d=dragging;d.ghost?.remove();d.placeholder?.remove();d.source?.classList.remove('drag-source');document.querySelectorAll('.drop-highlight,.drop-before,.drop-after').forEach(el=>el.classList.remove('drop-highlight','drop-before','drop-after'));document.body.classList.remove('dragging-active');dragging=null}
 function dragPreviewAt(clientX,clientY){
  const d=dragging;if(!d?.active)return;
  d.x=clientX;d.y=clientY;
@@ -843,6 +843,13 @@ function dragPreviewAt(clientX,clientY){
 
  d.zone=zone;
 }
+function autoScrollDrag(){
+ dragScrollFrame=0;const d=dragging;if(!d?.active)return;
+ const margin=90,y=d.y,height=window.innerHeight;
+ let speed=y<margin?-Math.min(12,(margin-y)*.15):y>height-margin?Math.min(12,(y-(height-margin))*.15):0;
+ if(speed){const before=window.scrollY;window.scrollBy(0,speed);if(window.scrollY!==before)dragPreviewAt(d.x,d.y)}
+ dragScrollFrame=requestAnimationFrame(autoScrollDrag);
+}
 function finishDrag(){
  const d=dragging;if(!d)return;
  const moved=d.active&&d.moved&&d.zone;
@@ -862,12 +869,11 @@ function finishDrag(){
   }
  }
  if(d.active){suppressClick=true;setTimeout(()=>suppressClick=false,400)}
- cleanDrag();if(d.active&&!moved)render();
+ cleanDrag();if(d.active)render();
 }
 $('content').addEventListener('pointerdown',e=>{
  if(inlineNameEdit||e.button!==0||e.target.closest('button,input,select,a'))return;
  const source=e.target.closest('[data-card-id]');if(!source)return;
- if(bulkMode){const id=source.dataset.cardId;draggingTap={id,x:e.clientX,y:e.clientY,pointerId:e.pointerId};}
  cleanDrag();const rect=source.getBoundingClientRect();
  dragging={id:source.dataset.cardId,source,x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY,offsetX:e.clientX-rect.left,offsetY:e.clientY-rect.top,active:false,moved:false,pointerId:e.pointerId};
  pressTimer=setTimeout(()=>{
@@ -888,8 +894,9 @@ document.addEventListener('pointermove',e=>{
  if(!d.active){if(Math.hypot(e.clientX-d.startX,e.clientY-d.startY)>10)cleanDrag();return}
  e.preventDefault();if(Math.hypot(e.clientX-d.startX,e.clientY-d.startY)>8)d.moved=true;
  dragPreviewAt(e.clientX,e.clientY);
+ if(!dragScrollFrame)dragScrollFrame=requestAnimationFrame(autoScrollDrag);
 },{passive:false});
-document.addEventListener('pointerup',e=>{if(dragging&&e.pointerId===dragging.pointerId){const wasActive=dragging.active;const id=dragging.id;const dx=Math.hypot(e.clientX-dragging.startX,e.clientY-dragging.startY);finishDrag();if(!wasActive&&bulkMode&&dx<9){selected.has(id)?selected.delete(id):selected.add(id);render();suppressClick=true;setTimeout(()=>suppressClick=false,400)}}draggingTap=null});
+document.addEventListener('pointerup',e=>{if(!dragging||e.pointerId!==dragging.pointerId)return;const wasActive=dragging.active,id=dragging.id,dx=Math.hypot(e.clientX-dragging.startX,e.clientY-dragging.startY);finishDrag();if(!wasActive&&bulkMode&&dx<9){selected.has(id)?selected.delete(id):selected.add(id);render();suppressClick=true;setTimeout(()=>suppressClick=false,400)}});
 document.addEventListener('pointercancel',()=>{const active=dragging?.active;draggingTap=null;cleanDrag();if(active)render()});
 document.addEventListener('touchmove',e=>{if(dragging?.active)e.preventDefault()},{passive:false});
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{cleanDrag();tab=b.dataset.tab;render()});
