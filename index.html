@@ -380,7 +380,7 @@ select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
  .mobile-overview .mini-fill{display:block;height:100%;width:0;background:var(--accent);border-radius:99px}
  .mobile-metric-chips{display:none;flex-wrap:wrap;gap:6px;margin:4px 0 8px}
  .mobile-metric-chips.is-open{display:flex}
- .mobile-metric-chips button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:8px 11px;font:inherit;font-size:11px;font-weight:650;cursor:pointer}
+ .mobile-metric-chips button,.mobile-metric-chips .metric-readonly{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:8px 11px;font:inherit;font-size:11px;font-weight:650;cursor:pointer}
  .mobile-metric-chips button[aria-pressed=true]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-strong)}
  .tabs{justify-content:flex-start!important;margin:7px 0 10px!important;gap:5px!important;background:var(--panel);padding:4px;width:fit-content!important}
  .tabs .tab{padding:10px 16px!important}
@@ -840,7 +840,7 @@ $('syncBtn').onclick=()=>{if(!session?.access_token||!cfg.pass){toast('Синх�
  mini.innerHTML='<span class="mini-head"><span class="mini-label">0 / 0 · 0%</span><span class="mini-more">Показатели ▾</span></span><span class="mini-rail"><span class="mini-fill"></span></span>';
  overview.appendChild(mini);
  const chips=document.createElement('div');chips.className='mobile-metric-chips';chips.id='mobileMetricChips';
- chips.innerHTML='<button type="button" data-stat-filter="all">Все · <span data-metric="all">0</span></button><button type="button" data-metric-action="done">Готово · <span data-metric="done">0</span></button><button type="button" data-metric-action="decision">Решить · <span data-metric="decision">0</span></button><button type="button" data-metric-action="rooms">Комнаты · <span data-metric="rooms">0</span></button>';
+ chips.innerHTML='<button type="button" data-stat-filter="all">Все · <span data-metric="all">0</span></button><span class="metric-readonly">Готово · <span data-metric="done">0</span></span><button type="button" data-metric-action="decision">Решить · <span data-metric="decision">0</span></button><button type="button" data-metric-action="rooms">Комнаты · <span data-metric="rooms">0</span></button>';
  overview.appendChild(chips);
  tabs.insertAdjacentElement('beforebegin',overview);
  const row=document.createElement('div');row.className='mobile-filter-row';
@@ -853,7 +853,7 @@ $('syncBtn').onclick=()=>{if(!session?.access_token||!cfg.pass){toast('Синх�
  function setOpen(open){panel.classList.toggle('is-open',open);toggle.setAttribute('aria-expanded',String(open));toggle.textContent=open?'☷ Фильтры ▴':'☷ Все комнаты · Фильтры ▾'}
  toggle.addEventListener('click',()=>setOpen(!panel.classList.contains('is-open')));
  mini.addEventListener('click',()=>{const open=!chips.classList.contains('is-open');chips.classList.toggle('is-open',open);mini.setAttribute('aria-expanded',String(open));mini.querySelector('.mini-more').textContent=open?'Показатели ▴':'Показатели ▾'});
- chips.addEventListener('click',e=>{const btn=e.target.closest('button');if(!btn)return;const action=btn.dataset.metricAction;if(action==='done'){$('unfinishedOnly').checked=false;$('unfinishedOnly').dispatchEvent(new Event('change',{bubbles:true}));setOpen(true)}else if(action==='decision'){const link=progress.querySelector('[data-filter-decision]');if(link)link.click()}else if(action==='rooms'){setOpen(true);roomFilter.focus()}else if(btn.dataset.statFilter==='all'){const original=stats.querySelector('[data-stat-filter="all"]');if(original)original.click()}});
+ chips.addEventListener('click',e=>{const btn=e.target.closest('button');if(!btn)return;const action=btn.dataset.metricAction;if(action==='decision'){const link=progress.querySelector('[data-filter-decision]');if(link)link.click()}else if(action==='rooms'){setOpen(true);roomFilter.focus()}else if(btn.dataset.statFilter==='all'){const original=stats.querySelector('[data-stat-filter="all"]');if(original)original.click()}});
  const label=mini.querySelector('.mini-label'),fill=mini.querySelector('.mini-fill');
  function update(){const value=($('progressText')?.textContent||'0 / 0').trim();const width=$('progressFill')?.style.width||'0%';const pct=Math.round(parseFloat(width)||0);label.textContent=value+' · '+pct+'%';fill.style.width=width;row.querySelector('.mobile-filter-count').textContent=($('totalCount')?.textContent||'0')+' объектов';const all=Number($('totalCount')?.textContent||0),done=Number(value.split('/')[0])||0;chips.querySelector('[data-metric="all"]').textContent=all;chips.querySelector('[data-metric="done"]').textContent=done;chips.querySelector('[data-metric="rooms"]').textContent=$('roomCount')?.textContent||'0';chips.querySelector('[data-metric="decision"]').textContent=state.items.filter(i=>!i.deleted&&requiresDecision(i)).length}
  const observer=new MutationObserver(update);[$('progressText'),$('progressFill'),$('totalCount')].filter(Boolean).forEach(el=>observer.observe(el,{childList:true,subtree:true,attributes:true,attributeFilter:['style']}));update();
