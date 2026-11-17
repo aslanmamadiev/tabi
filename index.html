@@ -474,6 +474,58 @@ select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
  }
  .mobile-metric-chips button:disabled{opacity:.55}
 }
+
+/* UI-15.3: phone-first unified responsive layout, all viewports. */
+.mobile-overview{display:block!important;margin:10px 0 7px!important}
+.mobile-overview .mobile-progress{
+ display:flex!important;flex-direction:column;gap:7px;width:100%;
+ border:0!important;border-radius:0!important;background:transparent!important;
+ padding:6px 1px 9px!important;color:var(--ink)!important;
+ font:inherit;cursor:pointer;-webkit-appearance:none;appearance:none
+}
+.mobile-overview .mini-head{display:flex;justify-content:space-between;align-items:center;width:100%;font-size:12px}
+.mobile-overview .mini-label{font-weight:700}
+.mobile-overview .mini-more{color:var(--muted);font-size:11px}
+.mobile-overview .mini-rail{display:block;width:100%;height:5px;background:var(--line);border-radius:99px;overflow:hidden}
+.mobile-overview .mini-fill{display:block;height:100%;background:var(--accent);border-radius:99px}
+.mobile-metric-chips{display:none;flex-wrap:wrap;align-items:center;gap:7px;margin:6px 0 9px}
+.mobile-metric-chips.is-open{display:flex!important}
+.mobile-metric-chips button{
+ display:inline-flex;align-items:center;justify-content:center;gap:4px;
+ min-height:36px;max-width:100%;padding:8px 12px;
+ -webkit-appearance:none;appearance:none;-webkit-tap-highlight-color:transparent;
+ border:1px solid var(--line)!important;border-radius:999px!important;
+ background:var(--card)!important;color:var(--ink)!important;-webkit-text-fill-color:var(--ink);
+ font:inherit;font-size:12px;font-weight:650;line-height:1.3;box-shadow:none;cursor:pointer
+}
+.mobile-metric-chips button[aria-pressed=true]{
+ background:var(--light)!important;border-color:var(--accent)!important;
+ color:var(--accent)!important;-webkit-text-fill-color:var(--accent)
+}
+.mobile-room-swipe{gap:8px;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.mobile-room-swipe .room-swipe-arrow{font-size:17px;line-height:1;color:var(--muted)}
+.mobile-room-swipe .room-swipe-name{max-width:min(38vw,200px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hero,.stats,.progressbox,.extra-tools,.mobile-filter-panel,.mobile-filter-row,.mobile-room-choices{display:none!important}
+.tools .filter{display:none!important}
+.tools{display:grid!important;grid-template-columns:minmax(0,1fr) auto;gap:9px;margin-bottom:12px}
+.tools .search{min-width:0;width:100%;box-sizing:border-box}
+.tools .mobile-add{display:block!important;min-height:40px;padding:10px 15px;box-shadow:none}
+.tabs{display:flex;width:fit-content!important;margin:7px 0 10px!important;gap:5px;background:var(--panel);padding:4px}
+.tabs .tab{flex:0 0 auto;padding:10px 16px}
+.room-section{margin-top:15px}
+@media(min-width:541px){
+ .wrap{max-width:1220px;margin:auto;padding:20px 24px 90px}
+ .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(min-width:1025px){
+ .wrap{padding:24px 30px 100px}
+ .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+ .mobile-overview{margin-top:15px!important}
+}
+@media(max-width:540px){
+ .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .tools .mobile-add{padding:10px 12px}
+}
 </style></head><body><main class="wrap"><header class="top"><div class="brand"><button type="button" class="mark kanji-theme" id="kanjiThemeBtn" aria-label="Переключить тему на Dusk" title="Переключить тему"><span class="kanji-glyph" aria-hidden="true">旅</span></button><div><b>Tabi <span class="project-label">· <button type="button" id="projectNameBtn" class="project-name-btn" title="Изменить название проекта" aria-label="Изменить название проекта">Мой переезд</button><input id="projectNameInput" class="project-name-input hidden" type="text" maxlength="48" autocomplete="off" aria-label="Название проекта"></span></b><small>Всё на своих местах</small></div></div><div class="top-actions"><button class="iconbtn" id="syncBtn" title="Синхронизировать" aria-label="Синхронизировать"><svg class="action-svg" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8.1 8.1 0 0 0-15.5-2M4 4v5h5"/><path d="M4 13a8.1 8.1 0 0 0 15.5 2M20 20v-5h-5"/></svg></button><button class="iconbtn" id="settingsBtn" title="Настройки и данные" aria-label="Настройки и данные"><svg class="action-svg" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><circle cx="12" cy="12" r="7.3"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(0 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(45 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(90 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(135 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(180 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(225 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(270 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(315 12 12)"/><circle cx="12" cy="12" r="3.15" fill="var(--card)"/></svg></button></div></header><section class="hero"><div><h1 id="heroTitle" aria-live="polite">Порядок в вещах.</h1><p>Одна система для всех комнат и этапов.</p></div><button class="primary" id="addBtn">＋ Добавить</button></section><section class="stats" aria-label="Интерактивная статистика"><button type="button" class="stat" data-stat-filter="all" aria-pressed="true" title="Показать все объекты и сбросить фильтры"><strong id="totalCount">0</strong><span>Всего объектов</span></button><button type="button" class="stat" data-stat-filter="rooms" aria-pressed="false" title="Показать только комнаты с объектами"><strong id="roomCount">0</strong><span>Комнат</span></button><button type="button" class="stat" data-stat-filter="tagged" aria-pressed="false" title="Показать только объекты с цветной меткой"><strong id="taggedCount">0</strong><span>С цветной меткой</span></button></section><nav class="tabs"><button class="tab active" data-tab="objects">☷ &nbsp; Объекты</button><button class="tab" data-tab="board">▥ &nbsp; Канбан</button></nav><div class="tools"><input class="search" id="search" placeholder="⌕  Поиск по объектам..." type="search"><button class="primary mobile-add" type="button" id="mobileAddBtn">＋ Добавить</button><select class="filter" id="roomFilter" aria-label="Фильтр по комнатам"></select></div><div class="progressbox"><div class="progresshead"><strong>Прогресс переезда</strong><span id="progressText">0 / 0</span></div><div class="progressrail"><div id="progressFill"></div></div><small id="progressHint"></small></div><div class="extra-tools"><label class="toggle"><input id="unfinishedOnly" type="checkbox"> Только незавершённые</label><button class="secondary" id="bulkToggle" type="button">Выбрать несколько</button></div><div id="bulkBar" class="bulkbar hidden"><span id="bulkCount">0 выбрано</span><select id="bulkAction"><option value="">Выберите действие</option><option value="red">Оставить</option><option value="yellow">Не знаю</option><option value="green">Отправить / взять</option><option value="none">Без метки</option><option value="done">✓ Отметить выполненными</option><option value="undone">Снять галочки</option><option value="delete">Удалить выбранные…</option></select><select id="bulkRoom"></select><button id="bulkApply" class="primary" type="button">Применить</button></div><div id="content"></div><footer class="footer"><span id="saveState">● Сохранено на устройстве</span><span>Локально · JSON · облачная синхронизация</span></footer></main>
 <div class="overlay hidden" id="itemOverlay"><section class="modal" role="dialog" aria-modal="true" aria-label="Объект"><h2 id="itemTitle">Новый объект</h2><p class="desc">Добавьте вещь, назначьте комнату и цветовую метку.</p><label class="field">Название<input id="itemName" placeholder="Например, книги" maxlength="160"></label><label class="field">Комната<select id="itemRoom"></select></label><label class="field">Цветовая метка</label><div class="colors" id="colorPicks"></div><label class="field" style="display:flex;align-items:center;gap:10px"><input type="checkbox" id="itemDone" style="width:20px;height:20px;margin:0"> Готово</label><div class="modal-actions"><button class="secondary danger hidden" id="deleteBtn">Удалить</button><button class="secondary" id="cancelItem">Отмена</button><button class="primary" id="saveItem">Сохранить</button></div></section></div>
 <div class="overlay hidden" id="settingsOverlay"><section class="modal wide" role="dialog" aria-modal="true" aria-label="Настройки"><button class="modal-close" id="closeSettingsTop" aria-label="Закрыть настройки" title="Закрыть"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button><h2>Настройки и данные</h2><p class="desc">Комнаты и названия статусов можно менять. Ваши данные остаются доступны без интернета на этом устройстве.</p><div class="settings-title">Внешний вид</div><div class="settings-row"><select class="filter" id="themeMode"><option value="system">Системная тема</option><option value="light">Komorebi · День</option><option value="dark">Dusk · Вечер</option></select></div><p class="small">Komorebi — дневной свет; Dusk — графит и янтарь. Изменение вступает в силу сразу и запоминается на устройстве.</p><div class="settings-title">Комнаты</div><div id="roomEditor"></div><div class="settings-row"><input id="newRoom" class="search" placeholder="Новая комната"><button id="addRoom" class="secondary">Добавить</button></div><div class="settings-title">Цветовые категории</div><div id="statusEditor"></div><details class="settings-fold" id="backupFold"><summary>Резервное копирование <span class="settings-fold-note">JSON</span></summary><div class="settings-row"><button class="secondary" id="exportBtn">↓ Экспорт JSON</button><button class="secondary" id="importBtn">↑ Импорт JSON</button><button class="secondary" id="restoreBackupBtn" type="button" hidden>↓ Копия до восстановления</button><input type="file" id="importFile" accept="application/json,.json" hidden></div></details><details class="settings-fold" id="syncFold"><summary>Защищённая синхронизация <span class="settings-fold-note">Аккаунт · шифрование</span></summary><p class="small">Создайте аккаунт по email или войдите в существующий. Каждый аккаунт имеет доступ только к своим записям. Для шифрования базы задайте отдельный пароль и введите его на обоих устройствах. Пароль шифрования не восстанавливается через email.</p><label class="field">Email<input id="authEmail" type="email" autocomplete="username" placeholder="you@example.com"></label><label class="field">Пароль аккаунта<input id="authPassword" type="password" autocomplete="current-password" placeholder="Пароль для входа"></label><div class="settings-row"><button class="secondary" id="authSignUp">Регистрация</button><button class="primary" id="authSignIn">Войти</button><button class="secondary" id="authSignOut">Выйти</button></div><label class="field">Пароль шифрования данных<input id="cloudPassword" type="password" placeholder="Отдельный пароль от 10 символов" autocomplete="off"></label><div class="settings-row"><button class="primary" id="cloudConnect">Сохранить пароль и синхронизировать</button></div><div id="cloudMsg" class="hint">Войдите в аккаунт. Локальные данные сохранены на устройстве.</div></details><div class="modal-actions"><button class="secondary" id="closeSettings">Готово</button></div></section></div><div class="overlay restore-overlay hidden" id="restoreOverlay"><section class="modal restore-dialog" role="alertdialog" aria-modal="true" aria-labelledby="restoreTitle" aria-describedby="restoreDescription"><h2 id="restoreTitle">Заменить данные?</h2><p class="desc" id="restoreDescription"></p><div class="modal-actions"><button type="button" class="secondary" id="restoreCancel">Отмена</button><button type="button" class="restore-confirm" id="restoreConfirm">Заменить</button></div></section></div><div id="toast" class="toast hidden"></div>
@@ -920,7 +972,7 @@ $('syncBtn').onclick=()=>{if(!session?.access_token||!cfg.pass){toast('Синх�
 
 /* UI-14 v2: progressive mobile-only rearrangement; existing controls remain wired. */
 (function setupCompactMobile(){
- if(!window.matchMedia('(max-width:1440px)').matches)return;
+ /* One shared adaptive interface for every viewport. */
  const tabs=document.querySelector('.tabs'),stats=document.querySelector('.stats'),roomFilter=$('roomFilter'),extra=document.querySelector('.extra-tools'),progress=document.querySelector('.progressbox');
  if(!tabs||!stats||!roomFilter||!extra||!progress)return;
  const overview=document.createElement('section');overview.className='mobile-overview';overview.setAttribute('aria-label','Прогресс переезда');
