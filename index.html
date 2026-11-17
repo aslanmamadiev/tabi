@@ -343,7 +343,7 @@ select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
  .extra-tools{margin-bottom:8px}
 }
 
-/* UI-03 / UI-05 / UI-08 responsive iteration:  task-first mobile composition; desktop structure unchanged */
+/* UI-03 / UI-05 / UI-08 responsive iteration: task-first mobile composition; desktop structure unchanged */
 @media(max-width:540px){
  .hero{display:none!important}
  .stats{display:none!important}
@@ -369,7 +369,7 @@ select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 }
 @media(min-width:541px){.mobile-progress,.mobile-filter-row,.mobile-filter-panel{display:none!important}}
 
-/* UI-03 responsive iteration:  compact A layout, expanded B-style inline metric chips */
+/* UI-03 responsive iteration: compact A layout, expanded B-style inline metric chips */
 @media(max-width:540px){
  .mobile-overview{margin:10px 0 5px}
  .mobile-overview .mobile-progress{width:100%;border:0;background:transparent;padding:6px 1px 9px;display:flex;flex-direction:column;gap:7px;cursor:pointer;color:var(--ink)}
@@ -395,14 +395,14 @@ select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
  .mobile-room-choice[aria-pressed=true]{background:var(--light);border-color:var(--accent);color:var(--accent)}
 }
 
-/* UI-07 responsive iteration:  swipeable room chip, no submenu or All chip */
+/* UI-07 responsive iteration: swipeable room chip, no submenu or All chip */
 @media(max-width:540px){
  .mobile-room-swipe{display:inline-flex;align-items:center;gap:9px;touch-action:pan-y;user-select:none;-webkit-user-select:none;max-width:100%;min-height:34px}
  .mobile-room-swipe .room-swipe-name{display:inline-block;max-width:145px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
  .mobile-room-swipe .room-swipe-arrow{font-size:17px;line-height:10px;color:var(--muted)}
 }
 
-/* UI-03 / UI-07 responsive tablet:  tablet 541–1024px; reuse same live KPI and room controls. */
+/* UI-03 / UI-07 responsive tablet: 541–1024px; reuse same live KPI and room controls. */
 @media(min-width:541px) and (max-width:1440px){
  .wrap{max-width:100%;padding:19px 22px 90px}
  .hero,.stats,.progressbox,.extra-tools{display:none!important}
@@ -430,7 +430,7 @@ select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
  .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
 
-/* UI-07 responsive audit:  one chip design system across phone/tablet; hide legacy controls consistently. */
+/* UI-07 responsive audit: one chip design system across phone/tablet; hide legacy controls consistently. */
 @media(max-width:1440px){
  .mobile-overview{display:block}
  .mobile-metric-chips{gap:7px;margin:6px 0 9px;align-items:center}
@@ -453,7 +453,7 @@ select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
  .mobile-overview .mobile-progress{font:inherit}
 }
 
-/* UI-04 / UI-05 responsive landscape:  explicitly styled native controls */
+/* UI-04 / UI-05 responsive landscape: explicitly styled native controls */
 @media(max-width:1440px){
  .mobile-metric-chips button{
   -webkit-appearance:none;appearance:none;
@@ -475,7 +475,7 @@ select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
  .mobile-metric-chips button:disabled{opacity:.55}
 }
 
-/* UI-03 / UI-05 / UI-07 responsive:  phone-first unified responsive layout, all viewports. */
+/* UI-03 / UI-05 / UI-07 responsive: phone-first unified responsive layout, all viewports. */
 .mobile-overview{display:block!important;margin:10px 0 7px!important}
 .mobile-overview .mobile-progress{
  display:flex!important;flex-direction:column;gap:7px;width:100%;
@@ -578,7 +578,7 @@ select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .workspace-toolbar .tools .mobile-add:focus-visible,
 .room-actions .room-add:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
-/* UI-08 responsive accent:  restore accent treatment only for the search-row add button */
+/* UI-08 responsive accent: restore accent treatment only for the search-row add button */
 .workspace-toolbar .tools .mobile-add{
  background:var(--accent)!important;
  color:#fff!important;
@@ -586,7 +586,7 @@ select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 }
 .workspace-toolbar .tools .mobile-add:hover{background:var(--accent-strong,var(--accent))!important}
 
-/* UI-07 responsive:  stable, content-aware room chip width */
+/* UI-07 responsive: stable, content-aware room chip width */
 .mobile-metric-chips .mobile-room-swipe{
  box-sizing:border-box!important;
  flex:0 1 auto!important;
@@ -1103,7 +1103,7 @@ $('authSignOut').onclick=async()=>{try{if(session?.access_token)await authReques
 $('cloudConnect').onclick=async()=>{let pass=$('cloudPassword').value;if(pass.length<10)return toast('Пароль шифрования — от 10 символов');if(!session?.access_token)return toast('Сначала войдите в аккаунт');cfg.pass=pass;saveCfg();await sync(true)};
 $('syncBtn').onclick=()=>{if(!session?.access_token||!cfg.pass){toast('Синхронизация не настроена. Подключите аккаунт в настройках.');return}sync(true)};if(session?.access_token){cloudState('Аккаунт подключён · проверяем синхронизацию','busy');if(cfg.pass)setTimeout(()=>sync(false),800)}timer=setInterval(()=>{if(!document.hidden&&session?.access_token&&cfg.pass)sync(false)},20000);
 
-/* UI-03 / UI-05 / UI-08 responsive iteration:  progressive mobile-only rearrangement; existing controls remain wired. */
+/* UI-03 / UI-05 / UI-08 responsive iteration: progressive mobile-only rearrangement; existing controls remain wired. */
 (function setupCompactMobile(){
  /* One shared adaptive interface for every viewport. */
  const tabs=document.querySelector('.tabs'),stats=document.querySelector('.stats'),roomFilter=$('roomFilter'),extra=document.querySelector('.extra-tools'),progress=document.querySelector('.progressbox');
