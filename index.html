@@ -813,7 +813,7 @@ function dragPreviewAt(clientX,clientY){
  if(!container){d.zone=null;return}
  // Compute insertion from stable card centres, not from the moving placeholder.
  // The placeholder must not become the hit-test target or trigger oscillating swaps.
- const candidates=[...container.querySelectorAll('[data-card-id]')].filter(el=>el!==d.source&&!selected.has(el.dataset.cardId));
+ const candidates=[...container.querySelectorAll('[data-card-id]')].filter(el=>el!==d.source&&!(d.groupIds||selected).has(el.dataset.cardId));
  const horizontal=tab==='objects'&&getComputedStyle(container).gridTemplateColumns.split(' ').length>1;
  let insertBefore=null;
  if(horizontal){
@@ -857,7 +857,7 @@ function finishDrag(){
  if(moved){
   const item=state.items.find(x=>x.id===d.id&&!x.deleted);
   if(item){
-   const movingIds=selected.has(item.id)?new Set([...selected]):new Set([item.id]);
+   const movingIds=d.groupIds|| (selected.has(item.id)?new Set([...selected]):new Set([item.id]));
    const groupKey=tab==='objects'?'room':'status',next=tab==='objects'?d.zone.dataset.roomDrop:d.zone.dataset.statusDrop;
    const group=state.items.filter(x=>!x.deleted&&!movingIds.has(x.id)&&(groupKey==='room'?x.room:(x.status||'none'))===next).sort((a,b)=>(Number(a.order??a.updatedAt)||0)-(Number(b.order??b.updatedAt)||0));
    const pos=d.near?group.findIndex(x=>x.id===d.near.dataset.cardId):-1;
@@ -895,7 +895,7 @@ function startCardDrag(d){
  const members=groupIds.map(id=>document.querySelector('#content [data-card-id="'+CSS.escape(id)+'"]')).filter(Boolean);
  const ghost=document.createElement('div');ghost.className='drag-ghost drag-group-ghost';
  ghost.style.width=rect.width+'px';ghost.style.height=rect.height+'px';ghost.style.pointerEvents='none';
- const previews=members.length>1?members.slice(0,3):[d.source];
+ const previews=members.length>1?members.slice(0,Math.min(members.length,5)):[d.source];
  previews.reverse().forEach((member,index)=>{
   const tile=member.cloneNode(true);tile.classList.remove('drag-source','drag-lifted','drag-group-member');
   tile.style.position='absolute';tile.style.inset='0';tile.style.width='100%';tile.style.height='100%';
@@ -906,6 +906,7 @@ function startCardDrag(d){
  if(groupIds.length>1){const count=document.createElement('span');count.className='drag-group-count';count.textContent=String(groupIds.length);ghost.appendChild(count)}
  document.body.append(ghost);d.ghost=ghost;
  members.forEach(member=>{if(member!==d.source)member.classList.add('drag-group-member')});
+ d.groupIds=new Set(groupIds);
 
  const placeholder=document.createElement('div');placeholder.className='drag-placeholder';placeholder.style.height=rect.height+'px';placeholder.style.width=rect.width+'px';d.placeholder=placeholder;
  d.source.after(placeholder);d.source.classList.add('drag-source');document.body.classList.add('dragging-active');
