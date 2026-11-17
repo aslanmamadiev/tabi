@@ -663,7 +663,7 @@ select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 #content [data-card-id].is-selected{outline:2px solid var(--accent);outline-offset:-2px}
 .drag-placeholder{pointer-events:none!important;border:2px dashed var(--accent);border-radius:12px;background:var(--light);opacity:.65;box-sizing:border-box;flex:none}
 .drag-lifted{position:relative;z-index:15;transform:translateY(-5px) scale(1.025);box-shadow:0 12px 28px #0002;transition:transform .16s ease-out,box-shadow .16s ease-out;will-change:transform}
-.drag-source{opacity:.15!important;pointer-events:none!important}
+.drag-source{opacity:.15!important;pointer-events:none!important}.drag-group-member{opacity:.22!important}.drag-group-ghost{overflow:visible!important;background:transparent!important;border:0!important;box-shadow:none!important}.drag-group-count{position:absolute;right:-14px;top:-20px;z-index:5;min-width:26px;height:26px;padding:0 6px;border-radius:99px;background:var(--accent);color:white;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;box-shadow:0 3px 10px #0003}
 .drag-ghost{pointer-events:none!important;z-index:10000!important;transform:scale(1.035);box-shadow:0 16px 40px #0002}
 .drag-ghost[data-drag-count]::after{content:attr(data-drag-count) " объектов";position:absolute;right:8px;top:8px;padding:4px 7px;border-radius:9px;background:var(--accent);color:var(--card);font-size:11px}
 #selectionToolbarSlot:has(#bulkBar){padding:0;margin:0 0 12px;min-height:39px}
@@ -801,7 +801,7 @@ function startInlineItemName(title){
 $('content').addEventListener('keydown',e=>{if(!bulkMode&&e.target.matches('[data-inline-name]')&&(e.key==='Enter'||e.key===' ')){e.preventDefault();startInlineItemName(e.target);return}if(e.target.id==='draftName'&&e.key==='Enter'){e.preventDefault();e.target.closest('.composer')?.querySelector('[data-save-draft]')?.click()}if(e.target.id==='draftName'&&e.key==='Escape'){draftRoom=null;render()}});
 // Press and hold (touch / mouse / pen) to drag cards across rooms or colour columns.
 let dragging=null,pressTimer=null,suppressClick=false,draggingTap=null,dragScrollFrame=0;
-function cleanDrag(){clearTimeout(pressTimer);pressTimer=null;cancelAnimationFrame(dragScrollFrame);dragScrollFrame=0;if(!dragging)return;const d=dragging;d.ghost?.remove();d.placeholder?.remove();d.source?.classList.remove('drag-source','drag-lifted');document.querySelectorAll('.drop-highlight,.drop-before,.drop-after').forEach(el=>el.classList.remove('drop-highlight','drop-before','drop-after'));document.body.classList.remove('dragging-active');dragging=null}
+function cleanDrag(){clearTimeout(pressTimer);pressTimer=null;cancelAnimationFrame(dragScrollFrame);dragScrollFrame=0;if(!dragging)return;const d=dragging;d.ghost?.remove();d.placeholder?.remove();document.querySelectorAll('.drag-group-member').forEach(el=>el.classList.remove('drag-group-member'));d.source?.classList.remove('drag-source','drag-lifted');document.querySelectorAll('.drop-highlight,.drop-before,.drop-after').forEach(el=>el.classList.remove('drop-highlight','drop-before','drop-after'));document.body.classList.remove('dragging-active');dragging=null}
 function dragPreviewAt(clientX,clientY){
  const d=dragging;if(!d?.active)return;
  d.x=clientX;d.y=clientY;
@@ -891,9 +891,22 @@ $('content').addEventListener('pointerdown',e=>{
 function startCardDrag(d){
  if(!d||d.active)return;
  d.active=true;d.source.classList.remove('drag-lifted');const rect=d.source.getBoundingClientRect();
- const ghost=d.source.cloneNode(true);ghost.classList.add('drag-ghost');ghost.style.width=rect.width+'px';ghost.style.height=rect.height+'px';ghost.style.pointerEvents='none';
- if(selected.size>1)ghost.dataset.dragCount=String(selected.size);
+ const groupIds=selected.has(d.id)?[...selected]:[d.id];
+ const members=groupIds.map(id=>document.querySelector('#content [data-card-id="'+CSS.escape(id)+'"]')).filter(Boolean);
+ const ghost=document.createElement('div');ghost.className='drag-ghost drag-group-ghost';
+ ghost.style.width=rect.width+'px';ghost.style.height=rect.height+'px';ghost.style.pointerEvents='none';
+ const previews=members.length>1?members.slice(0,3):[d.source];
+ previews.reverse().forEach((member,index)=>{
+  const tile=member.cloneNode(true);tile.classList.remove('drag-source','drag-lifted','drag-group-member');
+  tile.style.position='absolute';tile.style.inset='0';tile.style.width='100%';tile.style.height='100%';
+  tile.style.transform='translate('+(index*5)+'px,'+(-index*7)+'px)';
+  tile.style.boxShadow='0 8px 22px #0002';tile.style.borderRadius='12px';
+  ghost.appendChild(tile);
+ });
+ if(groupIds.length>1){const count=document.createElement('span');count.className='drag-group-count';count.textContent=String(groupIds.length);ghost.appendChild(count)}
  document.body.append(ghost);d.ghost=ghost;
+ members.forEach(member=>{if(member!==d.source)member.classList.add('drag-group-member')});
+
  const placeholder=document.createElement('div');placeholder.className='drag-placeholder';placeholder.style.height=rect.height+'px';placeholder.style.width=rect.width+'px';d.placeholder=placeholder;
  d.source.after(placeholder);d.source.classList.add('drag-source');document.body.classList.add('dragging-active');
  dragPreviewAt(d.x,d.y);
