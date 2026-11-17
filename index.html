@@ -866,11 +866,13 @@ function finishDrag(){
    group.splice(idx,0,...moving);
    for(const entry of moving){if(groupKey==='status'&&entry.status!==next)entry.done=false;entry[groupKey]=next}
    const tick=now();group.forEach((entry,index)=>{entry.order=tick+index;entry.updatedAt=tick+index});
+   cleanDrag();
    persist();
+   render();
+   return;
   }
  }
- if(d.active){suppressClick=true;setTimeout(()=>suppressClick=false,400)}
- cleanDrag();if(d.active)render();
+ cleanDrag();if(d.held)render();
 }
 // UI-09: one pointer gesture owns selection and drag; click must never toggle it twice.
 $('content').addEventListener('pointerdown',e=>{
@@ -907,15 +909,20 @@ document.addEventListener('pointermove',e=>{
 },{passive:false});
 document.addEventListener('pointerup',e=>{
  const d=dragging;if(!d||e.pointerId!==d.pointerId)return;
- const id=d.id,held=d.held,active=d.active,wasSelecting=selected.size>0;
- if(held){finishDrag();if(!active){suppressClick=true;render()}}
- else{
+ if(d.held){
+  finishDrag();
+  // Ignore the synthetic click following a long press, but not later taps.
+  suppressClick=true;
+  setTimeout(()=>{suppressClick=false},350);
+ }else{
+  // A short tap is handled only by the delegated click listener.
   cleanDrag();
-  if(wasSelecting){selected.has(id)?selected.delete(id):selected.add(id);bulkMode=selected.size>0;render();suppressClick=true}
  }
- if(suppressClick)setTimeout(()=>suppressClick=false,450);
 });
-document.addEventListener('pointercancel',()=>{const held=dragging?.held;cleanDrag();if(held)render()});
+document.addEventListener('pointercancel',e=>{
+ if(!dragging||e.pointerId!==dragging.pointerId)return;
+ const held=dragging.held;cleanDrag();if(held)render();
+});
 document.addEventListener('touchmove',e=>{if(dragging?.active)e.preventDefault()},{passive:false});
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{cleanDrag();tab=b.dataset.tab;render()});
 
