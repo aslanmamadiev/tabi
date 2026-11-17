@@ -759,6 +759,7 @@ function ui04ClearVisual(){
   ui04GestureArea.style.transition='';
   if(ui04Neighbor){ui04Neighbor.remove();ui04Neighbor=null}
   ui04Viewport.classList.remove('is-swiping');
+  ui04Viewport.style.height='';
 }
 function ui04PrepareNeighbor(g){
   if(ui04Neighbor)return;
@@ -766,6 +767,8 @@ function ui04PrepareNeighbor(g){
   const savedNodes=Array.from(ui04GestureArea.childNodes);
   const savedDraft=draftRoom;
   const scrollTop=window.scrollY;
+  // Hold the outgoing page's height while rendering the adjacent view.
+  ui04Viewport.style.height=ui04GestureArea.getBoundingClientRect().height+'px';
   tab=original==='objects'?'board':'objects';
   render();
   const neighbor=document.createElement('div');
@@ -821,8 +824,15 @@ async function ui04FinishSwipe(g,dx,velocity){
     if(valid){
       tab=g.from==='objects'?'board':'objects';
       cleanDrag();
-      ui04ClearVisual();
+      // Commit the new page without an intermediate empty viewport.
+      const scrollTop=window.scrollY;
+      ui04GestureArea.style.transform='';
+      ui04GestureArea.style.willChange='';
+      if(ui04Neighbor){ui04Neighbor.remove();ui04Neighbor=null}
+      ui04Viewport.classList.remove('is-swiping');
       render();
+      ui04Viewport.style.height='';
+      if(Math.abs(window.scrollY-scrollTop)>1)window.scrollTo({top:scrollTop,behavior:'instant'});
     }
   }finally{ui04ClearVisual();ui04Transition=false}
 }
