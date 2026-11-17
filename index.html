@@ -319,7 +319,7 @@ select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 @keyframes kanji-shift{0%{transform:scale(1) rotate(0)}25%{transform:scale(.91) rotate(-4deg)}65%{transform:scale(1.055) rotate(2deg)}100%{transform:scale(1) rotate(0)}}
 @media(prefers-reduced-motion:reduce){.kanji-theme,.kanji-glyph{transition:none!important}.kanji-theme.kanji-animate .kanji-glyph{animation:none}}
 
-/* UI-14 mobile-first: dense KPI strip, inline search/add, preserve existing filters. */
+/* UI-03 / UI-05 / UI-08 responsive: fulfillment metrics and inline search/add: dense KPI strip, inline search/add, preserve existing filters. */
 .mobile-add{display:none}
 @media(max-width:540px){
  .hero{margin-top:20px;gap:8px}
@@ -343,7 +343,7 @@ select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
  .extra-tools{margin-bottom:8px}
 }
 
-/* UI-14 v2: task-first mobile composition; desktop structure unchanged */
+/* UI-03 / UI-05 / UI-08 responsive iteration: task-first mobile composition; desktop structure unchanged */
 @media(max-width:540px){
  .hero{display:none!important}
  .stats{display:none!important}
@@ -369,7 +369,7 @@ select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 }
 @media(min-width:541px){.mobile-progress,.mobile-filter-row,.mobile-filter-panel{display:none!important}}
 
-/* UI-14 v3: compact A layout, expanded B-style inline metric chips */
+/* UI-03 responsive iteration: compact A layout, expanded B-style inline metric chips */
 @media(max-width:540px){
  .mobile-overview{margin:10px 0 5px}
  .mobile-overview .mobile-progress{width:100%;border:0;background:transparent;padding:6px 1px 9px;display:flex;flex-direction:column;gap:7px;cursor:pointer;color:var(--ink)}
@@ -395,14 +395,14 @@ select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
  .mobile-room-choice[aria-pressed=true]{background:var(--light);border-color:var(--accent);color:var(--accent)}
 }
 
-/* UI-14 v6: swipeable room chip, no submenu or All chip */
+/* UI-07 responsive iteration: swipeable room chip, no submenu or All chip */
 @media(max-width:540px){
  .mobile-room-swipe{display:inline-flex;align-items:center;gap:9px;touch-action:pan-y;user-select:none;-webkit-user-select:none;max-width:100%;min-height:34px}
  .mobile-room-swipe .room-swipe-name{display:inline-block;max-width:145px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
  .mobile-room-swipe .room-swipe-arrow{font-size:17px;line-height:10px;color:var(--muted)}
 }
 
-/* UI-15.2 adaptive compact: tablet 541–1024px; reuse same live KPI and room controls. */
+/* UI-03 / UI-07 responsive tablet: 541–1024px; reuse same live KPI and room controls. */
 @media(min-width:541px) and (max-width:1440px){
  .wrap{max-width:100%;padding:19px 22px 90px}
  .hero,.stats,.progressbox,.extra-tools{display:none!important}
@@ -430,7 +430,7 @@ select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
  .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
 
-/* UI-15.2 audit: one chip design system across phone/tablet; hide legacy controls consistently. */
+/* UI-07 responsive audit: one chip design system across phone/tablet; hide legacy controls consistently. */
 @media(max-width:1440px){
  .mobile-overview{display:block}
  .mobile-metric-chips{gap:7px;margin:6px 0 9px;align-items:center}
@@ -453,7 +453,7 @@ select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
  .mobile-overview .mobile-progress{font:inherit}
 }
 
-/* UI-15.2 iPad landscape/rotation: explicitly styled native controls */
+/* UI-04 / UI-05 responsive landscape: explicitly styled native controls */
 @media(max-width:1440px){
  .mobile-metric-chips button{
   -webkit-appearance:none;appearance:none;
@@ -475,7 +475,7 @@ select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
  .mobile-metric-chips button:disabled{opacity:.55}
 }
 
-/* UI-15.3: phone-first unified responsive layout, all viewports. */
+/* UI-03 / UI-05 / UI-07 responsive: phone-first unified responsive layout, all viewports. */
 .mobile-overview{display:block!important;margin:10px 0 7px!important}
 .mobile-overview .mobile-progress{
  display:flex!important;flex-direction:column;gap:7px;width:100%;
@@ -527,7 +527,7 @@ select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
  .tools .mobile-add{padding:10px 12px}
 }
 
-/* UI-15.4 unified responsive single-line workspace toolbar */
+/* UI-05 responsive: unified responsive single-line workspace toolbar */
 .workspace-toolbar{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:9px;margin:8px 0 13px;min-width:0}
 .workspace-toolbar .tabs{display:flex!important;align-items:center;gap:4px;width:auto!important;min-width:0;margin:0!important;padding:4px;border-radius:13px;background:var(--panel)}
 .workspace-toolbar .tabs .tab{display:grid;place-items:center;flex:0 0 auto;width:39px;height:39px;padding:0!important;border-radius:10px;line-height:1;cursor:pointer}
@@ -548,7 +548,7 @@ select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
  .workspace-toolbar .tools .search{height:42px}
 }
 
-/* UI-15.5 shared add-control geometry and icon */
+/* UI-08 responsive: shared add-control geometry and icon */
 :root{--tabi-add-size:39px;--tabi-add-radius:12px;--tabi-add-icon-size:21px}
 .workspace-toolbar .tools .mobile-add,
 .room-actions .room-add{
@@ -578,7 +578,7 @@ select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .workspace-toolbar .tools .mobile-add:focus-visible,
 .room-actions .room-add:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
-/* UI-15.5a: restore accent treatment only for the search-row add button */
+/* UI-08 responsive accent: restore accent treatment only for the search-row add button */
 .workspace-toolbar .tools .mobile-add{
  background:var(--accent)!important;
  color:#fff!important;
@@ -586,7 +586,7 @@ select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 }
 .workspace-toolbar .tools .mobile-add:hover{background:var(--accent-strong,var(--accent))!important}
 
-/* UI-15.6: stable, content-aware room chip width */
+/* UI-07 responsive: stable, content-aware room chip width */
 .mobile-metric-chips .mobile-room-swipe{
  box-sizing:border-box!important;
  flex:0 1 auto!important;
@@ -600,7 +600,7 @@ select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
  text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
 .mobile-metric-chips .mobile-room-swipe .room-swipe-arrow{flex:0 0 auto}
-/* UI-15.10 two adjacent page surfaces */
+/* UI-04 two adjacent page surfaces */
 .tabi-page-viewport{position:relative;min-width:0}
 .tabi-page-viewport.is-swiping{overflow:hidden;isolation:isolate}
 .tabi-page-viewport.is-swiping #content{position:relative;z-index:1;width:100%}
@@ -753,7 +753,7 @@ document.addEventListener('touchmove',e=>{if(dragging?.active){e.preventDefault(
 document.addEventListener('touchend',()=>{if(dragging?.active)finishDrag()});
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{cleanDrag();tab=b.dataset.tab;render()});
 
-/* UI-15.10 · two-page, finger-tracked iOS-style navigation */
+/* UI-04 · two-page, finger-tracked iOS-style navigation */
 let ui04Swipe=null,ui04Transition=false;
 const ui04ReducedMotion=()=>window.matchMedia?.('(prefers-reduced-motion: reduce)').matches===true;
 const ui04GestureArea=$('content');
@@ -1103,7 +1103,7 @@ $('authSignOut').onclick=async()=>{try{if(session?.access_token)await authReques
 $('cloudConnect').onclick=async()=>{let pass=$('cloudPassword').value;if(pass.length<10)return toast('Пароль шифрования — от 10 символов');if(!session?.access_token)return toast('Сначала войдите в аккаунт');cfg.pass=pass;saveCfg();await sync(true)};
 $('syncBtn').onclick=()=>{if(!session?.access_token||!cfg.pass){toast('Синхронизация не настроена. Подключите аккаунт в настройках.');return}sync(true)};if(session?.access_token){cloudState('Аккаунт подключён · проверяем синхронизацию','busy');if(cfg.pass)setTimeout(()=>sync(false),800)}timer=setInterval(()=>{if(!document.hidden&&session?.access_token&&cfg.pass)sync(false)},20000);
 
-/* UI-14 v2: progressive mobile-only rearrangement; existing controls remain wired. */
+/* UI-03 / UI-05 / UI-08 responsive iteration: progressive mobile-only rearrangement; existing controls remain wired. */
 (function setupCompactMobile(){
  /* One shared adaptive interface for every viewport. */
  const tabs=document.querySelector('.tabs'),stats=document.querySelector('.stats'),roomFilter=$('roomFilter'),extra=document.querySelector('.extra-tools'),progress=document.querySelector('.progressbox');
