@@ -758,20 +758,20 @@ async function ui04FinishSwipe(gesture,deltaX,velocity){
   const eligible=(gesture.from==='objects'&&deltaX<0)||(gesture.from==='board'&&deltaX>0);
   const valid=eligible&&(Math.abs(deltaX)>=Math.min(96,gesture.width*.24)||(Math.abs(deltaX)>=42&&Math.abs(velocity)>.55));
   const fromX=gesture.locked?ui04Clamp(gesture.dragX??deltaX,-gesture.width*.38,gesture.width*.38):0;
-  const fromOpacity=gesture.locked?.96:1;
+  const fromOpacity=gesture.locked?(1-Math.min(Math.abs(fromX)/gesture.width*.1,.05)):1;
   try{
     if(!valid){
       if(gesture.locked)await ui04Animate(el,[{transform:`translate3d(${fromX}px,0,0)`,opacity:fromOpacity},{transform:'translate3d(0,0,0)',opacity:1}],{duration:185,easing:'cubic-bezier(.2,.8,.2,1)'});
       return;
     }
     const dir=deltaX<0?-1:1;
-    if(!ui04ReducedMotion())await ui04Animate(el,[{transform:`translate3d(${fromX}px,0,0)`,opacity:fromOpacity},{transform:`translate3d(${dir*gesture.width*.30}px,0,0)`,opacity:.45}],{duration:125,easing:'ease-out'});
+    if(!ui04ReducedMotion())await ui04Animate(el,[{transform:`translate3d(${fromX}px,0,0)`,opacity:fromOpacity},{transform:`translate3d(${dir*gesture.width*.24}px,0,0)`,opacity:.78}],{duration:gesture.width<=600?205:160,easing:'cubic-bezier(.22,.7,.25,1)'});
     cleanDrag();
     tab=dir<0?'board':'objects';
     ui04ClearVisual();
     render();
     if(!ui04ReducedMotion()){
-      await ui04Animate(el,[{transform:`translate3d(${-dir*Math.min(90,gesture.width*.22)}px,0,0)`,opacity:.6},{transform:'translate3d(0,0,0)',opacity:1}],{duration:245,easing:'cubic-bezier(.16,1,.3,1)'});
+      await ui04Animate(el,[{transform:`translate3d(${-dir*Math.min(gesture.width<=600?48:75,gesture.width*.14)}px,0,0)`,opacity:.86},{transform:'translate3d(0,0,0)',opacity:1}],{duration:gesture.width<=600?300:260,easing:'cubic-bezier(.22,1,.36,1)'});
     }
   }finally{
     ui04ClearVisual();
