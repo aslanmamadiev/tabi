@@ -318,7 +318,308 @@ select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .kanji-theme.kanji-animate .kanji-glyph{animation:kanji-shift .55s cubic-bezier(.2,.7,.25,1)}
 @keyframes kanji-shift{0%{transform:scale(1) rotate(0)}25%{transform:scale(.91) rotate(-4deg)}65%{transform:scale(1.055) rotate(2deg)}100%{transform:scale(1) rotate(0)}}
 @media(prefers-reduced-motion:reduce){.kanji-theme,.kanji-glyph{transition:none!important}.kanji-theme.kanji-animate .kanji-glyph{animation:none}}
-</style></head><body><main class="wrap"><header class="top"><div class="brand"><button type="button" class="mark kanji-theme" id="kanjiThemeBtn" aria-label="Переключить тему на Dusk" title="Переключить тему"><span class="kanji-glyph" aria-hidden="true">旅</span></button><div><b>Tabi <span class="project-label">· <button type="button" id="projectNameBtn" class="project-name-btn" title="Изменить название проекта" aria-label="Изменить название проекта">Мой переезд</button><input id="projectNameInput" class="project-name-input hidden" type="text" maxlength="48" autocomplete="off" aria-label="Название проекта"></span></b><small>Всё на своих местах</small></div></div><div class="top-actions"><button class="iconbtn" id="syncBtn" title="Синхронизировать" aria-label="Синхронизировать"><svg class="action-svg" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8.1 8.1 0 0 0-15.5-2M4 4v5h5"/><path d="M4 13a8.1 8.1 0 0 0 15.5 2M20 20v-5h-5"/></svg></button><button class="iconbtn" id="settingsBtn" title="Настройки и данные" aria-label="Настройки и данные"><svg class="action-svg" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><circle cx="12" cy="12" r="7.3"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(0 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(45 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(90 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(135 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(180 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(225 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(270 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(315 12 12)"/><circle cx="12" cy="12" r="3.15" fill="var(--card)"/></svg></button></div></header><section class="hero"><div><div class="eyebrow">МОЙ ПЕРЕЕЗД · ИНВЕНТАРЬ</div><h1 id="heroTitle" aria-live="polite">Порядок в вещах.</h1><p>Одна система для всех комнат и этапов.</p></div><button class="primary" id="addBtn">＋ Добавить</button></section><section class="stats" aria-label="Интерактивная статистика"><button type="button" class="stat" data-stat-filter="all" aria-pressed="true" title="Показать все объекты и сбросить фильтры"><strong id="totalCount">0</strong><span>Всего объектов</span></button><button type="button" class="stat" data-stat-filter="rooms" aria-pressed="false" title="Показать только комнаты с объектами"><strong id="roomCount">0</strong><span>Комнат</span></button><button type="button" class="stat" data-stat-filter="tagged" aria-pressed="false" title="Показать только объекты с цветной меткой"><strong id="taggedCount">0</strong><span>С цветной меткой</span></button></section><nav class="tabs"><button class="tab active" data-tab="objects">☷ &nbsp; Объекты</button><button class="tab" data-tab="board">▥ &nbsp; Канбан</button></nav><div class="tools"><input class="search" id="search" placeholder="⌕  Поиск по объектам..." type="search"><select class="filter" id="roomFilter" aria-label="Фильтр по комнатам"></select></div><div class="progressbox"><div class="progresshead"><strong>Прогресс переезда</strong><span id="progressText">0 / 0</span></div><div class="progressrail"><div id="progressFill"></div></div><small id="progressHint"></small></div><div class="extra-tools"><label class="toggle"><input id="unfinishedOnly" type="checkbox"> Только незавершённые</label><button class="secondary" id="bulkToggle" type="button">Выбрать несколько</button></div><div id="bulkBar" class="bulkbar hidden"><span id="bulkCount">0 выбрано</span><select id="bulkAction"><option value="">Выберите действие</option><option value="red">Оставить</option><option value="yellow">Не знаю</option><option value="green">Отправить / взять</option><option value="none">Без метки</option><option value="done">✓ Отметить выполненными</option><option value="undone">Снять галочки</option><option value="delete">Удалить выбранные…</option></select><select id="bulkRoom"></select><button id="bulkApply" class="primary" type="button">Применить</button></div><div id="content"></div><footer class="footer"><span id="saveState">● Сохранено на устройстве</span><span>Локально · JSON · облачная синхронизация</span></footer></main>
+
+/* UI-14 mobile-first: dense KPI strip, inline search/add, preserve existing filters. */
+.mobile-add{display:none}
+@media(max-width:540px){
+ .hero{margin-top:20px;gap:8px}
+ .hero h1{font-size:clamp(28px,8vw,36px);margin:0 0 4px;letter-spacing:-1.4px}
+ .hero p{display:none}
+ .hero>#addBtn{display:none}
+ .stats{gap:0;margin:16px 0 14px;padding:6px 3px;background:var(--card);border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow)}
+ .stats .stat{min-width:0;padding:8px 2px;border:0;border-radius:10px;box-shadow:none;text-align:center;background:transparent}
+ .stats .stat+.stat{border-left:1px solid var(--line);border-radius:0}
+ .stats .stat strong{font-size:23px;line-height:1.15;letter-spacing:-.5px}
+ .stats .stat span{font-size:10px;line-height:1.2;display:block;margin-top:4px}
+ .tabs{margin-bottom:12px}
+ .tools{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;margin-bottom:12px}
+ .tools .search{min-width:0;width:100%;box-sizing:border-box}
+ .tools .mobile-add{display:block;padding:10px 12px;box-shadow:none;font-size:13px}
+ .tools .filter{grid-column:1/-1;max-width:none;width:100%;box-sizing:border-box}
+ .progressbox{padding:11px 13px;margin-bottom:12px}
+ .progresshead{margin-bottom:6px}
+ .progressrail{height:6px}
+ .progressbox small{margin-top:7px}
+ .extra-tools{margin-bottom:8px}
+}
+
+/* UI-14 v2: task-first mobile composition; desktop structure unchanged */
+@media(max-width:540px){
+ .hero{display:none!important}
+ .stats{display:none!important}
+ .tabs{margin:12px 0 10px!important;display:flex;align-items:center;justify-content:space-between;width:100%;gap:8px;background:transparent;padding:0}
+ .tabs .tab{padding:10px 9px;font-size:12px;white-space:nowrap}
+ .tabs .tab:first-child{margin-left:0}
+ .tabs .mobile-progress{display:flex;flex-direction:column;align-items:flex-end;justify-content:center;gap:5px;margin-left:auto;min-width:86px;cursor:pointer;color:var(--ink);font-size:11px;font-weight:700;border:0;background:transparent;padding:5px 0}
+ .mobile-progress .mini-rail{width:88px;height:4px;background:var(--line);border-radius:99px;overflow:hidden}
+ .mobile-progress .mini-fill{display:block;height:100%;width:0;background:var(--accent);border-radius:99px}
+ .tools{margin-bottom:7px!important}
+ .tools .filter{display:none}
+ .progressbox{display:none!important}
+ .mobile-filter-row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:0 0 9px}
+ .mobile-filter-toggle{border:0;background:transparent;color:var(--muted);font:inherit;font-size:12px;font-weight:650;padding:8px 2px;cursor:pointer}
+ .mobile-filter-count{font-size:11px;color:var(--muted)}
+ .mobile-filter-panel{display:none;border:1px solid var(--line);background:var(--card);border-radius:13px;padding:12px;margin-bottom:12px}
+ .mobile-filter-panel.is-open{display:flex;flex-direction:column;gap:12px}
+ .mobile-filter-panel .filter{display:block;width:100%;max-width:none}
+ .mobile-filter-panel .stats{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));margin:0!important;box-shadow:none}
+ .mobile-filter-panel .extra-tools{display:flex;margin:0}
+ .mobile-filter-panel .progressbox{display:block!important;margin:0;padding:10px}
+ .room-section{margin-top:14px}
+}
+@media(min-width:541px){.mobile-progress,.mobile-filter-row,.mobile-filter-panel{display:none!important}}
+
+/* UI-14 v3: compact A layout, expanded B-style inline metric chips */
+@media(max-width:540px){
+ .mobile-overview{margin:10px 0 5px}
+ .mobile-overview .mobile-progress{width:100%;border:0;background:transparent;padding:6px 1px 9px;display:flex;flex-direction:column;gap:7px;cursor:pointer;color:var(--ink)}
+ .mobile-overview .mini-head{display:flex;justify-content:space-between;align-items:center;width:100%;font-size:12px}
+ .mobile-overview .mini-label{font-weight:700}
+ .mobile-overview .mini-more{color:var(--muted);font-size:11px}
+ .mobile-overview .mini-rail{display:block;width:100%;height:5px;background:var(--line);border-radius:99px;overflow:hidden}
+ .mobile-overview .mini-fill{display:block;height:100%;width:0;background:var(--accent);border-radius:99px}
+ .mobile-metric-chips{display:none;flex-wrap:wrap;gap:6px;margin:4px 0 8px}
+ .mobile-metric-chips.is-open{display:flex}
+ .mobile-metric-chips button,.mobile-metric-chips .metric-readonly{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:8px 11px;font:inherit;font-size:11px;font-weight:650;cursor:pointer}
+ .mobile-metric-chips button[aria-pressed=true]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-strong)}
+ .tabs{justify-content:flex-start!important;margin:7px 0 10px!important;gap:5px!important;background:var(--panel);padding:4px;width:fit-content!important}
+ .tabs .tab{padding:10px 16px!important}
+ .mobile-filter-panel .stats{display:none!important}
+ .mobile-filter-row{display:none!important}
+ .mobile-filter-panel{margin:5px 0 10px!important}
+ .mobile-filter-panel .filter{display:block!important}
+ .mobile-metric-chips button[aria-pressed=true]{border-color:var(--accent);background:var(--light);color:var(--accent)}
+ .mobile-room-choices{display:none;flex-wrap:wrap;gap:6px;margin:4px 0 10px}
+ .mobile-room-choices.is-open{display:flex}
+ .mobile-room-choice{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:8px 11px;font:inherit;font-size:12px;color:var(--ink);cursor:pointer}
+ .mobile-room-choice[aria-pressed=true]{background:var(--light);border-color:var(--accent);color:var(--accent)}
+}
+
+/* UI-14 v6: swipeable room chip, no submenu or All chip */
+@media(max-width:540px){
+ .mobile-room-swipe{display:inline-flex;align-items:center;gap:9px;touch-action:pan-y;user-select:none;-webkit-user-select:none;max-width:100%;min-height:34px}
+ .mobile-room-swipe .room-swipe-name{display:inline-block;max-width:145px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ .mobile-room-swipe .room-swipe-arrow{font-size:17px;line-height:10px;color:var(--muted)}
+}
+
+/* UI-15.2 adaptive compact: tablet 541–1024px; reuse same live KPI and room controls. */
+@media(min-width:541px) and (max-width:1440px){
+ .wrap{max-width:100%;padding:19px 22px 90px}
+ .hero,.stats,.progressbox,.extra-tools{display:none!important}
+ .mobile-overview{display:block;margin:14px 0 8px}
+ .mobile-overview .mobile-progress{width:100%;display:flex;flex-direction:column;gap:8px;padding:8px 0;border:0;background:transparent;color:var(--ink);cursor:pointer}
+ .mobile-overview .mini-head{display:flex;justify-content:space-between;align-items:center;width:100%;font-size:13px}
+ .mobile-overview .mini-label{font-weight:700}
+ .mobile-overview .mini-more{color:var(--muted);font-size:12px}
+ .mobile-overview .mini-rail{display:block;width:100%;height:5px;background:var(--line);border-radius:99px;overflow:hidden}
+ .mobile-overview .mini-fill{display:block;height:100%;background:var(--accent);border-radius:99px}
+ .mobile-metric-chips{display:none;flex-wrap:wrap;gap:8px;margin:8px 0}
+ .mobile-metric-chips.is-open{display:flex}
+ .mobile-metric-chips button{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:9px 13px;color:var(--ink);font:inherit;font-size:12px;font-weight:650;cursor:pointer}
+ .mobile-metric-chips button[aria-pressed=true]{border-color:var(--accent);background:var(--light);color:var(--accent)}
+ .mobile-room-swipe{display:inline-flex;align-items:center;gap:10px;touch-action:pan-y;user-select:none}
+ .mobile-room-swipe .room-swipe-arrow{font-size:18px;color:var(--muted)}
+ .mobile-room-swipe .room-swipe-name{max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ .tabs{margin:8px 0 12px}
+ .tools{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:9px;margin-bottom:12px}
+ .tools .search{min-width:0;width:100%}
+ .tools .mobile-add{display:block;padding:11px 18px}
+ .tools .filter{display:none}
+ .mobile-filter-panel,.mobile-filter-row,.mobile-room-choices{display:none!important}
+ .room-section{margin:16px 0}
+ .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+
+/* UI-15.2 audit: one chip design system across phone/tablet; hide legacy controls consistently. */
+@media(max-width:1440px){
+ .mobile-overview{display:block}
+ .mobile-metric-chips{gap:7px;margin:6px 0 9px;align-items:center}
+ .mobile-metric-chips button{display:inline-flex;align-items:center;justify-content:center;gap:4px;min-height:36px;max-width:100%;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink);font:inherit;font-size:12px;line-height:1.3;font-weight:650;box-shadow:none;transition:background .16s,border-color .16s}
+ .mobile-metric-chips button[aria-pressed=true]{background:var(--light);border-color:var(--accent);color:var(--accent)}
+ .mobile-metric-chips button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+ .mobile-room-swipe{min-height:36px;gap:8px;touch-action:pan-y;-webkit-user-select:none;user-select:none}
+ .mobile-room-swipe .room-swipe-arrow{font-size:17px;line-height:1;color:var(--muted)}
+ .mobile-room-swipe .room-swipe-name{max-width:min(28vw,180px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ .mobile-filter-panel,.mobile-filter-row,.mobile-room-choices{display:none!important}
+ .tools .filter{display:none!important}
+ .hero,.stats,.progressbox,.extra-tools{display:none!important}
+ .mobile-overview .mini-rail{height:5px}
+ .mobile-overview .mini-fill{width:0}
+}
+@media(min-width:541px) and (max-width:1440px){
+ .tabs{background:var(--panel);padding:4px;border-radius:13px;width:fit-content;margin:8px 0 12px}
+ .tab{padding:10px 16px}
+ .tools .mobile-add{display:block}
+ .mobile-overview .mobile-progress{font:inherit}
+}
+
+/* UI-15.2 iPad landscape/rotation: explicitly styled native controls */
+@media(max-width:1440px){
+ .mobile-metric-chips button{
+  -webkit-appearance:none;appearance:none;
+  -webkit-tap-highlight-color:transparent;
+  background-color:var(--card)!important;
+  color:var(--ink)!important;
+  -webkit-text-fill-color:var(--ink);
+  border-color:var(--line)!important;
+  border-style:solid;
+  border-width:1px;
+  border-radius:999px;
+ }
+ .mobile-metric-chips button[aria-pressed="true"]{
+  background-color:var(--light)!important;
+  color:var(--accent)!important;
+  -webkit-text-fill-color:var(--accent);
+  border-color:var(--accent)!important;
+ }
+ .mobile-metric-chips button:disabled{opacity:.55}
+}
+
+/* UI-15.3: phone-first unified responsive layout, all viewports. */
+.mobile-overview{display:block!important;margin:10px 0 7px!important}
+.mobile-overview .mobile-progress{
+ display:flex!important;flex-direction:column;gap:7px;width:100%;
+ border:0!important;border-radius:0!important;background:transparent!important;
+ padding:6px 1px 9px!important;color:var(--ink)!important;
+ font:inherit;cursor:pointer;-webkit-appearance:none;appearance:none
+}
+.mobile-overview .mini-head{display:flex;justify-content:space-between;align-items:center;width:100%;font-size:12px}
+.mobile-overview .mini-label{font-weight:700}
+.mobile-overview .mini-more{color:var(--muted);font-size:11px}
+.mobile-overview .mini-rail{display:block;width:100%;height:5px;background:var(--line);border-radius:99px;overflow:hidden}
+.mobile-overview .mini-fill{display:block;height:100%;background:var(--accent);border-radius:99px}
+.mobile-metric-chips{display:none;flex-wrap:wrap;align-items:center;gap:7px;margin:6px 0 9px}
+.mobile-metric-chips.is-open{display:flex!important}
+.mobile-metric-chips button{
+ display:inline-flex;align-items:center;justify-content:center;gap:4px;
+ min-height:36px;max-width:100%;padding:8px 12px;
+ -webkit-appearance:none;appearance:none;-webkit-tap-highlight-color:transparent;
+ border:1px solid var(--line)!important;border-radius:999px!important;
+ background:var(--card)!important;color:var(--ink)!important;-webkit-text-fill-color:var(--ink);
+ font:inherit;font-size:12px;font-weight:650;line-height:1.3;box-shadow:none;cursor:pointer
+}
+.mobile-metric-chips button[aria-pressed=true]{
+ background:var(--light)!important;border-color:var(--accent)!important;
+ color:var(--accent)!important;-webkit-text-fill-color:var(--accent)
+}
+.mobile-room-swipe{gap:8px;touch-action:pan-y;user-select:none;-webkit-user-select:none}
+.mobile-room-swipe .room-swipe-arrow{font-size:17px;line-height:1;color:var(--muted)}
+.mobile-room-swipe .room-swipe-name{max-width:min(38vw,200px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hero,.stats,.progressbox,.extra-tools,.mobile-filter-panel,.mobile-filter-row,.mobile-room-choices{display:none!important}
+.tools .filter{display:none!important}
+.tools{display:grid!important;grid-template-columns:minmax(0,1fr) auto;gap:9px;margin-bottom:12px}
+.tools .search{min-width:0;width:100%;box-sizing:border-box}
+.tools .mobile-add{display:block!important;min-height:40px;padding:10px 15px;box-shadow:none}
+.tabs{display:flex;width:fit-content!important;margin:7px 0 10px!important;gap:5px;background:var(--panel);padding:4px}
+.tabs .tab{flex:0 0 auto;padding:10px 16px}
+.room-section{margin-top:15px}
+@media(min-width:541px){
+ .wrap{max-width:1220px;margin:auto;padding:20px 24px 90px}
+ .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(min-width:1025px){
+ .wrap{padding:24px 30px 100px}
+ .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+ .mobile-overview{margin-top:15px!important}
+}
+@media(max-width:540px){
+ .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .tools .mobile-add{padding:10px 12px}
+}
+
+/* UI-15.4 unified responsive single-line workspace toolbar */
+.workspace-toolbar{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;gap:9px;margin:8px 0 13px;min-width:0}
+.workspace-toolbar .tabs{display:flex!important;align-items:center;gap:4px;width:auto!important;min-width:0;margin:0!important;padding:4px;border-radius:13px;background:var(--panel)}
+.workspace-toolbar .tabs .tab{display:grid;place-items:center;flex:0 0 auto;width:39px;height:39px;padding:0!important;border-radius:10px;line-height:1;cursor:pointer}
+.workspace-toolbar .tabs .tab svg{display:block;width:20px;height:20px;pointer-events:none}
+.workspace-toolbar .tools{display:grid!important;grid-template-columns:minmax(0,1fr) 39px;align-items:center;gap:9px;margin:0!important;min-width:0}
+.workspace-toolbar .tools .search{width:100%;min-width:0;height:43px;box-sizing:border-box;margin:0;padding:9px 12px}
+.workspace-toolbar .tools .mobile-add{display:grid!important;place-items:center;width:39px;height:39px;min-width:39px;min-height:39px;padding:0!important;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);box-shadow:none;cursor:pointer;-webkit-appearance:none;appearance:none}
+.workspace-toolbar .tools .mobile-add svg{width:21px;height:21px;pointer-events:none}
+.workspace-toolbar .tools .mobile-add:hover{background:var(--panel)}
+.workspace-toolbar .tools .mobile-add:focus-visible,.workspace-toolbar .tabs .tab:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.workspace-toolbar .tools .filter{display:none!important}
+@media(max-width:540px){
+ .workspace-toolbar{gap:6px}
+ .workspace-toolbar .tabs{gap:2px;padding:3px}
+ .workspace-toolbar .tabs .tab{width:34px;height:36px}
+ .workspace-toolbar .tabs .tab svg{width:19px;height:19px}
+ .workspace-toolbar .tools{grid-template-columns:minmax(0,1fr) 39px;gap:6px}
+ .workspace-toolbar .tools .search{height:42px}
+}
+
+/* UI-15.5 shared add-control geometry and icon */
+:root{--tabi-add-size:39px;--tabi-add-radius:12px;--tabi-add-icon-size:21px}
+.workspace-toolbar .tools .mobile-add,
+.room-actions .room-add{
+ box-sizing:border-box!important;
+ display:grid!important;place-items:center!important;
+ flex:0 0 var(--tabi-add-size)!important;
+ width:var(--tabi-add-size)!important;
+ min-width:var(--tabi-add-size)!important;
+ height:var(--tabi-add-size)!important;
+ min-height:var(--tabi-add-size)!important;
+ padding:0!important;
+ border:1px solid var(--line)!important;
+ border-radius:var(--tabi-add-radius)!important;
+ background:var(--card)!important;
+ color:var(--ink)!important;
+ box-shadow:none!important;
+ -webkit-appearance:none;appearance:none;
+ cursor:pointer
+}
+.workspace-toolbar .tools .mobile-add svg,
+.room-actions .room-add svg{
+ display:block;width:var(--tabi-add-icon-size);height:var(--tabi-add-icon-size);
+ pointer-events:none;flex-shrink:0
+}
+.workspace-toolbar .tools .mobile-add:hover,
+.room-actions .room-add:hover{background:var(--panel)!important}
+.workspace-toolbar .tools .mobile-add:focus-visible,
+.room-actions .room-add:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* UI-15.5a: restore accent treatment only for the search-row add button */
+.workspace-toolbar .tools .mobile-add{
+ background:var(--accent)!important;
+ color:#fff!important;
+ border-color:var(--accent)!important;
+}
+.workspace-toolbar .tools .mobile-add:hover{background:var(--accent-strong,var(--accent))!important}
+
+/* UI-15.6: stable, content-aware room chip width */
+.mobile-metric-chips .mobile-room-swipe{
+ box-sizing:border-box!important;
+ flex:0 1 auto!important;
+ min-width:min(120px,100%)!important;
+ max-width:min(200px,100%)!important;
+ justify-content:space-between!important;
+ overflow:hidden;
+}
+.mobile-metric-chips .mobile-room-swipe .room-swipe-name{
+ display:block;flex:1 1 auto;min-width:0;max-width:none!important;
+ text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.mobile-metric-chips .mobile-room-swipe .room-swipe-arrow{flex:0 0 auto}
+/* UI-15.10 two adjacent page surfaces */
+.tabi-page-viewport{position:relative;min-width:0}
+.tabi-page-viewport.is-swiping{overflow:hidden;isolation:isolate}
+.tabi-page-viewport.is-swiping #content{position:relative;z-index:1;width:100%}
+.tabi-page-neighbor{position:absolute;z-index:2;left:0;top:0;width:100%;min-width:0;pointer-events:none;will-change:transform}
+@media(prefers-reduced-motion:reduce){.tabi-page-neighbor{will-change:auto}}
+/* UI-04.2: spaced pages and a shared stable header row */
+.tabi-page-viewport{overflow-anchor:none}
+.tabi-page-viewport.is-swiping{overflow:hidden;overflow-anchor:none}
+.tabi-page-viewport .drag-help,
+.tabi-page-viewport .board-density-bar{
+ box-sizing:border-box;min-height:42px;margin:0 0 12px;
+}
+.tabi-page-viewport .drag-help{
+ display:flex;align-items:center;line-height:1.35;
+}
+.tabi-page-viewport .board-density-bar{
+ display:flex;align-items:center;justify-content:flex-end;
+}
+</style></head><body><main class="wrap"><header class="top"><div class="brand"><button type="button" class="mark kanji-theme" id="kanjiThemeBtn" aria-label="Переключить тему на Dusk" title="Переключить тему"><span class="kanji-glyph" aria-hidden="true">旅</span></button><div><b>Tabi <span class="project-label">· <button type="button" id="projectNameBtn" class="project-name-btn" title="Изменить название проекта" aria-label="Изменить название проекта">Мой переезд</button><input id="projectNameInput" class="project-name-input hidden" type="text" maxlength="48" autocomplete="off" aria-label="Название проекта"></span></b><small>Всё на своих местах</small></div></div><div class="top-actions"><button class="iconbtn" id="syncBtn" title="Синхронизировать" aria-label="Синхронизировать"><svg class="action-svg" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8.1 8.1 0 0 0-15.5-2M4 4v5h5"/><path d="M4 13a8.1 8.1 0 0 0 15.5 2M20 20v-5h-5"/></svg></button><button class="iconbtn" id="settingsBtn" title="Настройки и данные" aria-label="Настройки и данные"><svg class="action-svg" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><circle cx="12" cy="12" r="7.3"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(0 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(45 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(90 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(135 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(180 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(225 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(270 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(315 12 12)"/><circle cx="12" cy="12" r="3.15" fill="var(--card)"/></svg></button></div></header><section class="hero"><div><h1 id="heroTitle" aria-live="polite">Порядок в вещах.</h1><p>Одна система для всех комнат и этапов.</p></div><button class="primary" id="addBtn">＋ Добавить</button></section><section class="stats" aria-label="Интерактивная статистика"><button type="button" class="stat" data-stat-filter="all" aria-pressed="true" title="Показать все объекты и сбросить фильтры"><strong id="totalCount">0</strong><span>Всего объектов</span></button><button type="button" class="stat" data-stat-filter="rooms" aria-pressed="false" title="Показать только комнаты с объектами"><strong id="roomCount">0</strong><span>Комнат</span></button><button type="button" class="stat" data-stat-filter="tagged" aria-pressed="false" title="Показать только объекты с цветной меткой"><strong id="taggedCount">0</strong><span>С цветной меткой</span></button></section><div class="workspace-toolbar"><nav class="tabs" aria-label="Режим отображения"><button class="tab active" data-tab="objects" aria-label="Объекты" title="Объекты"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4" width="17" height="16" rx="2"/><path d="M8 9h.01M11 9h6M8 15h.01M11 15h6"/></svg></button><button class="tab" data-tab="board" aria-label="Канбан" title="Канбан"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="5" height="16" rx="1.3"/><rect x="10" y="4" width="5" height="11" rx="1.3"/><rect x="17" y="4" width="4" height="14" rx="1.3"/></svg></button></nav><div class="tools"><input class="search" id="search" placeholder="Поиск..." aria-label="Поиск по объектам" type="search"><button class="primary mobile-add" type="button" id="mobileAddBtn" aria-label="Добавить объект" title="Добавить объект"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button><select class="filter" id="roomFilter" aria-label="Фильтр по комнатам"></select></div></div><div class="progressbox"><div class="progresshead"><strong>Прогресс переезда</strong><span id="progressText">0 / 0</span></div><div class="progressrail"><div id="progressFill"></div></div><small id="progressHint"></small></div><div class="extra-tools"><label class="toggle"><input id="unfinishedOnly" type="checkbox"> Только незавершённые</label><button class="secondary" id="bulkToggle" type="button">Выбрать несколько</button></div><div id="bulkBar" class="bulkbar hidden"><span id="bulkCount">0 выбрано</span><select id="bulkAction"><option value="">Выберите действие</option><option value="red">Оставить</option><option value="yellow">Не знаю</option><option value="green">Отправить / взять</option><option value="none">Без метки</option><option value="done">✓ Отметить выполненными</option><option value="undone">Снять галочки</option><option value="delete">Удалить выбранные…</option></select><select id="bulkRoom"></select><button id="bulkApply" class="primary" type="button">Применить</button></div><div id="content"></div><footer class="footer"><span id="saveState">● Сохранено на устройстве</span><span>Локально · JSON · облачная синхронизация</span></footer></main>
 <div class="overlay hidden" id="itemOverlay"><section class="modal" role="dialog" aria-modal="true" aria-label="Объект"><h2 id="itemTitle">Новый объект</h2><p class="desc">Добавьте вещь, назначьте комнату и цветовую метку.</p><label class="field">Название<input id="itemName" placeholder="Например, книги" maxlength="160"></label><label class="field">Комната<select id="itemRoom"></select></label><label class="field">Цветовая метка</label><div class="colors" id="colorPicks"></div><label class="field" style="display:flex;align-items:center;gap:10px"><input type="checkbox" id="itemDone" style="width:20px;height:20px;margin:0"> Готово</label><div class="modal-actions"><button class="secondary danger hidden" id="deleteBtn">Удалить</button><button class="secondary" id="cancelItem">Отмена</button><button class="primary" id="saveItem">Сохранить</button></div></section></div>
 <div class="overlay hidden" id="settingsOverlay"><section class="modal wide" role="dialog" aria-modal="true" aria-label="Настройки"><button class="modal-close" id="closeSettingsTop" aria-label="Закрыть настройки" title="Закрыть"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button><h2>Настройки и данные</h2><p class="desc">Комнаты и названия статусов можно менять. Ваши данные остаются доступны без интернета на этом устройстве.</p><div class="settings-title">Внешний вид</div><div class="settings-row"><select class="filter" id="themeMode"><option value="system">Системная тема</option><option value="light">Komorebi · День</option><option value="dark">Dusk · Вечер</option></select></div><p class="small">Komorebi — дневной свет; Dusk — графит и янтарь. Изменение вступает в силу сразу и запоминается на устройстве.</p><div class="settings-title">Комнаты</div><div id="roomEditor"></div><div class="settings-row"><input id="newRoom" class="search" placeholder="Новая комната"><button id="addRoom" class="secondary">Добавить</button></div><div class="settings-title">Цветовые категории</div><div id="statusEditor"></div><details class="settings-fold" id="backupFold"><summary>Резервное копирование <span class="settings-fold-note">JSON</span></summary><div class="settings-row"><button class="secondary" id="exportBtn">↓ Экспорт JSON</button><button class="secondary" id="importBtn">↑ Импорт JSON</button><button class="secondary" id="restoreBackupBtn" type="button" hidden>↓ Копия до восстановления</button><input type="file" id="importFile" accept="application/json,.json" hidden></div></details><details class="settings-fold" id="syncFold"><summary>Защищённая синхронизация <span class="settings-fold-note">Аккаунт · шифрование</span></summary><p class="small">Создайте аккаунт по email или войдите в существующий. Каждый аккаунт имеет доступ только к своим записям. Для шифрования базы задайте отдельный пароль и введите его на обоих устройствах. Пароль шифрования не восстанавливается через email.</p><label class="field">Email<input id="authEmail" type="email" autocomplete="username" placeholder="you@example.com"></label><label class="field">Пароль аккаунта<input id="authPassword" type="password" autocomplete="current-password" placeholder="Пароль для входа"></label><div class="settings-row"><button class="secondary" id="authSignUp">Регистрация</button><button class="primary" id="authSignIn">Войти</button><button class="secondary" id="authSignOut">Выйти</button></div><label class="field">Пароль шифрования данных<input id="cloudPassword" type="password" placeholder="Отдельный пароль от 10 символов" autocomplete="off"></label><div class="settings-row"><button class="primary" id="cloudConnect">Сохранить пароль и синхронизировать</button></div><div id="cloudMsg" class="hint">Войдите в аккаунт. Локальные данные сохранены на устройстве.</div></details><div class="modal-actions"><button class="secondary" id="closeSettings">Готово</button></div></section></div><div class="overlay restore-overlay hidden" id="restoreOverlay"><section class="modal restore-dialog" role="alertdialog" aria-modal="true" aria-labelledby="restoreTitle" aria-describedby="restoreDescription"><h2 id="restoreTitle">Заменить данные?</h2><p class="desc" id="restoreDescription"></p><div class="modal-actions"><button type="button" class="secondary" id="restoreCancel">Отмена</button><button type="button" class="restore-confirm" id="restoreConfirm">Заменить</button></div></section></div><div id="toast" class="toast hidden"></div>
 <script>
@@ -390,13 +691,15 @@ function applyTheme(){let m=cfg.theme==='system'?(window.matchMedia&&window.matc
 const kanjiThemeBtn=$('kanjiThemeBtn');
 function updateKanjiThemeLabel(){if(!kanjiThemeBtn)return;const dark=document.documentElement.dataset.theme==='dark';kanjiThemeBtn.setAttribute('aria-label','Переключить тему на '+(dark?'Komorebi':'Dusk'));kanjiThemeBtn.title='Тема: '+(dark?'Dusk':'Komorebi')+' · переключить';}
 if(kanjiThemeBtn){kanjiThemeBtn.addEventListener('click',()=>{const dark=document.documentElement.dataset.theme==='dark';cfg.theme=dark?'light':'dark';saveCfg();applyTheme();kanjiThemeBtn.classList.remove('kanji-animate');void kanjiThemeBtn.offsetWidth;kanjiThemeBtn.classList.add('kanji-animate');});kanjiThemeBtn.addEventListener('animationend',()=>kanjiThemeBtn.classList.remove('kanji-animate'));}
+$('mobileAddBtn').addEventListener('click',()=> $('addBtn').click());
 function requiresDecision(i){return ['yellow','none'].includes(i.status||'none')}
 function persist(){localStorage.setItem(KEY,JSON.stringify(state));$('saveState').textContent='● Сохранено на устройстве';render();if(session?.access_token&&cfg.pass){clearTimeout(delay);delay=setTimeout(()=>sync(false),1800)}}
 function toast(msg){$('toast').textContent=msg;$('toast').classList.remove('hidden');clearTimeout(toast.t);toast.t=setTimeout(()=>$('toast').classList.add('hidden'),2700)}
 function escape(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function checkDone(i){return `<input type="checkbox" class="checkdone" data-done-id="${escape(i.id)}" ${i.done?'checked':''} ${!['red','green'].includes(i.status)?'disabled':''} aria-label="${i.done?'Снять отметку готово: ':'Отметить готовым: '}${escape(i.name)}" title="${i.done?'Снять отметку':'Готово'}">`}
 function dotChoices(i){return `<div class="color-dots" aria-label="Цветовые метки">${statuses.map(st=>`<button type="button" class="quick-dot ${((i.status||'none')===st.id)?'active':''}" data-set-color="${st.id}" data-id="${escape(i.id)}" title="${escape(state.labels[st.id])}" aria-label="${escape(state.labels[st.id])}" aria-pressed="${(i.status||'none')===st.id}"><span style="background:${st.color}"></span></button>`).join('')}</div>`}
-function filtered(){let q=$('search').value.toLocaleLowerCase('ru').trim(),r=$('roomFilter').value;return state.items.filter(i=>!i.deleted&&(!unfinishedOnly||!i.done)&&(!decisionOnly||requiresDecision(i))&&(statFilter!=='tagged'||i.status!=='none')&&(!r||i.room===r)&&(!q||i.name.toLocaleLowerCase('ru').includes(q))).sort((a,b)=>Number(a.done)-Number(b.done)||(Number(a.order??a.updatedAt)||0)-(Number(b.order??b.updatedAt)||0))}
+let doneOnly=false;
+function filtered(){let q=$('search').value.toLocaleLowerCase('ru').trim(),r=$('roomFilter').value;return state.items.filter(i=>!i.deleted&&(!doneOnly||i.done)&&(!unfinishedOnly||!i.done)&&(!decisionOnly||requiresDecision(i))&&(statFilter!=='tagged'||i.status!=='none')&&(!r||i.room===r)&&(!q||i.name.toLocaleLowerCase('ru').includes(q))).sort((a,b)=>Number(a.done)-Number(b.done)||(Number(a.order??a.updatedAt)||0)-(Number(b.order??b.updatedAt)||0))}
 /* UI-02: determine the current stage solely from existing inventory data. */
 function updateHeroTitle(items,needsDecision,finished){
   let title;
@@ -407,7 +710,7 @@ function updateHeroTitle(items,needsDecision,finished){
   else title='План обретает форму.';
   $('heroTitle').textContent=title;
 }
-function render(){let live=state.items.filter(i=>!i.deleted),needsDecision=live.filter(requiresDecision).length;$('totalCount').textContent=live.length;$('roomCount').textContent=new Set(live.map(i=>i.room)).size;$('taggedCount').textContent=live.filter(i=>i.status!=='none').length;let finished=live.filter(i=>i.done).length;updateHeroTitle(live,needsDecision,finished);$('progressText').textContent=finished+' / '+live.length;$('progressFill').style.width=(live.length?100*finished/live.length:0)+'%';$('progressHint').innerHTML=`<span>${live.length?Math.round(100*finished/live.length):0}% завершено</span><span>·</span><button type="button" class="progress-link ${decisionOnly?'active':''}" data-filter-decision="toggle">${needsDecision} требуют решения</button>`;$('bulkCount').textContent=selected.size+' выбрано';$('bulkBar').classList.toggle('hidden',!bulkMode);$('bulkToggle').textContent=bulkMode?'Отменить выбор':'Выбрать несколько';$('bulkRoom').innerHTML='<option value="">Переместить в комнату…</option>'+state.rooms.map(r=>`<option value="${escape(r)}">${escape(r)}</option>`).join('');let old=$('roomFilter').value;let rooms=[...new Set([...state.rooms,...live.map(i=>i.room)])];$('roomFilter').innerHTML='<option value="">Все комнаты</option>'+rooms.map(r=>`<option value="${escape(r)}">${escape(r)}</option>`).join('');$('roomFilter').value=rooms.includes(old)?old:'';document.querySelectorAll('[data-tab]').forEach(e=>e.classList.toggle('active',e.dataset.tab===tab));let items=filtered();document.querySelectorAll('[data-stat-filter]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.statFilter===statFilter)));let allShown=!$('roomFilter').value&&!$('search').value.trim()&&!decisionOnly&&statFilter!=='rooms'&&statFilter!=='tagged';if(tab==='objects'){let html='<p class="drag-help">Нажмите цветную точку для смены метки · удерживайте карточку для перемещения</p>';for(const room of rooms){let subset=items.filter(i=>i.room===room);if(!subset.length&&!allShown&&draftRoom!==room)continue;let composer=draftRoom===room?`<article class="item composer tone-none"><div class="composer-head"><input class="composer-input" id="draftName" maxlength="160" placeholder="Новый предмет"></div><div class="composer-actions"><button class="secondary mini" type="button" data-cancel-draft>Отмена</button><button class="primary mini" type="button" data-save-draft="${escape(room)}">Добавить</button></div></article>`:'';html+=`<section class="room-section ${collapsedRooms.has(room)?'is-collapsed':''}" data-room-drop="${escape(room)}"><div class="room-title"><div class="left"><button type="button" class="room-collapse" data-collapse-room="${escape(room)}" aria-expanded="${!collapsedRooms.has(room)}" aria-label="${collapsedRooms.has(room)?'Развернуть':'Свернуть'} комнату ${escape(room)}">${roomChevron}</button><h2>${escape(room)}</h2><span class="count">${subset.length}</span></div><div class="room-actions"><button type="button" class="room-add" data-add-room-item="${escape(room)}" aria-label="Добавить предмет в комнату ${escape(room)}" title="Добавить предмет">＋</button></div></div>${collapsedRooms.has(room)?'':'<div class="grid">'}${collapsedRooms.has(room)?'':subset.map(i=>`<article class="item ${i.done?'completed':''} tone-${statuses.some(s=>s.id===i.status)?i.status:'none'}" data-card-id="${escape(i.id)}"><div class="itemline">${bulkMode?`<input type="checkbox" class="bulkcheck" data-select-id="${escape(i.id)}" ${selected.has(i.id)?'checked':''} aria-label="Выбрать объект">`:checkDone(i)}<span class="itemname" data-inline-name="${escape(i.id)}" role="button" tabindex="0" aria-label="Изменить название: ${escape(i.name)}" title="Нажмите для изменения названия">${escape(i.name)}</span><button class="tiny" data-edit="${escape(i.id)}" aria-label="Редактировать">⋯</button></div>${dotChoices(i)}</article>`).join('')}${composer}${collapsedRooms.has(room)?'':'</div>'}</section>`}$('content').innerHTML=html+(items.length||draftRoom?'' : !allShown?'<div class="empty">Ничего не найдено. Измените фильтры.</div>':'<div class="empty">Здесь пока пусто. Добавьте первый предмет.</div>')}else{$('content').innerHTML=`<div class="board-density-bar"><button type="button" class="board-density-toggle" data-board-density aria-pressed="${compactBoard}" aria-label="Компактный режим Канбана">${compactBoard?'▤ Обычный вид':'▥ Компактный вид'}</button></div><p class="drag-help">Удерживайте карточку и перетащите в нужную колонку</p><div class="board ${compactBoard?'is-compact':''}">${statuses.map(st=>{let group=items.filter(i=>(i.status||'none')===st.id);return `<section class="column" data-status-drop="${st.id}"><div class="colhead"><strong><span class="dot" style="background:${st.color}"></span>${escape(state.labels[st.id])}</strong><span class="count">${group.length}</span></div>${group.map(i=>`<article class="kanitem ${i.done?'completed':''}" data-card-id="${escape(i.id)}"><div class="kan-top">${bulkMode?`<input type="checkbox" class="bulkcheck" data-select-id="${escape(i.id)}" ${selected.has(i.id)?'checked':''} aria-label="Выбрать объект">`:checkDone(i)}<strong class="itemname" data-inline-name="${escape(i.id)}" role="button" tabindex="0" aria-label="Изменить название: ${escape(i.name)}" title="Нажмите для изменения названия">${escape(i.name)}</strong></div><small>${escape(i.room)}</small></article>`).join('')||'<div class="muted" style="padding:8px">Перетащите сюда</div>'}</section>`}).join('')}</div>`}if(draftRoom&&tab==='objects')setTimeout(()=>{$('draftName')?.focus()},0)}
+function render(){let live=state.items.filter(i=>!i.deleted),needsDecision=live.filter(requiresDecision).length;$('totalCount').textContent=live.length;$('roomCount').textContent=new Set(live.map(i=>i.room)).size;$('taggedCount').textContent=live.filter(i=>i.status!=='none').length;let finished=live.filter(i=>i.done).length;updateHeroTitle(live,needsDecision,finished);$('progressText').textContent=finished+' / '+live.length;$('progressFill').style.width=(live.length?100*finished/live.length:0)+'%';$('progressHint').innerHTML=`<span>${live.length?Math.round(100*finished/live.length):0}% завершено</span><span>·</span><button type="button" class="progress-link ${decisionOnly?'active':''}" data-filter-decision="toggle">${needsDecision} требуют решения</button>`;$('bulkCount').textContent=selected.size+' выбрано';$('bulkBar').classList.toggle('hidden',!bulkMode);$('bulkToggle').textContent=bulkMode?'Отменить выбор':'Выбрать несколько';$('bulkRoom').innerHTML='<option value="">Переместить в комнату…</option>'+state.rooms.map(r=>`<option value="${escape(r)}">${escape(r)}</option>`).join('');let old=$('roomFilter').value;let rooms=[...new Set([...state.rooms,...live.map(i=>i.room)])];$('roomFilter').innerHTML='<option value="">Все комнаты</option>'+rooms.map(r=>`<option value="${escape(r)}">${escape(r)}</option>`).join('');$('roomFilter').value=rooms.includes(old)?old:'';document.querySelectorAll('[data-tab]').forEach(e=>e.classList.toggle('active',e.dataset.tab===tab));let items=filtered();document.querySelectorAll('[data-stat-filter]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.statFilter===statFilter)));let allShown=!$('roomFilter').value&&!$('search').value.trim()&&!decisionOnly&&statFilter!=='rooms'&&statFilter!=='tagged';if(tab==='objects'){let html='<p class="drag-help">Нажмите цветную точку для смены метки · удерживайте карточку для перемещения</p>';for(const room of rooms){let subset=items.filter(i=>i.room===room);if(!subset.length&&!allShown&&draftRoom!==room)continue;let composer=draftRoom===room?`<article class="item composer tone-none"><div class="composer-head"><input class="composer-input" id="draftName" maxlength="160" placeholder="Новый предмет"></div><div class="composer-actions"><button class="secondary mini" type="button" data-cancel-draft>Отмена</button><button class="primary mini" type="button" data-save-draft="${escape(room)}">Добавить</button></div></article>`:'';html+=`<section class="room-section ${collapsedRooms.has(room)?'is-collapsed':''}" data-room-drop="${escape(room)}"><div class="room-title"><div class="left"><button type="button" class="room-collapse" data-collapse-room="${escape(room)}" aria-expanded="${!collapsedRooms.has(room)}" aria-label="${collapsedRooms.has(room)?'Развернуть':'Свернуть'} комнату ${escape(room)}">${roomChevron}</button><h2>${escape(room)}</h2><span class="count">${subset.length}</span></div><div class="room-actions"><button type="button" class="room-add" data-add-room-item="${escape(room)}" aria-label="Добавить предмет в комнату ${escape(room)}" title="Добавить предмет"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button></div></div>${collapsedRooms.has(room)?'':'<div class="grid">'}${collapsedRooms.has(room)?'':subset.map(i=>`<article class="item ${i.done?'completed':''} tone-${statuses.some(s=>s.id===i.status)?i.status:'none'}" data-card-id="${escape(i.id)}"><div class="itemline">${bulkMode?`<input type="checkbox" class="bulkcheck" data-select-id="${escape(i.id)}" ${selected.has(i.id)?'checked':''} aria-label="Выбрать объект">`:checkDone(i)}<span class="itemname" data-inline-name="${escape(i.id)}" role="button" tabindex="0" aria-label="Изменить название: ${escape(i.name)}" title="Нажмите для изменения названия">${escape(i.name)}</span><button class="tiny" data-edit="${escape(i.id)}" aria-label="Редактировать">⋯</button></div>${dotChoices(i)}</article>`).join('')}${composer}${collapsedRooms.has(room)?'':'</div>'}</section>`}$('content').innerHTML=html+(items.length||draftRoom?'' : !allShown?'<div class="empty">Ничего не найдено. Измените фильтры.</div>':'<div class="empty">Здесь пока пусто. Добавьте первый предмет.</div>')}else{$('content').innerHTML=`<div class="board-density-bar"><button type="button" class="board-density-toggle" data-board-density aria-pressed="${compactBoard}" aria-label="Компактный режим Канбана">${compactBoard?'▤ Обычный вид':'▥ Компактный вид'}</button></div><p class="drag-help">Удерживайте карточку и перетащите в нужную колонку</p><div class="board ${compactBoard?'is-compact':''}">${statuses.map(st=>{let group=items.filter(i=>(i.status||'none')===st.id);return `<section class="column" data-status-drop="${st.id}"><div class="colhead"><strong><span class="dot" style="background:${st.color}"></span>${escape(state.labels[st.id])}</strong><span class="count">${group.length}</span></div>${group.map(i=>`<article class="kanitem ${i.done?'completed':''}" data-card-id="${escape(i.id)}"><div class="kan-top">${bulkMode?`<input type="checkbox" class="bulkcheck" data-select-id="${escape(i.id)}" ${selected.has(i.id)?'checked':''} aria-label="Выбрать объект">`:checkDone(i)}<strong class="itemname" data-inline-name="${escape(i.id)}" role="button" tabindex="0" aria-label="Изменить название: ${escape(i.name)}" title="Нажмите для изменения названия">${escape(i.name)}</strong></div><small>${escape(i.room)}</small></article>`).join('')||'<div class="muted" style="padding:8px">Перетащите сюда</div>'}</section>`}).join('')}</div>`}if(draftRoom&&tab==='objects')setTimeout(()=>{$('draftName')?.focus()},0)}
 function closeItem(){$('itemOverlay').classList.add('hidden')}
 function openItem(id){editId=id||null;let i=id?state.items.find(x=>x.id===id):null;chosen=i?.status||'none';$('itemTitle').textContent=i?'Редактировать объект':'Новый объект';$('itemName').value=i?.name||'';$('itemDone').checked=!!i?.done;syncModalDone();let rooms=[...new Set([...state.rooms,...state.items.filter(x=>!x.deleted).map(x=>x.room)])];$('itemRoom').innerHTML=rooms.map(r=>`<option value="${escape(r)}">${escape(r)}</option>`).join('');$('itemRoom').value=i?.room||rooms[0];$('deleteBtn').classList.toggle('hidden',!i);drawColors();$('itemOverlay').classList.remove('hidden');$('itemName').focus()}
 function syncModalDone(){let allowed=['red','green'].includes(chosen);$('itemDone').disabled=!allowed;if(!allowed)$('itemDone').checked=false;$('itemDone').parentElement.title=allowed?'Отметить выполненное действие':'Сначала выберите «Оставить» или «Отправить / взять»'}
@@ -450,57 +753,96 @@ document.addEventListener('touchmove',e=>{if(dragging?.active){e.preventDefault(
 document.addEventListener('touchend',()=>{if(dragging?.active)finishDrag()});
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{cleanDrag();tab=b.dataset.tab;render()});
 
-/* UI-04 · interactive page swipe: finger-tracked, cancellable, reduced-motion aware.
-   No persistence, data calculation, or Kanban scroll changes. */
+/* UI-15.10 · two-page, finger-tracked iOS-style navigation */
 let ui04Swipe=null,ui04Transition=false;
 const ui04ReducedMotion=()=>window.matchMedia?.('(prefers-reduced-motion: reduce)').matches===true;
 const ui04GestureArea=$('content');
-const ui04Clamp=(value,min,max)=>Math.max(min,Math.min(max,value));
+const ui04PageGap=48; // 24px breathing room from each adjacent view
+const ui04Viewport=document.createElement('div');
+ui04Viewport.className='tabi-page-viewport';
+ui04GestureArea.parentNode.insertBefore(ui04Viewport,ui04GestureArea);
+ui04Viewport.appendChild(ui04GestureArea);
+let ui04Neighbor=null;
 function ui04ClearVisual(){
   ui04GestureArea.style.transform='';
-  ui04GestureArea.style.opacity='';
   ui04GestureArea.style.willChange='';
   ui04GestureArea.style.transition='';
+  if(ui04Neighbor){ui04Neighbor.remove();ui04Neighbor=null}
+  ui04Viewport.classList.remove('is-swiping');
 }
-function ui04Animate(el,frames,options){
-  if(ui04ReducedMotion()||!el.animate)return Promise.resolve();
-  const animation=el.animate(frames,options);
-  return animation.finished.catch(()=>{}).then(()=>{animation.cancel()});
+function ui04PrepareNeighbor(g){
+  if(ui04Neighbor)return;
+  const original=tab;
+  const savedNodes=Array.from(ui04GestureArea.childNodes);
+  const savedDraft=draftRoom;
+  const scrollTop=window.scrollY;
+  tab=original==='objects'?'board':'objects';
+  render();
+  const neighbor=document.createElement('div');
+  neighbor.className='tabi-page-neighbor';
+  while(ui04GestureArea.firstChild)neighbor.appendChild(ui04GestureArea.firstChild);
+  for(const node of savedNodes)ui04GestureArea.appendChild(node);
+  tab=original;draftRoom=savedDraft;
+  document.querySelectorAll('[data-tab]').forEach(e=>e.classList.toggle('active',e.dataset.tab===original));
+  ui04Viewport.appendChild(neighbor);
+  ui04Neighbor=neighbor;
+  ui04Viewport.classList.add('is-swiping');
+  // Rendering the adjacent view must not shift the document's scroll position.
+  if(Math.abs(window.scrollY-scrollTop)>1)window.scrollTo({top:scrollTop,behavior:'instant'});
 }
-async function ui04FinishSwipe(gesture,deltaX,velocity){
+function ui04Position(g,x){
+  const dir=g.from==='objects'?-1:1;
+  const width=g.width;
+  const clamped=Math.max(-width,Math.min(width,x));
+  ui04GestureArea.style.transform=`translate3d(${clamped}px,0,0)`;
+  if(ui04Neighbor)ui04Neighbor.style.transform=`translate3d(${clamped-dir*(width+ui04PageGap)}px,0,0)`;
+}
+function ui04AnimatePosition(g,from,to,duration){
+  if(ui04ReducedMotion()||duration<=0){ui04Position(g,to);return Promise.resolve()}
+  const dir=g.from==='objects'?-1:1;
+  const nodes=[ui04GestureArea,ui04Neighbor].filter(Boolean);
+  const animations=nodes.map((el,index)=>{
+    const offset=index===0?0:-dir*(g.width+ui04PageGap);
+    const anim=el.animate([
+      {transform:`translate3d(${from+offset}px,0,0)`},
+      {transform:`translate3d(${to+offset}px,0,0)`}
+    ],{duration,easing:'cubic-bezier(.22,.78,.2,1)',fill:'forwards'});
+    return anim.finished.then(()=>{
+      // Keep the completed transform while cancelling the temporary animation.
+      el.style.transform=`translate3d(${to+offset}px,0,0)`;
+      anim.cancel();
+    }).catch(()=>anim.cancel());
+  });
+  return Promise.all(animations);
+}
+async function ui04FinishSwipe(g,dx,velocity){
   if(ui04Transition)return;
   ui04Transition=true;
-  const el=ui04GestureArea;
-  const eligible=(gesture.from==='objects'&&deltaX<0)||(gesture.from==='board'&&deltaX>0);
-  const valid=eligible&&(Math.abs(deltaX)>=Math.min(96,gesture.width*.24)||(Math.abs(deltaX)>=42&&Math.abs(velocity)>.55));
-  const fromX=gesture.locked?ui04Clamp(gesture.dragX??deltaX,-gesture.width*.38,gesture.width*.38):0;
-  const fromOpacity=gesture.locked?.96:1;
+  const dir=g.from==='objects'?-1:1;
+  const eligible=dx*dir>0;
+  const distance=Math.abs(dx),speed=Math.abs(velocity);
+  const valid=g.locked&&eligible&&(distance>=g.width*.42||(distance>=22&&speed>.48));
+  const from=g.locked?Math.max(-g.width,Math.min(g.width,g.dragX??dx)):0;
+  const target=valid?dir*g.width:0;
+  const remaining=Math.abs(target-from);
+  const duration=ui04ReducedMotion()?0:Math.max(85,Math.min(280,remaining/Math.max(.8,speed*1.15)));
   try{
-    if(!valid){
-      if(gesture.locked)await ui04Animate(el,[{transform:`translate3d(${fromX}px,0,0)`,opacity:fromOpacity},{transform:'translate3d(0,0,0)',opacity:1}],{duration:185,easing:'cubic-bezier(.2,.8,.2,1)'});
-      return;
+    if(g.locked)await ui04AnimatePosition(g,from,target,duration);
+    if(valid){
+      tab=g.from==='objects'?'board':'objects';
+      cleanDrag();
+      ui04ClearVisual();
+      render();
     }
-    const dir=deltaX<0?-1:1;
-    if(!ui04ReducedMotion())await ui04Animate(el,[{transform:`translate3d(${fromX}px,0,0)`,opacity:fromOpacity},{transform:`translate3d(${dir*gesture.width*.30}px,0,0)`,opacity:.45}],{duration:125,easing:'ease-out'});
-    cleanDrag();
-    tab=dir<0?'board':'objects';
-    ui04ClearVisual();
-    render();
-    if(!ui04ReducedMotion()){
-      await ui04Animate(el,[{transform:`translate3d(${-dir*Math.min(90,gesture.width*.22)}px,0,0)`,opacity:.6},{transform:'translate3d(0,0,0)',opacity:1}],{duration:245,easing:'cubic-bezier(.16,1,.3,1)'});
-    }
-  }finally{
-    ui04ClearVisual();
-    ui04Transition=false;
-  }
+  }finally{ui04ClearVisual();ui04Transition=false}
 }
 ui04GestureArea.addEventListener('touchstart',e=>{
   ui04Swipe=null;
   if(ui04Transition||e.touches.length!==1||dragging?.active||e.target.closest('button,input,select,textarea,a,[contenteditable="true"]'))return;
   const board=e.target.closest('.board');
   if(board&&(tab!=='board'||board.scrollLeft>2))return;
-  const t=e.touches[0];
-  ui04Swipe={id:t.identifier,x:t.clientX,y:t.clientY,lastX:t.clientX,lastTime:performance.now(),started:performance.now(),width:Math.max(1,ui04GestureArea.clientWidth),from:tab,board,locked:false,vertical:false};
+  const t=e.touches[0],now=performance.now();
+  ui04Swipe={id:t.identifier,x:t.clientX,y:t.clientY,lastX:t.clientX,lastTime:now,started:now,width:Math.max(1,ui04Viewport.clientWidth),from:tab,board,locked:false,vertical:false};
 },{passive:true});
 ui04GestureArea.addEventListener('touchmove',e=>{
   const g=ui04Swipe;
@@ -513,15 +855,16 @@ ui04GestureArea.addEventListener('touchmove',e=>{
     if(Math.abs(dx)<12||Math.abs(dx)<Math.abs(dy)*1.4)return;
     if((g.from==='objects'&&dx>=0)||(g.from==='board'&&dx<=0)){ui04Swipe=null;return}
     if(g.board&&(dx<=0||g.board.scrollLeft>2)){ui04Swipe=null;return}
-    g.locked=true;ui04GestureArea.style.willChange='transform,opacity';
+    g.locked=true;
+    ui04PrepareNeighbor(g);
+    ui04GestureArea.style.willChange='transform';
+    ui04Neighbor.style.willChange='transform';
   }
   if(e.cancelable)e.preventDefault();
-  g.dragX=dx;g.lastX=t.clientX;g.lastTime=performance.now();
-  if(!ui04ReducedMotion()){
-    const x=ui04Clamp(dx,-g.width*.38,g.width*.38);
-    ui04GestureArea.style.transform=`translate3d(${x}px,0,0)`;
-    ui04GestureArea.style.opacity=String(1-Math.min(Math.abs(x)/g.width*.1,.05));
-  }
+  const now=performance.now(),dt=now-g.lastTime;
+  if(dt>0&&dt<110)g.flickVelocity=(t.clientX-g.lastX)/dt;
+  g.dragX=dx;g.lastX=t.clientX;g.lastTime=now;
+  ui04Position(g,dx);
 },{passive:false});
 ui04GestureArea.addEventListener('touchend',e=>{
   const g=ui04Swipe;ui04Swipe=null;
@@ -530,8 +873,8 @@ ui04GestureArea.addEventListener('touchend',e=>{
   if(!t){ui04ClearVisual();return}
   const dx=t.clientX-g.x,dy=t.clientY-g.y;
   const duration=Math.max(1,performance.now()-g.started);
-  // Average speed is used to accept a deliberate short flick; vertical scroll never switches.
-  const speed=dx/duration;
+  const recent=performance.now()-g.lastTime;
+  const speed=recent<95&&Number.isFinite(g.flickVelocity)?g.flickVelocity:dx/duration;
   if(g.vertical||Math.abs(dx)<Math.abs(dy)*1.4){ui04FinishSwipe(g,0,0);return}
   ui04FinishSwipe(g,dx,speed);
 },{passive:true});
@@ -564,7 +907,7 @@ document.querySelector('.stats').addEventListener('click',event=>{
   if(!button)return;
   const mode=button.dataset.statFilter;
   if(mode==='all'){
-    statFilter='all';decisionOnly=false;unfinishedOnly=false;
+    statFilter='all';decisionOnly=false;unfinishedOnly=false;doneOnly=false;
     $('unfinishedOnly').checked=false;$('search').value='';$('roomFilter').value='';
     tab='objects';
   }else{
@@ -759,6 +1102,63 @@ $('authSignIn').onclick=async()=>{let email=$('authEmail').value.trim(),password
 $('authSignOut').onclick=async()=>{try{if(session?.access_token)await authRequest('logout','POST')}catch{}setSession(null);cloudState('Выход выполнен. Данные на устройстве остаются.','');toast('Вы вышли из аккаунта')};
 $('cloudConnect').onclick=async()=>{let pass=$('cloudPassword').value;if(pass.length<10)return toast('Пароль шифрования — от 10 символов');if(!session?.access_token)return toast('Сначала войдите в аккаунт');cfg.pass=pass;saveCfg();await sync(true)};
 $('syncBtn').onclick=()=>{if(!session?.access_token||!cfg.pass){toast('Синхронизация не настроена. Подключите аккаунт в настройках.');return}sync(true)};if(session?.access_token){cloudState('Аккаунт подключён · проверяем синхронизацию','busy');if(cfg.pass)setTimeout(()=>sync(false),800)}timer=setInterval(()=>{if(!document.hidden&&session?.access_token&&cfg.pass)sync(false)},20000);
+
+/* UI-14 v2: progressive mobile-only rearrangement; existing controls remain wired. */
+(function setupCompactMobile(){
+ /* One shared adaptive interface for every viewport. */
+ const tabs=document.querySelector('.tabs'),stats=document.querySelector('.stats'),roomFilter=$('roomFilter'),extra=document.querySelector('.extra-tools'),progress=document.querySelector('.progressbox');
+ if(!tabs||!stats||!roomFilter||!extra||!progress)return;
+ const overview=document.createElement('section');overview.className='mobile-overview';overview.setAttribute('aria-label','Прогресс переезда');
+ const mini=document.createElement('button');mini.type='button';mini.className='mobile-progress';mini.setAttribute('aria-expanded','false');mini.setAttribute('aria-label','Раскрыть показатели переезда');
+ mini.innerHTML='<span class="mini-head"><span class="mini-label">0 / 0 · 0%</span><span class="mini-more">Показатели ▾</span></span><span class="mini-rail"><span class="mini-fill"></span></span>';
+ overview.appendChild(mini);
+ const chips=document.createElement('div');chips.className='mobile-metric-chips';chips.id='mobileMetricChips';
+ chips.innerHTML='<button type="button" data-metric-action="done">Готово · <span data-metric="done">0</span></button><button type="button" data-metric-action="decision">Решить · <span data-metric="decision">0</span></button><button type="button" class="mobile-room-swipe" data-metric-action="rooms" aria-label="Комнаты. Свайп влево или вправо переключает комнату" title="Свайп для смены комнаты"><span class="room-swipe-arrow" aria-hidden="true">‹</span><span class="room-swipe-name">Все комнаты</span><span class="room-swipe-arrow" aria-hidden="true">›</span></button>';
+ overview.appendChild(chips);
+ (tabs.closest('.workspace-toolbar')||tabs).insertAdjacentElement('beforebegin',overview);
+ const panel=document.createElement('div');panel.className='mobile-filter-panel';panel.id='mobileFilterPanel';
+ chips.insertAdjacentElement('afterend',panel);panel.append(roomFilter,extra,stats,progress);
+ const roomChip=chips.querySelector('[data-metric-action="rooms"]');
+ const roomMeasure=document.createElement('span');
+ roomMeasure.setAttribute('aria-hidden','true');
+ roomMeasure.style.cssText='position:absolute;visibility:hidden;white-space:nowrap;pointer-events:none;font:inherit;font-size:12px;font-weight:650';
+ roomChip.appendChild(roomMeasure);
+ let measuredRoomOptions='';
+ function fitRoomChip(){
+  const names=[...roomFilter.options].map(o=>o.textContent||'Все комнаты');
+  const signature=names.join('\\u0000');
+  if(signature===measuredRoomOptions)return;
+  measuredRoomOptions=signature;
+  const labelEl=roomChip.querySelector('.room-swipe-name');
+  const font=getComputedStyle(labelEl);
+  roomMeasure.style.font=font.font;
+  let longest=0;
+  for(const name of names){roomMeasure.textContent=name;longest=Math.max(longest,roomMeasure.getBoundingClientRect().width)}
+  roomMeasure.textContent='';
+  roomChip.style.width=Math.max(120,Math.min(200,Math.ceil(longest+72)))+'px';
+ }
+
+ function cycleRoom(step){const options=[...roomFilter.options].map(o=>o.value);if(!options.length)return;let index=options.indexOf(roomFilter.value);if(index<0)index=0;roomFilter.value=options[(index+step+options.length)%options.length];render();update()}
+ let startX=null,startY=null,swiped=false;
+ roomChip.addEventListener('touchstart',e=>{if(e.touches.length!==1)return;startX=e.touches[0].clientX;startY=e.touches[0].clientY;swiped=false;e.stopPropagation()},{passive:true});
+ roomChip.addEventListener('touchmove',e=>{if(startX===null)return;const dx=e.touches[0].clientX-startX,dy=e.touches[0].clientY-startY;if(Math.abs(dx)>10&&Math.abs(dx)>Math.abs(dy)){if(e.cancelable)e.preventDefault();e.stopPropagation()}},{passive:false});
+ roomChip.addEventListener('touchend',e=>{if(startX===null)return;const dx=e.changedTouches[0].clientX-startX,dy=e.changedTouches[0].clientY-startY;if(Math.abs(dx)>35&&Math.abs(dx)>Math.abs(dy)*1.2){swiped=true;cycleRoom(dx<0?1:-1);e.preventDefault()}startX=null;startY=null;e.stopPropagation()},{passive:false});
+ roomChip.addEventListener('touchcancel',()=>{startX=null;startY=null});
+ roomChip.addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();cycleRoom(e.key==='ArrowLeft'?-1:1)}});
+ mini.addEventListener('click',()=>{const open=!chips.classList.contains('is-open');chips.classList.toggle('is-open',open);mini.setAttribute('aria-expanded',String(open));mini.querySelector('.mini-more').textContent=open?'Показатели ▴':'Показатели ▾'});
+ chips.addEventListener('click',e=>{const btn=e.target.closest('button');if(!btn)return;const action=btn.dataset.metricAction;
+ if(action==='rooms'){if(swiped){swiped=false;return}cycleRoom(1)}
+ else if(action==='done'){doneOnly=!doneOnly;decisionOnly=false;unfinishedOnly=false;$('unfinishedOnly').checked=false;tab='objects';render();update()}
+ else if(action==='decision'){decisionOnly=!decisionOnly;doneOnly=false;unfinishedOnly=false;$('unfinishedOnly').checked=false;tab='objects';render();update()}
+ });
+ const label=mini.querySelector('.mini-label'),fill=mini.querySelector('.mini-fill');
+ function update(){const value=($('progressText')?.textContent||'0 / 0').trim(),width=$('progressFill')?.style.width||'0%',pct=Math.round(parseFloat(width)||0);label.textContent=value+' · '+pct+'%';fill.style.width=width;
+ const done=Number(value.split('/')[0])||0;chips.querySelector('[data-metric="done"]').textContent=done;chips.querySelector('[data-metric="decision"]').textContent=state.items.filter(i=>!i.deleted&&requiresDecision(i)).length;
+ chips.querySelector('[data-metric-action="done"]').setAttribute('aria-pressed',String(doneOnly));chips.querySelector('[data-metric-action="decision"]').setAttribute('aria-pressed',String(decisionOnly));
+ fitRoomChip();roomChip.querySelector('.room-swipe-name').textContent=roomFilter.selectedOptions[0]?.textContent||'Все комнаты';roomChip.title=roomFilter.selectedOptions[0]?.textContent||'Все комнаты';roomChip.setAttribute('aria-pressed',String(!!roomFilter.value));
+ }
+ const observer=new MutationObserver(update);[$('progressText'),$('progressFill'),$('totalCount')].filter(Boolean).forEach(el=>observer.observe(el,{childList:true,subtree:true,attributes:true,attributeFilter:['style']}));update();
+})();
 applyTheme();window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{if(cfg.theme==='system')applyTheme()});window.addEventListener('online',()=>sync(false));document.addEventListener('visibilitychange',()=>{if(!document.hidden&&cfg.url)sync(false)});document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('itemOverlay').classList.add('hidden');$('settingsOverlay').classList.add('hidden')}});render();
 })();
 </script></body></html>
