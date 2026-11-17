@@ -799,6 +799,26 @@ function startInlineItemName(title){
   input.focus();input.select();
 }
 $('content').addEventListener('keydown',e=>{if(!bulkMode&&e.target.matches('[data-inline-name]')&&(e.key==='Enter'||e.key===' ')){e.preventDefault();startInlineItemName(e.target);return}if(e.target.id==='draftName'&&e.key==='Enter'){e.preventDefault();e.target.closest('.composer')?.querySelector('[data-save-draft]')?.click()}if(e.target.id==='draftName'&&e.key==='Escape'){draftRoom=null;render()}});
+/* UI-09.1a: temporary local gesture trace. No network or persistent storage. */
+const ui09Trace=[],ui09Panel=document.createElement('aside');
+ui09Panel.id='ui09TracePanel';
+ui09Panel.style.cssText='position:fixed;bottom:12px;right:12px;z-index:99999;width:min(350px,calc(100vw - 24px));max-height:40vh;overflow:auto;background:var(--card,#fff);color:var(--text,#222);border:1px solid var(--accent,#888);border-radius:12px;padding:10px;box-shadow:0 8px 28px #0003;font:11px/1.4 monospace';
+ui09Panel.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><strong>UI-09 · Диагностика</strong><button type="button" id="ui09CopyTrace">Скопировать лог</button><button type="button" id="ui09HideTrace" aria-label="Скрыть диагностику">×</button></div><pre id="ui09TraceText" style="white-space:pre-wrap;overflow-wrap:anywhere;max-height:27vh;overflow:auto;margin:8px 0 0"></pre>';
+document.body.appendChild(ui09Panel);
+document.getElementById('ui09CopyTrace').onclick=()=>{const report=ui09Trace.join('\n');if(navigator.clipboard?.writeText)navigator.clipboard.writeText(report).catch(()=>prompt('Скопируйте лог',report));else prompt('Скопируйте лог',report)};
+document.getElementById('ui09HideTrace').onclick=()=>ui09Panel.remove();
+let ui09EventSeq=0;
+function ui09Log(phase,e){
+ const card=e.target?.closest?.('[data-card-id]');
+ const line=String(++ui09EventSeq).padStart(3,'0')+' '+phase+' '+e.type+' card='+(card?card.dataset.cardId.slice(0,8):'none')+' target='+(e.target?.tagName||'?')+' selected='+selected.size+' bulk='+bulkMode+' held='+(dragging?.held||false)+' active='+(dragging?.active||false)+' suppressed='+heldClickPending;
+ ui09Trace.push(line);if(ui09Trace.length>100)ui09Trace.shift();
+ const pre=document.getElementById('ui09TraceText');if(pre){pre.textContent=ui09Trace.slice(-24).join('\n');pre.scrollTop=pre.scrollHeight}
+}
+for(const eventName of ['pointerdown','pointerup','pointercancel','click']){
+ document.addEventListener(eventName,e=>{if(e.target?.closest?.('#ui09TracePanel'))return;ui09Log('capture',e)},true);
+ document.addEventListener(eventName,e=>{if(e.target?.closest?.('#ui09TracePanel'))return;ui09Log('bubble',e);queueMicrotask(()=>ui09Log('after',e))});
+}
+
 // Press and hold (touch / mouse / pen) to drag cards across rooms or colour columns.
 let dragging=null,pressTimer=null,suppressClick=false,draggingTap=null,dragScrollFrame=0;
 function cleanDrag(){clearTimeout(pressTimer);pressTimer=null;cancelAnimationFrame(dragScrollFrame);dragScrollFrame=0;if(!dragging)return;const d=dragging;d.ghost?.remove();d.placeholder?.remove();document.querySelectorAll('.drag-group-member').forEach(el=>el.classList.remove('drag-group-member'));d.source?.classList.remove('drag-source','drag-lifted');document.querySelectorAll('.drop-highlight,.drop-before,.drop-after').forEach(el=>el.classList.remove('drop-highlight','drop-before','drop-after'));document.body.classList.remove('dragging-active');dragging=null}
