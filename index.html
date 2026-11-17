@@ -878,7 +878,7 @@ function finishDrag(){
 $('content').addEventListener('pointerdown',e=>{
  if(inlineNameEdit||e.button!==0||e.target.closest('button,input,select,a'))return;
  const source=e.target.closest('[data-card-id]');if(!source)return;
- cleanDrag();const rect=source.getBoundingClientRect();
+ consumedGestureClick=false;cleanDrag();const rect=source.getBoundingClientRect();
  dragging={id:source.dataset.cardId,source,x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY,offsetX:e.clientX-rect.left,offsetY:e.clientY-rect.top,active:false,moved:false,held:false,pointerId:e.pointerId};
  pressTimer=setTimeout(()=>{
   const d=dragging;if(!d||d.source!==source)return;
@@ -922,25 +922,30 @@ document.addEventListener('pointermove',e=>{
  e.preventDefault();d.moved=true;dragPreviewAt(e.clientX,e.clientY);
 },{passive:false});
 // Selection taps are handled at pointerup; discard only their generated click.
-// The click event owns short taps; pointerup owns completed holds/drags.
-// Never replace the tapped DOM node during pointerup: mobile browsers may lose later taps.
-let suppressNextCardClick=false;
-$('content').addEventListener('click',e=>{
- if(!e.target.closest('[data-card-id]'))return;
- if(suppressNextCardClick){
-  suppressNextCardClick=false;
-  e.preventDefault();e.stopImmediatePropagation();
- }
+// UI-09.1: a pointer gesture has one owner. A synthesized click is consumed
+// in capture phase even if render() replaced its original card node.
+let consumedGestureClick=false;
+document.addEventListener('click',e=>{
+ if(!consumedGestureClick)return;
+ consumedGestureClick=false;
+ e.preventDefault();
+ e.stopImmediatePropagation();
 },true);
 document.addEventListener('pointerup',e=>{
  const d=dragging;if(!d||e.pointerId!==d.pointerId)return;
- const held=d.held;
+ const id=d.id,held=d.held,hadSelection=selected.size>0;
  if(held){
-  suppressNextCardClick=true;
+  consumedGestureClick=true;
   finishDrag();
-  // Some browsers do not synthesize a click after a long press.
-  requestAnimationFrame(()=>{suppressNextCardClick=false});
- }else cleanDrag();
+ }else{
+  cleanDrag();
+  if(hadSelection){
+   selected.has(id)?selected.delete(id):selected.add(id);
+   bulkMode=selected.size>0;
+   consumedGestureClick=true;
+   render();
+  }
+ }
 });
 document.addEventListener('pointercancel',e=>{
  if(!dragging||e.pointerId!==dragging.pointerId)return;
