@@ -881,7 +881,6 @@ $('syncBtn').onclick=()=>{if(!session?.access_token||!cfg.pass){toast('Синх�
  roomChip.querySelector('.room-swipe-name').textContent=roomFilter.selectedOptions[0]?.textContent||'Все комнаты';roomChip.setAttribute('aria-pressed',String(!!roomFilter.value));
  }
  const observer=new MutationObserver(update);[$('progressText'),$('progressFill'),$('totalCount')].filter(Boolean).forEach(el=>observer.observe(el,{childList:true,subtree:true,attributes:true,attributeFilter:['style']}));update();
-}
 })();
 applyTheme();window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{if(cfg.theme==='system')applyTheme()});window.addEventListener('online',()=>sync(false));document.addEventListener('visibilitychange',()=>{if(!document.hidden&&cfg.url)sync(false)});document.addEventListener('keydown',e=>{if(e.key==='Escape'){$('itemOverlay').classList.add('hidden');$('settingsOverlay').classList.add('hidden')}});render();
 })();
