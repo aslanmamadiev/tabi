@@ -922,25 +922,25 @@ document.addEventListener('pointermove',e=>{
  e.preventDefault();d.moved=true;dragPreviewAt(e.clientX,e.clientY);
 },{passive:false});
 // Selection taps are handled at pointerup; discard only their generated click.
-// Card selection is owned by pointerup. Never use a time window that can eat the next tap.
+// The click event owns short taps; pointerup owns completed holds/drags.
+// Never replace the tapped DOM node during pointerup: mobile browsers may lose later taps.
+let suppressNextCardClick=false;
 $('content').addEventListener('click',e=>{
- if(bulkMode&&e.target.closest('[data-card-id]')&&!e.target.closest('button,input,select,a,textarea')){
+ if(!e.target.closest('[data-card-id]'))return;
+ if(suppressNextCardClick){
+  suppressNextCardClick=false;
   e.preventDefault();e.stopImmediatePropagation();
  }
 },true);
 document.addEventListener('pointerup',e=>{
  const d=dragging;if(!d||e.pointerId!==d.pointerId)return;
- const id=d.id,held=d.held,active=d.active,wasSelecting=selected.size>0;
+ const held=d.held;
  if(held){
+  suppressNextCardClick=true;
   finishDrag();
- }else{
-  cleanDrag();
-  if(wasSelecting){
-   selected.has(id)?selected.delete(id):selected.add(id);
-   bulkMode=selected.size>0;
-    render();
-  }
- }
+  // Some browsers do not synthesize a click after a long press.
+  requestAnimationFrame(()=>{suppressNextCardClick=false});
+ }else cleanDrag();
 });
 document.addEventListener('pointercancel',e=>{
  if(!dragging||e.pointerId!==dragging.pointerId)return;
