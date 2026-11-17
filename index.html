@@ -465,7 +465,14 @@ function ui04ClearVisual(){
 function ui04Animate(el,frames,options){
   if(ui04ReducedMotion()||!el.animate)return Promise.resolve();
   const animation=el.animate(frames,options);
-  return animation.finished.catch(()=>{}).then(()=>{animation.cancel()});
+  return animation.finished.then(()=>{
+    // Preserve the exact final frame before removing the WAAPI animation.
+    // Otherwise cancel() can expose the previous inline drag transform for one frame.
+    const last=frames[frames.length-1];
+    if(last.transform!==undefined)el.style.transform=last.transform;
+    if(last.opacity!==undefined)el.style.opacity=String(last.opacity);
+    animation.cancel();
+  }).catch(()=>{animation.cancel()});
 }
 async function ui04FinishSwipe(gesture,deltaX,velocity){
   if(ui04Transition)return;
