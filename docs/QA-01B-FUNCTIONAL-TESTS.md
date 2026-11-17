@@ -1,6 +1,6 @@
-# QA-01B · Functional acceptance scenarios
+# Tabi · Проверка функциональности
 
-Status: **PENDING MANUAL DEVICE EXECUTION**. Test only on disposable sample inventory, not real synced data. Do not import into a production account.
+Статус: **сценарии не подтверждены выполнением на устройствах**. Использовать только тестовые данные в изолированном профиле; не импортировать их в production.
 
 ## Test fixture
 
@@ -28,6 +28,21 @@ Create two rooms (A, B), three items: Alpha (A/red), Beta (A/yellow), Gamma (B/g
 | B16 | Switch Komorebi/Dusk; focus name, theme selector, item editor | Accent matches theme; no duplicate green ring | Pending |
 | B17 | Resize portrait/landscape; use tab/swipe navigation | No clipped controls or accidental drag | Pending |
 | B18 | During inline name edit, trigger a render via another UI update | No silent loss of user input (risk QA-01A-04) | Pending |
+
+## Дополнительные риски для проверки
+
+- Одновременные изменения с одинаковым `updatedAt`: проверить разрешение конфликта на двух тестовых клиентах.
+- Импорт: отклонять некорректные метки, статусы и повторяющиеся ID без повреждения данных.
+- Перетаскивание без перемещения: проверить отсутствие ненужной записи и синхронизации.
+- Массовое удаление при одновременно выбранной комнате: подтвердить ожидаемое действие.
+- Перетаскивание комнат у границ и в пустой области: проверить маркер вставки.
+- Для UI-04 проверить остаточное дёрганье свайпа и вертикальную стабильность заголовка.
+
+## Изоляция Preview и данных
+
+- Проверять изменения на отдельном origin или в изолированном профиле браузера: пути одного origin (например, `/tabi/` и `/tabi/preview/`) разделяют один `localStorage`.
+- Не подключать Preview к пользовательской облачной учётной записи и не запускать импорт/замену облака на реальных данных.
+- Перед проверками синхронизации и восстановления создавать JSON-копию; тесты облачных конфликтов требуют отдельного согласования и тестового backend.
 
 ## Execution matrix
 
