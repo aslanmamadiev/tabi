@@ -601,14 +601,12 @@ select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 }
 .mobile-metric-chips .mobile-room-swipe .room-swipe-arrow{flex:0 0 auto}
 /* UI-04 two adjacent page surfaces */
-.tabi-page-viewport{position:relative;min-width:0}
-.tabi-page-viewport.is-swiping{overflow:hidden;isolation:isolate}
+.tabi-page-viewport{position:relative;min-width:0;overflow-anchor:none}
+.tabi-page-viewport.is-swiping{overflow:hidden;isolation:isolate;overflow-anchor:none}
 .tabi-page-viewport.is-swiping #content{position:relative;z-index:1;width:100%}
 .tabi-page-neighbor{position:absolute;z-index:2;left:0;top:0;width:100%;min-width:0;pointer-events:none;will-change:transform}
 @media(prefers-reduced-motion:reduce){.tabi-page-neighbor{will-change:auto}}
-/* UI-04.2: spaced pages and a shared stable header row */
-.tabi-page-viewport{overflow-anchor:none}
-.tabi-page-viewport.is-swiping{overflow:hidden;overflow-anchor:none}
+/* UI-04: shared stable header row */
 .tabi-page-viewport .drag-help,
 .tabi-page-viewport .board-density-bar{
  box-sizing:border-box;min-height:42px;margin:0 0 12px;
