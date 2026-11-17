@@ -403,7 +403,7 @@ select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 }
 
 /* UI-15.2 adaptive compact: tablet 541–1024px; reuse same live KPI and room controls. */
-@media(min-width:541px) and (max-width:1024px){
+@media(min-width:541px) and (max-width:1440px){
  .wrap{max-width:100%;padding:19px 22px 90px}
  .hero,.stats,.progressbox,.extra-tools{display:none!important}
  .mobile-overview{display:block;margin:14px 0 8px}
@@ -431,7 +431,7 @@ select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 }
 
 /* UI-15.2 audit: one chip design system across phone/tablet; hide legacy controls consistently. */
-@media(max-width:1024px){
+@media(max-width:1440px){
  .mobile-overview{display:block}
  .mobile-metric-chips{gap:7px;margin:6px 0 9px;align-items:center}
  .mobile-metric-chips button{display:inline-flex;align-items:center;justify-content:center;gap:4px;min-height:36px;max-width:100%;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink);font:inherit;font-size:12px;line-height:1.3;font-weight:650;box-shadow:none;transition:background .16s,border-color .16s}
@@ -446,11 +446,33 @@ select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
  .mobile-overview .mini-rail{height:5px}
  .mobile-overview .mini-fill{width:0}
 }
-@media(min-width:541px) and (max-width:1024px){
+@media(min-width:541px) and (max-width:1440px){
  .tabs{background:var(--panel);padding:4px;border-radius:13px;width:fit-content;margin:8px 0 12px}
  .tab{padding:10px 16px}
  .tools .mobile-add{display:block}
  .mobile-overview .mobile-progress{font:inherit}
+}
+
+/* UI-15.2 iPad landscape/rotation: explicitly styled native controls */
+@media(max-width:1440px){
+ .mobile-metric-chips button{
+  -webkit-appearance:none;appearance:none;
+  -webkit-tap-highlight-color:transparent;
+  background-color:var(--card)!important;
+  color:var(--ink)!important;
+  -webkit-text-fill-color:var(--ink);
+  border-color:var(--line)!important;
+  border-style:solid;
+  border-width:1px;
+  border-radius:999px;
+ }
+ .mobile-metric-chips button[aria-pressed="true"]{
+  background-color:var(--light)!important;
+  color:var(--accent)!important;
+  -webkit-text-fill-color:var(--accent);
+  border-color:var(--accent)!important;
+ }
+ .mobile-metric-chips button:disabled{opacity:.55}
 }
 </style></head><body><main class="wrap"><header class="top"><div class="brand"><button type="button" class="mark kanji-theme" id="kanjiThemeBtn" aria-label="Переключить тему на Dusk" title="Переключить тему"><span class="kanji-glyph" aria-hidden="true">旅</span></button><div><b>Tabi <span class="project-label">· <button type="button" id="projectNameBtn" class="project-name-btn" title="Изменить название проекта" aria-label="Изменить название проекта">Мой переезд</button><input id="projectNameInput" class="project-name-input hidden" type="text" maxlength="48" autocomplete="off" aria-label="Название проекта"></span></b><small>Всё на своих местах</small></div></div><div class="top-actions"><button class="iconbtn" id="syncBtn" title="Синхронизировать" aria-label="Синхронизировать"><svg class="action-svg" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8.1 8.1 0 0 0-15.5-2M4 4v5h5"/><path d="M4 13a8.1 8.1 0 0 0 15.5 2M20 20v-5h-5"/></svg></button><button class="iconbtn" id="settingsBtn" title="Настройки и данные" aria-label="Настройки и данные"><svg class="action-svg" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><circle cx="12" cy="12" r="7.3"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(0 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(45 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(90 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(135 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(180 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(225 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(270 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(315 12 12)"/><circle cx="12" cy="12" r="3.15" fill="var(--card)"/></svg></button></div></header><section class="hero"><div><h1 id="heroTitle" aria-live="polite">Порядок в вещах.</h1><p>Одна система для всех комнат и этапов.</p></div><button class="primary" id="addBtn">＋ Добавить</button></section><section class="stats" aria-label="Интерактивная статистика"><button type="button" class="stat" data-stat-filter="all" aria-pressed="true" title="Показать все объекты и сбросить фильтры"><strong id="totalCount">0</strong><span>Всего объектов</span></button><button type="button" class="stat" data-stat-filter="rooms" aria-pressed="false" title="Показать только комнаты с объектами"><strong id="roomCount">0</strong><span>Комнат</span></button><button type="button" class="stat" data-stat-filter="tagged" aria-pressed="false" title="Показать только объекты с цветной меткой"><strong id="taggedCount">0</strong><span>С цветной меткой</span></button></section><nav class="tabs"><button class="tab active" data-tab="objects">☷ &nbsp; Объекты</button><button class="tab" data-tab="board">▥ &nbsp; Канбан</button></nav><div class="tools"><input class="search" id="search" placeholder="⌕  Поиск по объектам..." type="search"><button class="primary mobile-add" type="button" id="mobileAddBtn">＋ Добавить</button><select class="filter" id="roomFilter" aria-label="Фильтр по комнатам"></select></div><div class="progressbox"><div class="progresshead"><strong>Прогресс переезда</strong><span id="progressText">0 / 0</span></div><div class="progressrail"><div id="progressFill"></div></div><small id="progressHint"></small></div><div class="extra-tools"><label class="toggle"><input id="unfinishedOnly" type="checkbox"> Только незавершённые</label><button class="secondary" id="bulkToggle" type="button">Выбрать несколько</button></div><div id="bulkBar" class="bulkbar hidden"><span id="bulkCount">0 выбрано</span><select id="bulkAction"><option value="">Выберите действие</option><option value="red">Оставить</option><option value="yellow">Не знаю</option><option value="green">Отправить / взять</option><option value="none">Без метки</option><option value="done">✓ Отметить выполненными</option><option value="undone">Снять галочки</option><option value="delete">Удалить выбранные…</option></select><select id="bulkRoom"></select><button id="bulkApply" class="primary" type="button">Применить</button></div><div id="content"></div><footer class="footer"><span id="saveState">● Сохранено на устройстве</span><span>Локально · JSON · облачная синхронизация</span></footer></main>
 <div class="overlay hidden" id="itemOverlay"><section class="modal" role="dialog" aria-modal="true" aria-label="Объект"><h2 id="itemTitle">Новый объект</h2><p class="desc">Добавьте вещь, назначьте комнату и цветовую метку.</p><label class="field">Название<input id="itemName" placeholder="Например, книги" maxlength="160"></label><label class="field">Комната<select id="itemRoom"></select></label><label class="field">Цветовая метка</label><div class="colors" id="colorPicks"></div><label class="field" style="display:flex;align-items:center;gap:10px"><input type="checkbox" id="itemDone" style="width:20px;height:20px;margin:0"> Готово</label><div class="modal-actions"><button class="secondary danger hidden" id="deleteBtn">Удалить</button><button class="secondary" id="cancelItem">Отмена</button><button class="primary" id="saveItem">Сохранить</button></div></section></div>
@@ -898,7 +920,7 @@ $('syncBtn').onclick=()=>{if(!session?.access_token||!cfg.pass){toast('Синх�
 
 /* UI-14 v2: progressive mobile-only rearrangement; existing controls remain wired. */
 (function setupCompactMobile(){
- if(!window.matchMedia('(max-width:1024px)').matches)return;
+ if(!window.matchMedia('(max-width:1440px)').matches)return;
  const tabs=document.querySelector('.tabs'),stats=document.querySelector('.stats'),roomFilter=$('roomFilter'),extra=document.querySelector('.extra-tools'),progress=document.querySelector('.progressbox');
  if(!tabs||!stats||!roomFilter||!extra||!progress)return;
  const overview=document.createElement('section');overview.className='mobile-overview';overview.setAttribute('aria-label','Прогресс переезда');
