@@ -661,6 +661,9 @@ select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 #content .group-select{cursor:pointer;border:1px solid transparent;color:var(--muted)}
 #content .group-select[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);background:var(--light)}
 #content [data-card-id].is-selected{outline:2px solid var(--accent);outline-offset:-2px}
+.drag-placeholder{border:2px dashed var(--accent);border-radius:12px;background:var(--light);opacity:.65;box-sizing:border-box;flex:none}
+.drag-source{opacity:.15!important}
+.drag-ghost{pointer-events:none!important;z-index:10000!important;transform:scale(1.035);box-shadow:0 16px 40px #0002}
 .drag-ghost[data-drag-count]::after{content:attr(data-drag-count) " объектов";position:absolute;right:8px;top:8px;padding:4px 7px;border-radius:9px;background:var(--accent);color:var(--card);font-size:11px}
 #selectionToolbarSlot:has(#bulkBar){padding:0;margin:0 0 12px;min-height:39px}
 #selectionToolbarSlot #bulkBar{display:flex!important;flex-wrap:nowrap;align-items:center;gap:6px;margin:0;padding:0;background:transparent;border:0;box-shadow:none;position:static;min-width:0}
@@ -797,14 +800,75 @@ function startInlineItemName(title){
 $('content').addEventListener('keydown',e=>{if(!bulkMode&&e.target.matches('[data-inline-name]')&&(e.key==='Enter'||e.key===' ')){e.preventDefault();startInlineItemName(e.target);return}if(e.target.id==='draftName'&&e.key==='Enter'){e.preventDefault();e.target.closest('.composer')?.querySelector('[data-save-draft]')?.click()}if(e.target.id==='draftName'&&e.key==='Escape'){draftRoom=null;render()}});
 // Press and hold (touch / mouse / pen) to drag cards across rooms or colour columns.
 let dragging=null,pressTimer=null,suppressClick=false;
-function cleanDrag(){clearTimeout(pressTimer);pressTimer=null;if(!dragging)return;dragging.ghost?.remove();dragging.source?.classList.remove('drag-source');document.querySelectorAll('.drop-highlight,.drop-before,.drop-after').forEach(el=>el.classList.remove('drop-highlight','drop-before','drop-after'));document.body.classList.remove('dragging-active');dragging=null}
-function moveAt(clientX,clientY){if(!dragging?.active)return;let d=dragging;d.ghost.style.left=(clientX-d.offsetX)+'px';d.ghost.style.top=(clientY-d.offsetY)+'px';document.querySelectorAll('.drop-highlight,.drop-before,.drop-after').forEach(el=>el.classList.remove('drop-highlight','drop-before','drop-after'));let target=document.elementFromPoint(clientX,clientY),zone=target?.closest(tab==='objects'?'[data-room-drop]':'[data-status-drop]');if(!zone){d.zone=null;d.near=null;return}let cards=[...zone.querySelectorAll('[data-card-id]')].filter(c=>c.dataset.cardId!==d.id);let near=target.closest('[data-card-id]');if(!near||near.dataset.cardId===d.id||(selected.has(d.id)&&selected.has(near.dataset.cardId))||!zone.contains(near))near=null;let after=near?clientY>near.getBoundingClientRect().top+near.getBoundingClientRect().height/2:false;d.zone=zone;d.near=near;d.after=after;zone.classList.add('drop-highlight');if(near)near.classList.add(after?'drop-after':'drop-before')}
-function finishDrag(){let d=dragging;if(!d)return;let valid=d.active&&d.zone;if(valid){let item=state.items.find(x=>x.id===d.id);if(item){let movingIds=selected.has(item.id)?new Set([...selected].filter(id=>state.items.some(x=>x.id===id&&!x.deleted))):new Set([item.id]);let groupKey=tab==='objects'?'room':'status',next=tab==='objects'?d.zone.dataset.roomDrop:d.zone.dataset.statusDrop;let group=state.items.filter(x=>!x.deleted&&!movingIds.has(x.id)&&(groupKey==='room'?x.room:x.status||'none')===next).sort((a,b)=>(Number(a.order??a.updatedAt)||0)-(Number(b.order??b.updatedAt)||0));let pos=d.near?group.findIndex(x=>x.id===d.near.dataset.cardId):-1;let idx=pos<0?group.length:pos+(d.after?1:0);let moving=state.items.filter(x=>movingIds.has(x.id)).sort((a,b)=>(Number(a.order??a.updatedAt)||0)-(Number(b.order??b.updatedAt)||0));group.splice(idx,0,...moving);for(const moved of moving){if(groupKey==='status'&&moved.status!==next)moved.done=false;moved[groupKey]=next}let tick=now();group.forEach((x,index)=>{x.order=tick+index;x.updatedAt=tick+index});selected.clear();bulkMode=false;persist();toast(tab==='objects'?'Комната и порядок обновлены':'Метка и порядок обновлены')}}if(d.active){suppressClick=true;setTimeout(()=>suppressClick=false,350)}cleanDrag();if(d.active&&!valid)render()}
-$('content').addEventListener('pointerdown',e=>{if(inlineNameEdit||e.button!==0||e.target.closest('button,input,select,a'))return;let source=e.target.closest('[data-card-id]');if(!source)return;cleanDrag();let rect=source.getBoundingClientRect();dragging={id:source.dataset.cardId,source,x:e.clientX,y:e.clientY,offsetX:e.clientX-rect.left,offsetY:e.clientY-rect.top,active:false,pointerId:e.pointerId};pressTimer=setTimeout(()=>{if(!dragging||dragging.source!==source)return;if(!selected.has(dragging.id)){if(!selected.size){selected.add(dragging.id);bulkMode=true}else{selected.clear();selected.add(dragging.id);bulkMode=true}source.classList.add('is-selected')}dragging.active=true;let ghost=source.cloneNode(true);ghost.classList.add('drag-ghost');if(selected.has(dragging.id)&&selected.size>1)ghost.dataset.dragCount=String(selected.size);ghost.style.width=rect.width+'px';ghost.style.height=rect.height+'px';document.body.append(ghost);dragging.ghost=ghost;source.classList.add('drag-source');document.body.classList.add('dragging-active');moveAt(dragging.x,dragging.y);if(navigator.vibrate)navigator.vibrate(18)},320)},{passive:true});
-document.addEventListener('pointermove',e=>{if(!dragging||e.pointerId!==dragging.pointerId)return;if(!dragging.active){if(Math.hypot(e.clientX-dragging.x,e.clientY-dragging.y)>9)cleanDrag();return}e.preventDefault();dragging.x=e.clientX;dragging.y=e.clientY;moveAt(e.clientX,e.clientY)},{passive:false});
-document.addEventListener('pointerup',e=>{if(dragging&&e.pointerId===dragging.pointerId)finishDrag()});document.addEventListener('pointercancel',()=>cleanDrag());
-document.addEventListener('touchmove',e=>{if(dragging?.active){e.preventDefault();let t=e.touches[0];if(t){dragging.x=t.clientX;dragging.y=t.clientY;moveAt(t.clientX,t.clientY)}}},{passive:false});
-document.addEventListener('touchend',()=>{if(dragging?.active)finishDrag()});
+function cleanDrag(){clearTimeout(pressTimer);pressTimer=null;if(!dragging)return;const d=dragging;d.ghost?.remove();d.placeholder?.remove();d.source?.classList.remove('drag-source');document.querySelectorAll('.drop-highlight,.drop-before,.drop-after').forEach(el=>el.classList.remove('drop-highlight','drop-before','drop-after'));document.body.classList.remove('dragging-active');dragging=null}
+function dragPreviewAt(clientX,clientY){
+ const d=dragging;if(!d?.active)return;
+ d.x=clientX;d.y=clientY;
+ d.ghost.style.left=(clientX-d.offsetX)+'px';d.ghost.style.top=(clientY-d.offsetY)+'px';
+ const target=document.elementFromPoint(clientX,clientY);
+ const zone=target?.closest(tab==='objects'?'[data-room-drop]':'[data-status-drop]');
+ if(!zone){d.zone=null;return}
+ const container=tab==='objects'?zone.querySelector('.grid'):zone;
+ if(!container){d.zone=null;return}
+ const near=target?.closest('[data-card-id]');
+ const validNear=near&&near!==d.source&&!selected.has(near.dataset.cardId)&&container.contains(near)?near:null;
+ const after=validNear?clientY>validNear.getBoundingClientRect().top+validNear.getBoundingClientRect().height/2:false;
+ const before=validNear?(after?validNear.nextSibling:validNear):null;
+ const oldRects=new Map([...container.querySelectorAll('[data-card-id]')].map(el=>[el,el.getBoundingClientRect()]));
+ if(d.placeholder.parentNode!==container||d.placeholder.nextSibling!==before){
+  container.insertBefore(d.placeholder,before);
+  for(const [el,old] of oldRects){const next=el.getBoundingClientRect();const dx=old.left-next.left,dy=old.top-next.top;if(dx||dy){el.animate([{transform:`translate(${dx}px,${dy}px)`},{transform:'translate(0,0)'}],{duration:180,easing:'cubic-bezier(.2,.8,.2,1)'})}}
+ }
+ d.zone=zone;d.near=validNear;d.after=after;
+}
+function finishDrag(){
+ const d=dragging;if(!d)return;
+ const moved=d.active&&d.moved&&d.zone;
+ if(moved){
+  const item=state.items.find(x=>x.id===d.id&&!x.deleted);
+  if(item){
+   const movingIds=selected.has(item.id)?new Set([...selected]):new Set([item.id]);
+   const groupKey=tab==='objects'?'room':'status',next=tab==='objects'?d.zone.dataset.roomDrop:d.zone.dataset.statusDrop;
+   const group=state.items.filter(x=>!x.deleted&&!movingIds.has(x.id)&&(groupKey==='room'?x.room:(x.status||'none'))===next).sort((a,b)=>(Number(a.order??a.updatedAt)||0)-(Number(b.order??b.updatedAt)||0));
+   const pos=d.near?group.findIndex(x=>x.id===d.near.dataset.cardId):-1;
+   const idx=pos<0?group.length:pos+(d.after?1:0);
+   const moving=state.items.filter(x=>!x.deleted&&movingIds.has(x.id)).sort((a,b)=>(Number(a.order??a.updatedAt)||0)-(Number(b.order??b.updatedAt)||0));
+   group.splice(idx,0,...moving);
+   for(const entry of moving){if(groupKey==='status'&&entry.status!==next)entry.done=false;entry[groupKey]=next}
+   const tick=now();group.forEach((entry,index)=>{entry.order=tick+index;entry.updatedAt=tick+index});
+   persist();
+  }
+ }
+ if(d.active){suppressClick=true;setTimeout(()=>suppressClick=false,400)}
+ cleanDrag();if(d.active&&!moved)render();
+}
+$('content').addEventListener('pointerdown',e=>{
+ if(inlineNameEdit||e.button!==0||e.target.closest('button,input,select,a'))return;
+ const source=e.target.closest('[data-card-id]');if(!source)return;
+ cleanDrag();const rect=source.getBoundingClientRect();
+ dragging={id:source.dataset.cardId,source,x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY,offsetX:e.clientX-rect.left,offsetY:e.clientY-rect.top,active:false,moved:false,pointerId:e.pointerId};
+ pressTimer=setTimeout(()=>{
+  const d=dragging;if(!d||d.source!==source)return;
+  if(!selected.has(d.id)){if(selected.size)selected.clear();selected.add(d.id)}
+  bulkMode=true;d.active=true;source.classList.add('is-selected');
+  const ghost=source.cloneNode(true);ghost.classList.add('drag-ghost');ghost.style.width=rect.width+'px';ghost.style.height=rect.height+'px';ghost.style.pointerEvents='none';
+  if(selected.size>1)ghost.dataset.dragCount=String(selected.size);
+  document.body.append(ghost);d.ghost=ghost;
+  const placeholder=document.createElement('div');placeholder.className='drag-placeholder';placeholder.style.height=rect.height+'px';placeholder.style.width=rect.width+'px';d.placeholder=placeholder;
+  source.after(placeholder);source.classList.add('drag-source');document.body.classList.add('dragging-active');
+  ghost.style.left=(d.x-d.offsetX)+'px';ghost.style.top=(d.y-d.offsetY)+'px';
+  if(navigator.vibrate)navigator.vibrate(18);
+ },320);
+},{passive:true});
+document.addEventListener('pointermove',e=>{
+ const d=dragging;if(!d||e.pointerId!==d.pointerId)return;
+ if(!d.active){if(Math.hypot(e.clientX-d.startX,e.clientY-d.startY)>10)cleanDrag();return}
+ e.preventDefault();if(Math.hypot(e.clientX-d.startX,e.clientY-d.startY)>8)d.moved=true;
+ dragPreviewAt(e.clientX,e.clientY);
+},{passive:false});
+document.addEventListener('pointerup',e=>{if(dragging&&e.pointerId===dragging.pointerId)finishDrag()});
+document.addEventListener('pointercancel',()=>{const active=dragging?.active;cleanDrag();if(active)render()});
+document.addEventListener('touchmove',e=>{if(dragging?.active)e.preventDefault()},{passive:false});
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{cleanDrag();tab=b.dataset.tab;render()});
 
 /* UI-04 · two-page, finger-tracked iOS-style navigation */
