@@ -878,7 +878,7 @@ function finishDrag(){
 $('content').addEventListener('pointerdown',e=>{
  if(inlineNameEdit||e.button!==0||e.target.closest('button,input,select,a'))return;
  const source=e.target.closest('[data-card-id]');if(!source)return;
- consumedGestureClick=false;cleanDrag();const rect=source.getBoundingClientRect();
+ heldClickPending=false;cleanDrag();const rect=source.getBoundingClientRect();
  dragging={id:source.dataset.cardId,source,x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY,offsetX:e.clientX-rect.left,offsetY:e.clientY-rect.top,active:false,moved:false,held:false,pointerId:e.pointerId};
  pressTimer=setTimeout(()=>{
   const d=dragging;if(!d||d.source!==source)return;
@@ -922,30 +922,22 @@ document.addEventListener('pointermove',e=>{
  e.preventDefault();d.moved=true;dragPreviewAt(e.clientX,e.clientY);
 },{passive:false});
 // Selection taps are handled at pointerup; discard only their generated click.
-// UI-09.1: a pointer gesture has one owner. A synthesized click is consumed
-// in capture phase even if render() replaced its original card node.
-let consumedGestureClick=false;
+// UI-09.1: short taps are handled exclusively by delegated click.
+// A hold can produce a synthetic click on a removed/retargeted node;
+// suppress it only until the next real pointerdown.
+let heldClickPending=false;
 document.addEventListener('click',e=>{
- if(!consumedGestureClick)return;
- consumedGestureClick=false;
+ if(!heldClickPending)return;
+ heldClickPending=false;
  e.preventDefault();
  e.stopImmediatePropagation();
 },true);
 document.addEventListener('pointerup',e=>{
  const d=dragging;if(!d||e.pointerId!==d.pointerId)return;
- const id=d.id,held=d.held,hadSelection=selected.size>0;
- if(held){
-  consumedGestureClick=true;
+ if(d.held){
+  heldClickPending=true;
   finishDrag();
- }else{
-  cleanDrag();
-  if(hadSelection){
-   selected.has(id)?selected.delete(id):selected.add(id);
-   bulkMode=selected.size>0;
-   consumedGestureClick=true;
-   render();
-  }
- }
+ }else cleanDrag();
 });
 document.addEventListener('pointercancel',e=>{
  if(!dragging||e.pointerId!==dragging.pointerId)return;
