@@ -921,16 +921,27 @@ document.addEventListener('pointermove',e=>{
  if(!d.active)return;
  e.preventDefault();d.moved=true;dragPreviewAt(e.clientX,e.clientY);
 },{passive:false});
+// Selection taps are handled at pointerup; discard only their generated click.
+let ignoreCardClickUntil=0;
+$('content').addEventListener('click',e=>{
+ if(performance.now()<ignoreCardClickUntil&&e.target.closest('[data-card-id]')){
+  e.preventDefault();e.stopImmediatePropagation();ignoreCardClickUntil=0;
+ }
+},true);
 document.addEventListener('pointerup',e=>{
  const d=dragging;if(!d||e.pointerId!==d.pointerId)return;
- if(d.held){
+ const id=d.id,held=d.held,active=d.active,wasSelecting=selected.size>0;
+ if(held){
   finishDrag();
-  // Ignore the synthetic click following a long press, but not later taps.
-  suppressClick=true;
-  setTimeout(()=>{suppressClick=false},350);
+  ignoreCardClickUntil=performance.now()+500;
  }else{
-  // A short tap is handled only by the delegated click listener.
   cleanDrag();
+  if(wasSelecting){
+   selected.has(id)?selected.delete(id):selected.add(id);
+   bulkMode=selected.size>0;
+   ignoreCardClickUntil=performance.now()+500;
+   render();
+  }
  }
 });
 document.addEventListener('pointercancel',e=>{
