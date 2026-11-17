@@ -807,7 +807,11 @@ function ui04AnimatePosition(g,from,to,duration){
       {transform:`translate3d(${from+offset}px,0,0)`},
       {transform:`translate3d(${to+offset}px,0,0)`}
     ],{duration,easing:'cubic-bezier(.22,.78,.2,1)',fill:'forwards'});
-    return anim.finished.catch(()=>{}).then(()=>anim.cancel());
+    return anim.finished.then(()=>{
+      // Keep the completed transform while cancelling the temporary animation.
+      el.style.transform=`translate3d(${to+offset}px,0,0)`;
+      anim.cancel();
+    }).catch(()=>anim.cancel());
   });
   return Promise.all(animations);
 }
