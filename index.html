@@ -662,6 +662,7 @@ select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 #content .group-select[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);background:var(--light)}
 #content [data-card-id].is-selected{outline:2px solid var(--accent);outline-offset:-2px}
 .drag-placeholder{pointer-events:none!important;border:2px dashed var(--accent);border-radius:12px;background:var(--light);opacity:.65;box-sizing:border-box;flex:none}
+.drag-lifted{position:relative;z-index:15;transform:translateY(-5px) scale(1.025);box-shadow:0 12px 28px #0002;transition:transform .16s ease-out,box-shadow .16s ease-out;will-change:transform}
 .drag-source{opacity:.15!important;pointer-events:none!important}
 .drag-ghost{pointer-events:none!important;z-index:10000!important;transform:scale(1.035);box-shadow:0 16px 40px #0002}
 .drag-ghost[data-drag-count]::after{content:attr(data-drag-count) " объектов";position:absolute;right:8px;top:8px;padding:4px 7px;border-radius:9px;background:var(--accent);color:var(--card);font-size:11px}
@@ -800,7 +801,7 @@ function startInlineItemName(title){
 $('content').addEventListener('keydown',e=>{if(!bulkMode&&e.target.matches('[data-inline-name]')&&(e.key==='Enter'||e.key===' ')){e.preventDefault();startInlineItemName(e.target);return}if(e.target.id==='draftName'&&e.key==='Enter'){e.preventDefault();e.target.closest('.composer')?.querySelector('[data-save-draft]')?.click()}if(e.target.id==='draftName'&&e.key==='Escape'){draftRoom=null;render()}});
 // Press and hold (touch / mouse / pen) to drag cards across rooms or colour columns.
 let dragging=null,pressTimer=null,suppressClick=false,draggingTap=null,dragScrollFrame=0;
-function cleanDrag(){clearTimeout(pressTimer);pressTimer=null;cancelAnimationFrame(dragScrollFrame);dragScrollFrame=0;if(!dragging)return;const d=dragging;d.ghost?.remove();d.placeholder?.remove();d.source?.classList.remove('drag-source');document.querySelectorAll('.drop-highlight,.drop-before,.drop-after').forEach(el=>el.classList.remove('drop-highlight','drop-before','drop-after'));document.body.classList.remove('dragging-active');dragging=null}
+function cleanDrag(){clearTimeout(pressTimer);pressTimer=null;cancelAnimationFrame(dragScrollFrame);dragScrollFrame=0;if(!dragging)return;const d=dragging;d.ghost?.remove();d.placeholder?.remove();d.source?.classList.remove('drag-source','drag-lifted');document.querySelectorAll('.drop-highlight,.drop-before,.drop-after').forEach(el=>el.classList.remove('drop-highlight','drop-before','drop-after'));document.body.classList.remove('dragging-active');dragging=null}
 function dragPreviewAt(clientX,clientY){
  const d=dragging;if(!d?.active)return;
  d.x=clientX;d.y=clientY;
@@ -881,13 +882,13 @@ $('content').addEventListener('pointerdown',e=>{
   const d=dragging;if(!d||d.source!==source)return;
   d.held=true;
   if(!selected.has(d.id))selected.add(d.id);
-  bulkMode=true;source.classList.add('is-selected');
+  bulkMode=true;source.classList.add('is-selected','drag-lifted');
   if(navigator.vibrate)navigator.vibrate(18);
  },320);
 },{passive:true});
 function startCardDrag(d){
  if(!d||d.active)return;
- d.active=true;const rect=d.source.getBoundingClientRect();
+ d.active=true;d.source.classList.remove('drag-lifted');const rect=d.source.getBoundingClientRect();
  const ghost=d.source.cloneNode(true);ghost.classList.add('drag-ghost');ghost.style.width=rect.width+'px';ghost.style.height=rect.height+'px';ghost.style.pointerEvents='none';
  if(selected.size>1)ghost.dataset.dragCount=String(selected.size);
  document.body.append(ghost);d.ghost=ghost;
