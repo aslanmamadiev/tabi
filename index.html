@@ -759,7 +759,7 @@ async function ui04FinishSwipe(gesture,deltaX,velocity){
   const distance=Math.abs(deltaX),speed=Math.abs(velocity);
   // Distance or a deliberate, directional flick may complete the page.
   const valid=eligible&&(distance>=Math.min(88,gesture.width*.22)||(distance>=22&&speed>.48));
-  const fromX=gesture.locked?ui04Clamp(gesture.dragX??deltaX,-gesture.width*.38,gesture.width*.38):0;
+  const fromX=gesture.locked?ui04Clamp(gesture.dragX??deltaX,-gesture.width,gesture.width):0;
   const fromOpacity=gesture.locked?(1-Math.min(Math.abs(fromX)/gesture.width*.1,.05)):1;
   try{
     if(!valid){
@@ -772,9 +772,10 @@ async function ui04FinishSwipe(gesture,deltaX,velocity){
     const dir=deltaX<0?-1:1;
     // Apple-style velocity-aware settle: quick flicks finish quickly; slow drags glide.
     const fast=speed>1.1;
-    const exitDuration=fast?95:speed>.55?135:190;
-    const entryDuration=fast?175:speed>.55?220:270;
-    if(!ui04ReducedMotion())await ui04Animate(el,[
+    const phone=gesture.width<=600;
+    const exitDuration=phone?(fast?0:speed>.55?65:105):(fast?95:speed>.55?135:190);
+    const entryDuration=phone?(fast?130:speed>.55?165:205):(fast?175:speed>.55?220:270);
+    if(!ui04ReducedMotion()&&exitDuration>0)await ui04Animate(el,[
       {transform:`translate3d(${fromX}px,0,0)`,opacity:fromOpacity},
       {transform:`translate3d(${dir*gesture.width*.32}px,0,0)`,opacity:.88}
     ],{duration:exitDuration,easing:'cubic-bezier(.2,.7,.25,1)'});
@@ -783,7 +784,7 @@ async function ui04FinishSwipe(gesture,deltaX,velocity){
     ui04ClearVisual();
     render();
     if(!ui04ReducedMotion())await ui04Animate(el,[
-      {transform:`translate3d(${-dir*Math.min(gesture.width*.14,65)}px,0,0)`,opacity:.92},
+      {transform:`translate3d(${-dir*Math.min(gesture.width*.14,phone?36:65)}px,0,0)`,opacity:phone?.97:.92},
       {transform:'translate3d(0,0,0)',opacity:1}
     ],{duration:entryDuration,easing:'cubic-bezier(.16,1,.3,1)'});
   }finally{
@@ -815,7 +816,7 @@ ui04GestureArea.addEventListener('touchmove',e=>{
   if(e.cancelable)e.preventDefault();
   const now=performance.now(),dt=now-g.lastTime;if(dt>0&&dt<110)g.flickVelocity=(t.clientX-g.lastX)/dt;g.dragX=dx;g.lastX=t.clientX;g.lastTime=now;
   if(!ui04ReducedMotion()){
-    const x=ui04Clamp(dx,-g.width*.38,g.width*.38);
+    const x=ui04Clamp(dx,-g.width,g.width);
     ui04GestureArea.style.transform=`translate3d(${x}px,0,0)`;
     ui04GestureArea.style.opacity=String(1-Math.min(Math.abs(x)/g.width*.1,.05));
   }
