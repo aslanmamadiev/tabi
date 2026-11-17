@@ -871,33 +871,50 @@ function finishDrag(){
  if(d.active){suppressClick=true;setTimeout(()=>suppressClick=false,400)}
  cleanDrag();if(d.active)render();
 }
+// UI-09: one pointer gesture owns selection and drag; click must never toggle it twice.
 $('content').addEventListener('pointerdown',e=>{
  if(inlineNameEdit||e.button!==0||e.target.closest('button,input,select,a'))return;
  const source=e.target.closest('[data-card-id]');if(!source)return;
  cleanDrag();const rect=source.getBoundingClientRect();
- dragging={id:source.dataset.cardId,source,x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY,offsetX:e.clientX-rect.left,offsetY:e.clientY-rect.top,active:false,moved:false,pointerId:e.pointerId};
+ dragging={id:source.dataset.cardId,source,x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY,offsetX:e.clientX-rect.left,offsetY:e.clientY-rect.top,active:false,moved:false,held:false,pointerId:e.pointerId};
  pressTimer=setTimeout(()=>{
   const d=dragging;if(!d||d.source!==source)return;
-  if(!selected.has(d.id))selected.add(d.id)
-  bulkMode=true;d.active=true;source.classList.add('is-selected');
-  const ghost=source.cloneNode(true);ghost.classList.add('drag-ghost');ghost.style.width=rect.width+'px';ghost.style.height=rect.height+'px';ghost.style.pointerEvents='none';
-  if(selected.size>1)ghost.dataset.dragCount=String(selected.size);
-  document.body.append(ghost);d.ghost=ghost;
-  const placeholder=document.createElement('div');placeholder.className='drag-placeholder';placeholder.style.height=rect.height+'px';placeholder.style.width=rect.width+'px';d.placeholder=placeholder;
-  source.after(placeholder);source.classList.add('drag-source');document.body.classList.add('dragging-active');
-  ghost.style.left=(d.x-d.offsetX)+'px';ghost.style.top=(d.y-d.offsetY)+'px';
+  d.held=true;
+  if(!selected.has(d.id))selected.add(d.id);
+  bulkMode=true;source.classList.add('is-selected');
   if(navigator.vibrate)navigator.vibrate(18);
  },320);
 },{passive:true});
+function startCardDrag(d){
+ if(!d||d.active)return;
+ d.active=true;const rect=d.source.getBoundingClientRect();
+ const ghost=d.source.cloneNode(true);ghost.classList.add('drag-ghost');ghost.style.width=rect.width+'px';ghost.style.height=rect.height+'px';ghost.style.pointerEvents='none';
+ if(selected.size>1)ghost.dataset.dragCount=String(selected.size);
+ document.body.append(ghost);d.ghost=ghost;
+ const placeholder=document.createElement('div');placeholder.className='drag-placeholder';placeholder.style.height=rect.height+'px';placeholder.style.width=rect.width+'px';d.placeholder=placeholder;
+ d.source.after(placeholder);d.source.classList.add('drag-source');document.body.classList.add('dragging-active');
+ dragPreviewAt(d.x,d.y);
+ if(!dragScrollFrame)dragScrollFrame=requestAnimationFrame(autoScrollDrag);
+}
 document.addEventListener('pointermove',e=>{
  const d=dragging;if(!d||e.pointerId!==d.pointerId)return;
- if(!d.active){if(Math.hypot(e.clientX-d.startX,e.clientY-d.startY)>10)cleanDrag();return}
- e.preventDefault();if(Math.hypot(e.clientX-d.startX,e.clientY-d.startY)>8)d.moved=true;
- dragPreviewAt(e.clientX,e.clientY);
- if(!dragScrollFrame)dragScrollFrame=requestAnimationFrame(autoScrollDrag);
+ const distance=Math.hypot(e.clientX-d.startX,e.clientY-d.startY);
+ if(!d.held){if(distance>10)cleanDrag();return}
+ if(distance>9&&!d.active)startCardDrag(d);
+ if(!d.active)return;
+ e.preventDefault();d.moved=true;dragPreviewAt(e.clientX,e.clientY);
 },{passive:false});
-document.addEventListener('pointerup',e=>{if(!dragging||e.pointerId!==dragging.pointerId)return;finishDrag()});
-document.addEventListener('pointercancel',()=>{const active=dragging?.active;draggingTap=null;cleanDrag();if(active)render()});
+document.addEventListener('pointerup',e=>{
+ const d=dragging;if(!d||e.pointerId!==d.pointerId)return;
+ const id=d.id,held=d.held,active=d.active,wasSelecting=selected.size>0;
+ if(held){finishDrag();if(!active){suppressClick=true;render()}}
+ else{
+  cleanDrag();
+  if(wasSelecting){selected.has(id)?selected.delete(id):selected.add(id);bulkMode=selected.size>0;render();suppressClick=true}
+ }
+ if(suppressClick)setTimeout(()=>suppressClick=false,450);
+});
+document.addEventListener('pointercancel',()=>{const held=dragging?.held;cleanDrag();if(held)render()});
 document.addEventListener('touchmove',e=>{if(dragging?.active)e.preventDefault()},{passive:false});
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{cleanDrag();tab=b.dataset.tab;render()});
 
