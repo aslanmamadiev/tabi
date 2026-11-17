@@ -1003,7 +1003,7 @@ $('syncBtn').onclick=()=>{if(!session?.access_token||!cfg.pass){toast('Синх�
  const chips=document.createElement('div');chips.className='mobile-metric-chips';chips.id='mobileMetricChips';
  chips.innerHTML='<button type="button" data-metric-action="done">Готово · <span data-metric="done">0</span></button><button type="button" data-metric-action="decision">Решить · <span data-metric="decision">0</span></button><button type="button" class="mobile-room-swipe" data-metric-action="rooms" aria-label="Комнаты. Свайп влево или вправо переключает комнату" title="Свайп для смены комнаты"><span class="room-swipe-arrow" aria-hidden="true">‹</span><span class="room-swipe-name">Все комнаты</span><span class="room-swipe-arrow" aria-hidden="true">›</span></button>';
  overview.appendChild(chips);
- tabs.insertAdjacentElement('beforebegin',overview);
+ (tabs.closest('.workspace-toolbar')||tabs).insertAdjacentElement('beforebegin',overview);
  const panel=document.createElement('div');panel.className='mobile-filter-panel';panel.id='mobileFilterPanel';
  chips.insertAdjacentElement('afterend',panel);panel.append(roomFilter,extra,stats,progress);
  const roomChip=chips.querySelector('[data-metric-action="rooms"]');
