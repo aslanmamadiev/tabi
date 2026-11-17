@@ -662,7 +662,7 @@ select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 #content .group-select[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);background:var(--light)}
 #content [data-card-id].is-selected{outline:2px solid var(--accent);outline-offset:-2px}
 .drag-placeholder{border:2px dashed var(--accent);border-radius:12px;background:var(--light);opacity:.65;box-sizing:border-box;flex:none}
-.drag-source{opacity:.15!important}
+.drag-source{opacity:.15!important;pointer-events:none!important}
 .drag-ghost{pointer-events:none!important;z-index:10000!important;transform:scale(1.035);box-shadow:0 16px 40px #0002}
 .drag-ghost[data-drag-count]::after{content:attr(data-drag-count) " объектов";position:absolute;right:8px;top:8px;padding:4px 7px;border-radius:9px;background:var(--accent);color:var(--card);font-size:11px}
 #selectionToolbarSlot:has(#bulkBar){padding:0;margin:0 0 12px;min-height:39px}
