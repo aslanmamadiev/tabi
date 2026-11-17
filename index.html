@@ -600,6 +600,12 @@ select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
  text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
 }
 .mobile-metric-chips .mobile-room-swipe .room-swipe-arrow{flex:0 0 auto}
+/* UI-15.10 two adjacent page surfaces */
+.tabi-page-viewport{position:relative;min-width:0}
+.tabi-page-viewport.is-swiping{overflow:hidden;isolation:isolate}
+.tabi-page-viewport.is-swiping #content{position:relative;z-index:1;width:100%}
+.tabi-page-neighbor{position:absolute;z-index:2;left:0;top:0;width:100%;min-width:0;pointer-events:none;will-change:transform}
+@media(prefers-reduced-motion:reduce){.tabi-page-neighbor{will-change:auto}}
 </style></head><body><main class="wrap"><header class="top"><div class="brand"><button type="button" class="mark kanji-theme" id="kanjiThemeBtn" aria-label="Переключить тему на Dusk" title="Переключить тему"><span class="kanji-glyph" aria-hidden="true">旅</span></button><div><b>Tabi <span class="project-label">· <button type="button" id="projectNameBtn" class="project-name-btn" title="Изменить название проекта" aria-label="Изменить название проекта">Мой переезд</button><input id="projectNameInput" class="project-name-input hidden" type="text" maxlength="48" autocomplete="off" aria-label="Название проекта"></span></b><small>Всё на своих местах</small></div></div><div class="top-actions"><button class="iconbtn" id="syncBtn" title="Синхронизировать" aria-label="Синхронизировать"><svg class="action-svg" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8.1 8.1 0 0 0-15.5-2M4 4v5h5"/><path d="M4 13a8.1 8.1 0 0 0 15.5 2M20 20v-5h-5"/></svg></button><button class="iconbtn" id="settingsBtn" title="Настройки и данные" aria-label="Настройки и данные"><svg class="action-svg" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><circle cx="12" cy="12" r="7.3"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(0 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(45 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(90 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(135 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(180 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(225 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(270 12 12)"/><rect x="10.2" y="1.8" width="3.6" height="5.3" rx=".35" transform="rotate(315 12 12)"/><circle cx="12" cy="12" r="3.15" fill="var(--card)"/></svg></button></div></header><section class="hero"><div><h1 id="heroTitle" aria-live="polite">Порядок в вещах.</h1><p>Одна система для всех комнат и этапов.</p></div><button class="primary" id="addBtn">＋ Добавить</button></section><section class="stats" aria-label="Интерактивная статистика"><button type="button" class="stat" data-stat-filter="all" aria-pressed="true" title="Показать все объекты и сбросить фильтры"><strong id="totalCount">0</strong><span>Всего объектов</span></button><button type="button" class="stat" data-stat-filter="rooms" aria-pressed="false" title="Показать только комнаты с объектами"><strong id="roomCount">0</strong><span>Комнат</span></button><button type="button" class="stat" data-stat-filter="tagged" aria-pressed="false" title="Показать только объекты с цветной меткой"><strong id="taggedCount">0</strong><span>С цветной меткой</span></button></section><div class="workspace-toolbar"><nav class="tabs" aria-label="Режим отображения"><button class="tab active" data-tab="objects" aria-label="Объекты" title="Объекты"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="4" width="17" height="16" rx="2"/><path d="M8 9h.01M11 9h6M8 15h.01M11 15h6"/></svg></button><button class="tab" data-tab="board" aria-label="Канбан" title="Канбан"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="5" height="16" rx="1.3"/><rect x="10" y="4" width="5" height="11" rx="1.3"/><rect x="17" y="4" width="4" height="14" rx="1.3"/></svg></button></nav><div class="tools"><input class="search" id="search" placeholder="Поиск..." aria-label="Поиск по объектам" type="search"><button class="primary mobile-add" type="button" id="mobileAddBtn" aria-label="Добавить объект" title="Добавить объект"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button><select class="filter" id="roomFilter" aria-label="Фильтр по комнатам"></select></div></div><div class="progressbox"><div class="progresshead"><strong>Прогресс переезда</strong><span id="progressText">0 / 0</span></div><div class="progressrail"><div id="progressFill"></div></div><small id="progressHint"></small></div><div class="extra-tools"><label class="toggle"><input id="unfinishedOnly" type="checkbox"> Только незавершённые</label><button class="secondary" id="bulkToggle" type="button">Выбрать несколько</button></div><div id="bulkBar" class="bulkbar hidden"><span id="bulkCount">0 выбрано</span><select id="bulkAction"><option value="">Выберите действие</option><option value="red">Оставить</option><option value="yellow">Не знаю</option><option value="green">Отправить / взять</option><option value="none">Без метки</option><option value="done">✓ Отметить выполненными</option><option value="undone">Снять галочки</option><option value="delete">Удалить выбранные…</option></select><select id="bulkRoom"></select><button id="bulkApply" class="primary" type="button">Применить</button></div><div id="content"></div><footer class="footer"><span id="saveState">● Сохранено на устройстве</span><span>Локально · JSON · облачная синхронизация</span></footer></main>
 <div class="overlay hidden" id="itemOverlay"><section class="modal" role="dialog" aria-modal="true" aria-label="Объект"><h2 id="itemTitle">Новый объект</h2><p class="desc">Добавьте вещь, назначьте комнату и цветовую метку.</p><label class="field">Название<input id="itemName" placeholder="Например, книги" maxlength="160"></label><label class="field">Комната<select id="itemRoom"></select></label><label class="field">Цветовая метка</label><div class="colors" id="colorPicks"></div><label class="field" style="display:flex;align-items:center;gap:10px"><input type="checkbox" id="itemDone" style="width:20px;height:20px;margin:0"> Готово</label><div class="modal-actions"><button class="secondary danger hidden" id="deleteBtn">Удалить</button><button class="secondary" id="cancelItem">Отмена</button><button class="primary" id="saveItem">Сохранить</button></div></section></div>
 <div class="overlay hidden" id="settingsOverlay"><section class="modal wide" role="dialog" aria-modal="true" aria-label="Настройки"><button class="modal-close" id="closeSettingsTop" aria-label="Закрыть настройки" title="Закрыть"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button><h2>Настройки и данные</h2><p class="desc">Комнаты и названия статусов можно менять. Ваши данные остаются доступны без интернета на этом устройстве.</p><div class="settings-title">Внешний вид</div><div class="settings-row"><select class="filter" id="themeMode"><option value="system">Системная тема</option><option value="light">Komorebi · День</option><option value="dark">Dusk · Вечер</option></select></div><p class="small">Komorebi — дневной свет; Dusk — графит и янтарь. Изменение вступает в силу сразу и запоминается на устройстве.</p><div class="settings-title">Комнаты</div><div id="roomEditor"></div><div class="settings-row"><input id="newRoom" class="search" placeholder="Новая комната"><button id="addRoom" class="secondary">Добавить</button></div><div class="settings-title">Цветовые категории</div><div id="statusEditor"></div><details class="settings-fold" id="backupFold"><summary>Резервное копирование <span class="settings-fold-note">JSON</span></summary><div class="settings-row"><button class="secondary" id="exportBtn">↓ Экспорт JSON</button><button class="secondary" id="importBtn">↑ Импорт JSON</button><button class="secondary" id="restoreBackupBtn" type="button" hidden>↓ Копия до восстановления</button><input type="file" id="importFile" accept="application/json,.json" hidden></div></details><details class="settings-fold" id="syncFold"><summary>Защищённая синхронизация <span class="settings-fold-note">Аккаунт · шифрование</span></summary><p class="small">Создайте аккаунт по email или войдите в существующий. Каждый аккаунт имеет доступ только к своим записям. Для шифрования базы задайте отдельный пароль и введите его на обоих устройствах. Пароль шифрования не восстанавливается через email.</p><label class="field">Email<input id="authEmail" type="email" autocomplete="username" placeholder="you@example.com"></label><label class="field">Пароль аккаунта<input id="authPassword" type="password" autocomplete="current-password" placeholder="Пароль для входа"></label><div class="settings-row"><button class="secondary" id="authSignUp">Регистрация</button><button class="primary" id="authSignIn">Войти</button><button class="secondary" id="authSignOut">Выйти</button></div><label class="field">Пароль шифрования данных<input id="cloudPassword" type="password" placeholder="Отдельный пароль от 10 символов" autocomplete="off"></label><div class="settings-row"><button class="primary" id="cloudConnect">Сохранить пароль и синхронизировать</button></div><div id="cloudMsg" class="hint">Войдите в аккаунт. Локальные данные сохранены на устройстве.</div></details><div class="modal-actions"><button class="secondary" id="closeSettings">Готово</button></div></section></div><div class="overlay restore-overlay hidden" id="restoreOverlay"><section class="modal restore-dialog" role="alertdialog" aria-modal="true" aria-labelledby="restoreTitle" aria-describedby="restoreDescription"><h2 id="restoreTitle">Заменить данные?</h2><p class="desc" id="restoreDescription"></p><div class="modal-actions"><button type="button" class="secondary" id="restoreCancel">Отмена</button><button type="button" class="restore-confirm" id="restoreConfirm">Заменить</button></div></section></div><div id="toast" class="toast hidden"></div>
@@ -734,71 +740,88 @@ document.addEventListener('touchmove',e=>{if(dragging?.active){e.preventDefault(
 document.addEventListener('touchend',()=>{if(dragging?.active)finishDrag()});
 document.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{cleanDrag();tab=b.dataset.tab;render()});
 
-/* UI-04 · interactive page swipe: finger-tracked, cancellable, reduced-motion aware.
-   No persistence, data calculation, or Kanban scroll changes. */
+/* UI-15.10 · two-page, finger-tracked iOS-style navigation */
 let ui04Swipe=null,ui04Transition=false;
 const ui04ReducedMotion=()=>window.matchMedia?.('(prefers-reduced-motion: reduce)').matches===true;
 const ui04GestureArea=$('content');
-const ui04Clamp=(value,min,max)=>Math.max(min,Math.min(max,value));
+const ui04Viewport=document.createElement('div');
+ui04Viewport.className='tabi-page-viewport';
+ui04GestureArea.parentNode.insertBefore(ui04Viewport,ui04GestureArea);
+ui04Viewport.appendChild(ui04GestureArea);
+let ui04Neighbor=null;
 function ui04ClearVisual(){
   ui04GestureArea.style.transform='';
-  ui04GestureArea.style.opacity='';
   ui04GestureArea.style.willChange='';
   ui04GestureArea.style.transition='';
+  if(ui04Neighbor){ui04Neighbor.remove();ui04Neighbor=null}
+  ui04Viewport.classList.remove('is-swiping');
 }
-function ui04Animate(el,frames,options){
-  if(ui04ReducedMotion()||!el.animate)return Promise.resolve();
-  const animation=el.animate(frames,options);
-  return animation.finished.catch(()=>{}).then(()=>{animation.cancel()});
+function ui04PrepareNeighbor(g){
+  if(ui04Neighbor)return;
+  const original=tab;
+  const savedNodes=Array.from(ui04GestureArea.childNodes);
+  const savedDraft=draftRoom;
+  tab=original==='objects'?'board':'objects';
+  render();
+  const neighbor=document.createElement('div');
+  neighbor.className='tabi-page-neighbor';
+  while(ui04GestureArea.firstChild)neighbor.appendChild(ui04GestureArea.firstChild);
+  for(const node of savedNodes)ui04GestureArea.appendChild(node);
+  tab=original;draftRoom=savedDraft;
+  document.querySelectorAll('[data-tab]').forEach(e=>e.classList.toggle('active',e.dataset.tab===original));
+  ui04Viewport.appendChild(neighbor);
+  ui04Neighbor=neighbor;
+  ui04Viewport.classList.add('is-swiping');
 }
-async function ui04FinishSwipe(gesture,deltaX,velocity){
+function ui04Position(g,x){
+  const dir=g.from==='objects'?-1:1;
+  const width=g.width;
+  const clamped=Math.max(-width,Math.min(width,x));
+  ui04GestureArea.style.transform=`translate3d(${clamped}px,0,0)`;
+  if(ui04Neighbor)ui04Neighbor.style.transform=`translate3d(${clamped-dir*width}px,0,0)`;
+}
+function ui04AnimatePosition(g,from,to,duration){
+  if(ui04ReducedMotion()||duration<=0){ui04Position(g,to);return Promise.resolve()}
+  const dir=g.from==='objects'?-1:1;
+  const nodes=[ui04GestureArea,ui04Neighbor].filter(Boolean);
+  const animations=nodes.map((el,index)=>{
+    const offset=index===0?0:-dir*g.width;
+    const anim=el.animate([
+      {transform:`translate3d(${from+offset}px,0,0)`},
+      {transform:`translate3d(${to+offset}px,0,0)`}
+    ],{duration,easing:'cubic-bezier(.22,.78,.2,1)',fill:'forwards'});
+    return anim.finished.catch(()=>{}).then(()=>anim.cancel());
+  });
+  return Promise.all(animations);
+}
+async function ui04FinishSwipe(g,dx,velocity){
   if(ui04Transition)return;
   ui04Transition=true;
-  const el=ui04GestureArea;
-  const eligible=(gesture.from==='objects'&&deltaX<0)||(gesture.from==='board'&&deltaX>0);
-  const distance=Math.abs(deltaX),speed=Math.abs(velocity);
-  // Distance or a deliberate, directional flick may complete the page.
-  const valid=eligible&&(distance>=Math.min(88,gesture.width*.22)||(distance>=22&&speed>.48));
-  const fromX=gesture.locked?ui04Clamp(gesture.dragX??deltaX,-gesture.width,gesture.width):0;
-  const fromOpacity=gesture.locked?(1-Math.min(Math.abs(fromX)/gesture.width*.1,.05)):1;
+  const dir=g.from==='objects'?-1:1;
+  const eligible=dx*dir>0;
+  const distance=Math.abs(dx),speed=Math.abs(velocity);
+  const valid=g.locked&&eligible&&(distance>=g.width*.42||(distance>=22&&speed>.48));
+  const from=g.locked?Math.max(-g.width,Math.min(g.width,g.dragX??dx)):0;
+  const target=valid?dir*g.width:0;
+  const remaining=Math.abs(target-from);
+  const duration=ui04ReducedMotion()?0:Math.max(85,Math.min(280,remaining/Math.max(.8,speed*1.15)));
   try{
-    if(!valid){
-      if(gesture.locked&&!ui04ReducedMotion())await ui04Animate(el,[
-        {transform:`translate3d(${fromX}px,0,0)`,opacity:fromOpacity},
-        {transform:'translate3d(0,0,0)',opacity:1}
-      ],{duration:Math.max(110,Math.min(220,150+Math.abs(fromX)*.25)),easing:'cubic-bezier(.2,.8,.2,1)'});
-      return;
+    if(g.locked)await ui04AnimatePosition(g,from,target,duration);
+    if(valid){
+      tab=g.from==='objects'?'board':'objects';
+      cleanDrag();
+      ui04ClearVisual();
+      render();
     }
-    const dir=deltaX<0?-1:1;
-    // Apple-style velocity-aware settle: quick flicks finish quickly; slow drags glide.
-    const fast=speed>1.1;
-    const phone=gesture.width<=600;
-    const exitDuration=phone?(fast?0:speed>.55?65:105):(fast?95:speed>.55?135:190);
-    const entryDuration=phone?(fast?130:speed>.55?165:205):(fast?175:speed>.55?220:270);
-    if(!ui04ReducedMotion()&&exitDuration>0)await ui04Animate(el,[
-      {transform:`translate3d(${fromX}px,0,0)`,opacity:fromOpacity},
-      {transform:`translate3d(${dir*gesture.width*.32}px,0,0)`,opacity:.88}
-    ],{duration:exitDuration,easing:'cubic-bezier(.2,.7,.25,1)'});
-    cleanDrag();
-    tab=dir<0?'board':'objects';
-    ui04ClearVisual();
-    render();
-    if(!ui04ReducedMotion())await ui04Animate(el,[
-      {transform:`translate3d(${-dir*Math.min(gesture.width*.14,phone?36:65)}px,0,0)`,opacity:phone?.97:.92},
-      {transform:'translate3d(0,0,0)',opacity:1}
-    ],{duration:entryDuration,easing:'cubic-bezier(.16,1,.3,1)'});
-  }finally{
-    ui04ClearVisual();
-    ui04Transition=false;
-  }
+  }finally{ui04ClearVisual();ui04Transition=false}
 }
 ui04GestureArea.addEventListener('touchstart',e=>{
   ui04Swipe=null;
   if(ui04Transition||e.touches.length!==1||dragging?.active||e.target.closest('button,input,select,textarea,a,[contenteditable="true"]'))return;
   const board=e.target.closest('.board');
   if(board&&(tab!=='board'||board.scrollLeft>2))return;
-  const t=e.touches[0];
-  ui04Swipe={id:t.identifier,x:t.clientX,y:t.clientY,lastX:t.clientX,lastTime:performance.now(),started:performance.now(),width:Math.max(1,ui04GestureArea.clientWidth),from:tab,board,locked:false,vertical:false};
+  const t=e.touches[0],now=performance.now();
+  ui04Swipe={id:t.identifier,x:t.clientX,y:t.clientY,lastX:t.clientX,lastTime:now,started:now,width:Math.max(1,ui04Viewport.clientWidth),from:tab,board,locked:false,vertical:false};
 },{passive:true});
 ui04GestureArea.addEventListener('touchmove',e=>{
   const g=ui04Swipe;
@@ -811,15 +834,16 @@ ui04GestureArea.addEventListener('touchmove',e=>{
     if(Math.abs(dx)<12||Math.abs(dx)<Math.abs(dy)*1.4)return;
     if((g.from==='objects'&&dx>=0)||(g.from==='board'&&dx<=0)){ui04Swipe=null;return}
     if(g.board&&(dx<=0||g.board.scrollLeft>2)){ui04Swipe=null;return}
-    g.locked=true;ui04GestureArea.style.willChange='transform,opacity';
+    g.locked=true;
+    ui04PrepareNeighbor(g);
+    ui04GestureArea.style.willChange='transform';
+    ui04Neighbor.style.willChange='transform';
   }
   if(e.cancelable)e.preventDefault();
-  const now=performance.now(),dt=now-g.lastTime;if(dt>0&&dt<110)g.flickVelocity=(t.clientX-g.lastX)/dt;g.dragX=dx;g.lastX=t.clientX;g.lastTime=now;
-  if(!ui04ReducedMotion()){
-    const x=ui04Clamp(dx,-g.width,g.width);
-    ui04GestureArea.style.transform=`translate3d(${x}px,0,0)`;
-    ui04GestureArea.style.opacity=String(1-Math.min(Math.abs(x)/g.width*.1,.05));
-  }
+  const now=performance.now(),dt=now-g.lastTime;
+  if(dt>0&&dt<110)g.flickVelocity=(t.clientX-g.lastX)/dt;
+  g.dragX=dx;g.lastX=t.clientX;g.lastTime=now;
+  ui04Position(g,dx);
 },{passive:false});
 ui04GestureArea.addEventListener('touchend',e=>{
   const g=ui04Swipe;ui04Swipe=null;
@@ -828,7 +852,6 @@ ui04GestureArea.addEventListener('touchend',e=>{
   if(!t){ui04ClearVisual();return}
   const dx=t.clientX-g.x,dy=t.clientY-g.y;
   const duration=Math.max(1,performance.now()-g.started);
-  // Average speed is used to accept a deliberate short flick; vertical scroll never switches.
   const recent=performance.now()-g.lastTime;
   const speed=recent<95&&Number.isFinite(g.flickVelocity)?g.flickVelocity:dx/duration;
   if(g.vertical||Math.abs(dx)<Math.abs(dy)*1.4){ui04FinishSwipe(g,0,0);return}
