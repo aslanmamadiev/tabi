@@ -661,7 +661,7 @@ select.filter:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 #content .group-select{cursor:pointer;border:1px solid transparent;color:var(--muted)}
 #content .group-select[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);background:var(--light)}
 #content [data-card-id].is-selected{outline:2px solid var(--accent);outline-offset:-2px}
-.drag-placeholder{border:2px dashed var(--accent);border-radius:12px;background:var(--light);opacity:.65;box-sizing:border-box;flex:none}
+.drag-placeholder{pointer-events:none!important;border:2px dashed var(--accent);border-radius:12px;background:var(--light);opacity:.65;box-sizing:border-box;flex:none}
 .drag-source{opacity:.15!important;pointer-events:none!important}
 .drag-ghost{pointer-events:none!important;z-index:10000!important;transform:scale(1.035);box-shadow:0 16px 40px #0002}
 .drag-ghost[data-drag-count]::after{content:attr(data-drag-count) " объектов";position:absolute;right:8px;top:8px;padding:4px 7px;border-radius:9px;background:var(--accent);color:var(--card);font-size:11px}
@@ -810,23 +810,38 @@ function dragPreviewAt(clientX,clientY){
  if(!zone){d.zone=null;return}
  const container=tab==='objects'?zone.querySelector('.grid'):zone;
  if(!container){d.zone=null;return}
- const near=target?.closest('[data-card-id]');
- const validNear=near&&near!==d.source&&!selected.has(near.dataset.cardId)&&container.contains(near)?near:null;
- const rect=validNear?.getBoundingClientRect();
- const after=rect?clientY>rect.top+rect.height/2:false;
- const before=validNear?(after?validNear.nextSibling:validNear):null;
- // Hysteresis: ignore movement near a boundary and rapid target oscillation.
- const nowTick=performance.now();
- const boundaryDistance=rect?Math.abs(clientY-(rect.top+rect.height/2)):99;
- if(boundaryDistance<Math.min(18,(rect?.height||0)*.22))return;
- if(d.lastReflow&&nowTick-d.lastReflow<140)return;
- if(d.placeholder.parentNode===container&&d.placeholder.nextSibling===before){d.zone=zone;return;}
- const oldRects=new Map([...container.querySelectorAll('[data-card-id]')].map(el=>[el,el.getBoundingClientRect()]));
- if(d.placeholder.parentNode!==container||d.placeholder.nextSibling!==before){
-  container.insertBefore(d.placeholder,before);d.lastReflow=nowTick;
-  for(const [el,old] of oldRects){const next=el.getBoundingClientRect();const dx=old.left-next.left,dy=old.top-next.top;if(dx||dy){el.animate([{transform:`translate(${dx}px,${dy}px)`},{transform:'translate(0,0)'}],{duration:180,easing:'cubic-bezier(.2,.8,.2,1)'})}}
+ // Compute insertion from stable card centres, not from the moving placeholder.
+ // The placeholder must not become the hit-test target or trigger oscillating swaps.
+ const candidates=[...container.querySelectorAll('[data-card-id]')].filter(el=>el!==d.source&&!selected.has(el.dataset.cardId));
+ const horizontal=tab==='objects'&&getComputedStyle(container).gridTemplateColumns.split(' ').length>1;
+ let insertBefore=null;
+ if(horizontal){
+  const ranked=candidates.map(el=>({el,r:el.getBoundingClientRect()}));
+  const row=ranked.filter(x=>clientY>=x.r.top-12&&clientY<=x.r.bottom+12);
+  const pool=row.length?row:ranked;
+  insertBefore=pool.find(x=>clientY<x.r.top+x.r.height*.35||(clientY<=x.r.bottom&&clientX<x.r.left+x.r.width*.5))?.el||null;
+ }else{
+  insertBefore=candidates.find(el=>{const r=el.getBoundingClientRect();return clientY<r.top+r.height*.5})||null;
  }
- d.zone=zone;d.near=validNear;d.after=after;
+ const sameParent=d.placeholder.parentNode===container;
+ if(sameParent&&d.placeholder.nextElementSibling===insertBefore){d.zone=zone;return}
+ const nowTick=performance.now();
+ if(d.lastReflow&&nowTick-d.lastReflow<230){d.zone=zone;return}
+ // Only commit a new slot after a stable pointer position.
+ const key=(zone.dataset.roomDrop||zone.dataset.statusDrop)+'|'+(insertBefore?.dataset.cardId||'end');
+ if(d.candidateKey!==key){d.candidateKey=key;d.candidateSince=nowTick;d.zone=zone;return}
+ if(nowTick-d.candidateSince<110){d.zone=zone;return}
+ const oldRects=new Map(candidates.map(el=>[el,el.getBoundingClientRect()]));
+ container.insertBefore(d.placeholder,insertBefore);
+ d.lastReflow=nowTick;
+ for(const [el,old] of oldRects){
+  el.getAnimations().forEach(anim=>anim.cancel());
+  const next=el.getBoundingClientRect(),dx=old.left-next.left,dy=old.top-next.top;
+  if(dx||dy)el.animate([{transform:`translate(${dx}px,${dy}px)`},{transform:'translate(0,0)'}],{duration:220,easing:'ease-out'});
+ }
+ d.near=insertBefore;d.after=false;
+
+ d.zone=zone;
 }
 function finishDrag(){
  const d=dragging;if(!d)return;
@@ -857,7 +872,7 @@ $('content').addEventListener('pointerdown',e=>{
  dragging={id:source.dataset.cardId,source,x:e.clientX,y:e.clientY,startX:e.clientX,startY:e.clientY,offsetX:e.clientX-rect.left,offsetY:e.clientY-rect.top,active:false,moved:false,pointerId:e.pointerId};
  pressTimer=setTimeout(()=>{
   const d=dragging;if(!d||d.source!==source)return;
-  if(!selected.has(d.id)){if(selected.size)selected.clear();selected.add(d.id)}
+  if(!selected.has(d.id))selected.add(d.id)
   bulkMode=true;d.active=true;source.classList.add('is-selected');
   const ghost=source.cloneNode(true);ghost.classList.add('drag-ghost');ghost.style.width=rect.width+'px';ghost.style.height=rect.height+'px';ghost.style.pointerEvents='none';
   if(selected.size>1)ghost.dataset.dragCount=String(selected.size);
